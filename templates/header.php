@@ -14,7 +14,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Style the side navigation */
+/* Style the side navigation 
 .sidenav {
   height: 100%;
   width: 200px;
@@ -25,7 +25,7 @@ body {
   background-color: #111;
   overflow-x: hidden;
 }
-
+*/
 
 /* Side navigation links */
 .sidenav a {

@@ -29,18 +29,31 @@
 						<div class="card-content center">
 								<br><br>
 							<?php echo htmlspecialchars('Thesis statement: ' . $inferencedb['thesisST']); ?>
-									<br><u>Thesis Flags</u><br>
+					
+
+		</select>
+<br>
+
+						
+
+		<!--  if too narrow then post[ruleNarrow = 1] for claimsdb[id] --> 
+
+		<!--  if too broad then post[ruleBroad = 1] for claimsdb[id]... etc 
+
+				<br><u>Thesis Flags</u><br>
 			<select name="supportMeans">
 		  	<option value="" selected>Select...</option>
   			<option value="1">Has Rival</option>
   			<option value="2">Too Early</option>
   			<option value="3">Too Late</option>
-		</select><br><br><br>
 
 
+<select class="myselect">
+  			<option data-url="thesisRival.php">thesisRival</option>
+   			<option data-url="thesisLate.php">thesisLate</option>
+   				</select>
 
-		<?php echo htmlspecialchars('Reason statement: ' . $inferencedb['reasonST']); ?>
-									<br><u>Reason Flags</u><br>
+<br><u>Reason Flags</u><br>
 			<select name="supportMeans">
 		  	<option value="" selected>Select...</option>
   			<option value="1">Unestablished Subject</option>
@@ -48,22 +61,17 @@
   			<option value="3">Hostile</option>
 		</select><br><br><br>
 
-
-
-
-		<?php echo htmlspecialchars('Rule statement: ' . $inferencedb['ruleST']); ?>
-									<br><u>Rule Flags</u><br>
+					<br><u>Rule Flags</u><br>
 			<select name="flagstate">
 		  	<option value="" selected>Select...</option>
-  			<option value="1">Too Narrow</option>
+  			<option value="(<a href="flagadd.php?id=<?php echo $inferencedb['inferenceID']?>">flagadd</a>)">Too Narrow</option>
   			<option value="2">Too Broad</option>
   			<option value="3">Unestablished Universal</option>
   			<option value="3">Contrived Universal</option>
 		</select><br><br><br>
 
-		<!--  if too narrow then post[ruleNarrow = 1] for claimsdb[id] --> 
 
-		<!--  if too broad then post[ruleBroad = 1] for claimsdb[id]... etc --> 
+	--> 
 
 
 
@@ -76,6 +84,7 @@
 
 						<div class="card-action right-align">
 							<a class="brand-text" href="details.php?id=<?php echo $inferencedb['inferenceID']?>">details</a>
+							
 						</div>
 					</div>
 				</div>
@@ -89,51 +98,29 @@
 
 
 
-<center>
-<body class="text-center">
-
-
-        	 <select class="form-control" name="options" id="options" placeholder="Options">
-		  	<option value="" selected>Select...</option>
-  			<option value="1">Too Narrow</option>
-  			<option value="2">Too Broad</option>
-  			<option value="3">Unestablished Universal</option>
-  			<option value="3">Contrived Universal</option>
-
-
-            <input type="text" id="textInput" value="" hidden/>
-
-
-
-    </div>
-</div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<script>
-    $( "#options" ).change(function() {
-        $("#textInput").show();
-    });
-</script>
 
 
+<!-- <center>
+<div id="content">Hi</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
-    var about_me = "test.php";
-    $('#options').click(function(){
-        $('#options').load(about_me);
+    var about_me = "add.php";
+    $('#content').click(function(){
+        $('#content').load(about_me);
     });
 });
 </script>
-
+-->
 
 </body>
 </html>
 
 
 
-
+<br><br><br>
 
 
 
@@ -169,7 +156,13 @@ $(document).ready(function(){
 	<p>You are logged out!</p>
 	<p> You are logged in!</p>
 
-
+<!--             <input type="text" id="textInput" value="" hidden/>
+<script>
+    $( "#options" ).change(function() {
+        $("#textInput").show();
+    });
+</script>
+ -->
 
 
 	<?php include('templates/footer.php'); ?>

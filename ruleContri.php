@@ -1,3 +1,49 @@
+<?php 
+	include('config/db_connect.php');
+	// check GET request id param
+	if(isset($_GET['id'])){ //also the flag name
+		
+		// escape sql chars
+		$inferenceID = mysqli_real_escape_string($conn, $_GET['id']); //get the flag name too
+		// make sql
+		$sql = "SELECT * FROM inferencedb WHERE inferenceID = $inferenceID";
+		// get the query result
+		$result = mysqli_query($conn, $sql);
+		// fetch result in array format
+		$inferencedb = '';
+		$inferencedb = mysqli_fetch_assoc($result);
+		mysqli_free_result($result);
+		mysqli_close($conn);
+	}
+?>
+
+
+<!DOCTYPE html>
+<html>
+ 
+	<?php include('templates/header.php'); ?>
+<center>
+	<div class="container center">
+		<?php if ($inferencedb): ?>
+			<p><b>Inference ID:</b>  <?php echo $inferencedb['inferenceID']; ?> </p>
+			<p><b>Thesis Statement:</b>  <?php echo $inferencedb['thesisST']; ?> </p>
+			<p><b>Reason Statement:</b>  <?php echo $inferencedb['reasonST']; ?> </p>
+			<p><b>Rule Statement:</b>  <?php echo $inferencedb['ruleST']; ?> </p>
+
+
+</center>
+
+
+		<?php else: ?>
+			<h5>Claim not found.</h5>
+		<?php endif ?>
+	</div>
+
+
+	<?php include('templates/footer.php'); ?>
+
+</html>
+
 <?php
 	include('config/db_connect.php');
 	$inferenceID = $temp = $result = $array = $claim_fk = $claimID = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL = $reason = '';
@@ -145,12 +191,7 @@ $ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $exampl
 	} // end POST check
 // Close connection
 mysqli_close($conn);
-
-
-
-
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -162,71 +203,35 @@ mysqli_close($conn);
   <section class="container grey-text">
 		<h4 class="center">Add Claim</h4>
 		<form class="white" action="add.php" method="POST">
-<label>Subject</label><br>
+
+			<label>Subject</label><br>
 			<input type="text" name="subject" value="<?php echo htmlspecialchars($subject) ?>">
 			<div class="red-text"><?php echo $errors['subject']; ?></div>
 
 			<label>Target Property</label><br>
 			<input type="text" name="targetP" value="<?php echo htmlspecialchars($targetP) ?>"> <br>
+			
+			<label>Reason</label><br>
+			<input type="text" name="reason" value="<?php echo htmlspecialchars($reason) ?>">
+			<div class="red-text"><?php echo $errors['reason']; ?></div>
 
+		<label>Support Means: Testimony/Inference</label><br>
 
+		<select name="supportMeans">
+		  	<option value="" selected>Select...</option>
+  			<option value="0">Testimony</option>
+  			<option value="1">Inference</option>
+		</select>
+<br> 
 
-<label>Support Means</label><br>
-
-<select name="union" id="union">
-<option value="choose">Choose One</option>
-<option value="inference">Inference</option>
-<option value="testimony">Testimony</option>
-<option value="perception">Perception</option>
-</select>
-<br>
-
-<textarea id="otherUnion" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Statement</textarea><br>
-<textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example Statement</textarea><br>
-<textarea id="url" name = "URL" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
-<textarea id="rd" name = "rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
-
-<script type="text/javascript">
-
-var union = document.getElementById('union');
-union.onchange = checkOtherUnion;
-union.onchange();
-
-function checkOtherUnion() {
-    var union = this;
-    var otherUnion = document.getElementById('otherUnion');
-    
-
-    if (union.options[union.selectedIndex].value === 'inference') {
-        otherUnion.style.display = '';
-        example.style.display = '';
-    } else {
-        otherUnion.style.display = 'none';
-        example.style.display = 'none';
-    }
-
-
-if (union.options[union.selectedIndex].value === 'perception') {
-        url.style.display = '';
-    } else {
-        url.style.display = 'none';
-      
-    }
-
-
-
-if (union.options[union.selectedIndex].value === 'testimony') {
-        rd.style.display = '';
-    } else {
-        rd.style.display = 'none';
-      
-    }
-
-}
-</script>
-
+				<label>Example? (Leave blank if N/A)</label><br>
+			<input type="text" name="example" value="<?php echo htmlspecialchars($example) ?>">
 
 <br>
+				<label>Url? (Leave blank if N/A)</label><br>
+			<input type="text" name="URL" value="<?php echo htmlspecialchars($URL) ?>">
+	
+
 
 
 			<div class="center">
@@ -242,3 +247,10 @@ if (union.options[union.selectedIndex].value === 'testimony') {
 	<?php include('templates/footer.php'); ?>
 
 </html>
+
+<!-- <p><h6>Thesis Statement:</h6> <?php echo $claimsdb['subject']; ?> <?php echo $claims['thesis']; ?></p><br>
+
+<p><h6>Reason Statement:</h6> Because <?php echo $claims['subject']; ?> <?php echo $claims['reason']; ?></p><br>
+
+<p><h6>Rule Example:</h6> Whatever <?php echo $claims['reason']; ?>, <?php echo $claims['thesis']; ?>, as in the case of <?php echo $claims['example']; ?></p><br> --> 
+
