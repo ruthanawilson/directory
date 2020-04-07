@@ -130,6 +130,7 @@ $(document).ready(function(){
 
 </center>
 
+<!--    
 <div id="topmenu" >Page1 | Page2 | Page 3
 <ul><center>
       <a href="#">Home</a>
@@ -155,8 +156,7 @@ $(document).ready(function(){
 
 	<p>You are logged out!</p>
 	<p> You are logged in!</p>
-
-<!--             <input type="text" id="textInput" value="" hidden/>
+         <input type="text" id="textInput" value="" hidden/>
 <script>
     $( "#options" ).change(function() {
         $("#textInput").show();

@@ -50,12 +50,6 @@ body {
 </head>
 <body>
 
-<div class="sidenav">
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-</div>
-
 
 
 </body>
@@ -64,32 +58,31 @@ body {
 
 
 <head>
-	
-	<!-- Compiled and minified CSS 
+  
+  <!-- Compiled and minified CSS 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <style type="text/css">
-	  .brand{
-	  	background: #cbb09c !important;
-	  }
-  	.brand-text{
-  		color: #cbb09c !important;
-  	}
-  	form{
-  		max-width: 460px;
-  		margin: 20px auto;
-  		padding: 20px;
-  	}
+    .brand{
+      background: #cbb09c !important;
+    }
+    .brand-text{
+      color: #cbb09c !important;
+    }
+    form{
+      max-width: 460px;
+      margin: 20px auto;
+      padding: 20px;
+    }
   </style>
 </head>
 <body class="grey lighten-4">
-	<nav class="white z-depth-0">
+  <nav class="white z-depth-0">
 
 
 </div>-->
 
     <div class="container">
-      <a href="http://localhost/directory" class="brand-logo brand-text">Vada Project</a>
-      <ul id="nav-mobile" class="right hide-on-small-and-down">
+     
         <li><a href="http://localhost/directory/add.php" class="btn brand z-depth-0">Add Claim</a></li>
       </ul>
     </div>

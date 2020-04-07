@@ -21,6 +21,15 @@
 	$result2 = mysqli_query($conn, $sql2);
 	// fetch the resulting rows as an array // was $result
 	$flagsdb = mysqli_fetch_all($result2, MYSQLI_ASSOC);
+
+
+
+	$sql3 = 'SELECT inferenceIDFlagged, inferenceIDFlagger, flagType, active FROM flagsdb';
+	// get the result set (set of rows)
+	$result3 = mysqli_query($conn, $sql3);
+	// fetch the resulting rows as an array // was $result
+	$flagsdb2 = mysqli_fetch_all($result3, MYSQLI_ASSOC);
+
 	
 	// close connection
 	mysqli_close($conn);
@@ -36,19 +45,20 @@
 <center>
 	<div class="container center">
 
+	<?php foreach($flagsdb as $flagsdb): 
 
-		<?php if ($inferencedb):
-
-
-		 //	if($flagsdb['inferenceIDFlagged'] == $inferenceID && $flagsdb['active'] == '1')
-// { ?>	<html><font color="red"> }
-	
+		 $color = '';
+		 $inferenceIDFlagged = $flagsdb['inferenceIDFlagged'];
+		 $active = $flagsdb['active'];
+		 	if($inferenceIDFlagged == $inferenceID && $active == '1')
+ { $color = "red"; break;}
+else{ $color = "green"; } 
+endforeach;  ?>
+<font color = "<?php echo $color; ?>">	
 			<p><b>Inference ID:</b>  <?php echo $inferencedb['inferenceID']; ?> </p>
-			<p><b>Thesis Statement:</b>  <?php echo $inferencedb['thesisST']; ?> </p></font>
+			<p><b>Thesis Statement:</b>  <?php echo $inferencedb['thesisST']; ?> </p>
 			<p><b>Reason Statement:</b>  <?php echo $inferencedb['reasonST']; ?> </p>
-			<p><b>Rule Statement:</b>  <?php echo $inferencedb['ruleST']; ?> </p></html>
-					
-<html>
+			<p><b>Rule Statement:</b>  <?php echo $inferencedb['ruleST']; ?> </p></font>
 
 				<br><u>Thesis Flags</u><br>
 				<select name="thesisFlags" onchange="location = this.value;">
@@ -56,9 +66,7 @@
   			<option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">Has Rival</option>
   			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Too Early</option>
   			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Too Late</option>
-  			</select><br><br><br>
-
-
+  			</select><br><br>
 
 		<br><u>Reason Flags</u><br>
 				<select name="reasonFlags" onchange="location = this.value;">
@@ -66,8 +74,7 @@
   			<option value="reasonUS.php?id=<?php echo $inferencedb['inferenceID']?>">Unestablished Subject</option>
   			<option value="reasonUI.php?id=<?php echo $inferencedb['inferenceID']?>">Itself Unestablished</option>
   			<option value="reasonHostile.php?id=<?php echo $inferencedb['inferenceID']?>">Hostile</option>
-  			</select><br><br><br>
-
+  			</select><br><br>
 
 					<br><u>Rule Flags</u><br>
 			<select name="ruleFlags" onchange="location = this.value;">
@@ -76,56 +83,58 @@
   			<option value="ruleBroad.php?id=<?php echo $inferencedb['inferenceID']?>">Too Broad</option>
   			<option value="ruleUnest.php?id=<?php echo $inferencedb['inferenceID']?>">Unestablished Universal</option>
   			<option value="ruleContri.php?id=<?php echo $inferencedb['inferenceID']?>">Contrived Universal</option>
-		</select><br><br><br>
+		</select><br><br>
 
+<br><u>Perception Flags</u><br>
+				<select name="perFlags" onchange="location = this.value;">
+		  	<option value="" selected>Select...</option>
+  			<option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">No contact with object from sense organ</option>
+  			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Relies on language</option>
+  			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Errant</option>
+  			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Ambiguous</option>
+  			</select><br><br>
 
-<!--
-
-<select name="forma" onchange="location = this.value;">
- <option value="choose">Choose One</option>
- <option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">thesisRival</option>
- <option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">thesisLate</option>
- <option value="thesisEarly.php">thesisEarly</option>
-</select>
---> 
-
-
-</center>
-
-
-		<?php else: ?>
-			<h5>Claim not found.</h5>
-		<?php endif ?>
+  			<br><u>Inference Flags</u><br>
+				<select name="infFlags" onchange="location = this.value;">
+		  	<option value="" selected>Select...</option>
+  			<option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">No direct familiarity/rumored</option>
+  			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Errant information</option>
+  			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Uncertain/Ambiguous</option>
+  			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Alternative agendas/motivations</option>
+  			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Misstatement</option>
+  			</select><br><br>
 	
 	</div>
-	<?php foreach($flagsdb as $flagsdb): ?>
 
-	<center>
-		<?php
-if($flagsdb['inferenceIDFlagged'] == $inferenceID && $flagsdb['active'] == '1')
+	<?php 
+	$empty = '';
+	foreach($flagsdb2 as $flagsdb2):
+?> <?php
+	
+		$inferenceIDFlagged = $flagsdb2['inferenceIDFlagged'];
+		 $active = $flagsdb2['active'];
+		 	if($inferenceIDFlagged == $inferenceID && $active == '1')
 {
-				echo htmlspecialchars('ID being flagged: ' . $flagsdb['inferenceIDFlagged']); 
-	?><html> <br></html>
-	<?php				echo htmlspecialchars('Type of flag: ' . $flagsdb['flagType']); 
-		
+				echo htmlspecialchars('ID being flagged: ' . $flagsdb2['inferenceIDFlagged']); 
+	?><br>
+	<?php				echo htmlspecialchars('Type of flag: ' . $flagsdb2['flagType']);  ?><br>
 
-
- ?>
-
-				<html> <br></html>
-			
-			
-		
-
-				<a href ="details.php?id=<?php echo $flagsdb['inferenceIDFlagger']?>"><?php echo htmlspecialchars('ID of FLAGGER for THIS inference: ' . $flagsdb['inferenceIDFlagger']); ?> </a> <?php
+				<a href ="details.php?id=<?php echo $flagsdb['inferenceIDFlagger']?>"><?php echo htmlspecialchars('ID of FLAGGER for THIS inference: ' . $flagsdb2['inferenceIDFlagger']); ?> </a> <?php
 						}
-					//	else{
-				//			echo "This entry has never been flagged!";
-				//		}
+		
+						if($flagsdb2['inferenceIDFlagged'] == $inferenceID)
+						{ 
+							$empty = "false";
 
+						}
+						?><br><br><?php
 	endforeach;
+	if($empty = "true")
+	{
+		echo "This inference has never been flagged.";
+	}
 
-?> <br><br>
+?> <br>
 	<?php include('templates/footer.php'); ?>
 
 </html>
