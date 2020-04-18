@@ -12,7 +12,6 @@
 		// fetch result in array format
 		$inferencedb = mysqli_fetch_assoc($result);
 		mysqli_free_result($result);
-	
 	}
 ?>
 
@@ -24,12 +23,15 @@
 <center>
 	<div class="container center">
 		<?php if ($inferencedb): ?>
+
 			<p><b>Inference ID:</b>  <?php echo $inferencedb['inferenceID']; ?> </p>
 			<p><b>Thesis Statement:</b>  <?php echo $inferencedb['thesisST']; ?> </p>
 			<p><b>Reason Statement:</b>  <?php echo $inferencedb['reasonST']; ?> </p>
 			<?php $inferenceIDFlagged = $inferencedb['inferenceID']; 
 				//echo $inferenceIDFlagged;
- 
+			session_start();
+			$_SESSION['varname'] = $inferenceIDFlagged;
+echo $_SESSION['varname'];
 
  // $inferenceIDFlagger = mysqli_insert_id($conn);
  // echo "meow" . $inferenceIDFlagger;
@@ -37,15 +39,34 @@
 				 $order = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
 				 $nice = mysqli_query($conn, $order);
 
- 				if($row = $nice->fetch_assoc()) {
-    echo $row['inferenceID']."<br>";
-    $inferenceIDFlagger = $row['inferenceID'];
-}
- 	echo $inferenceIDFlagger;
  	?>
 
 			<p><b>Rule Statement:</b>  <?php echo $inferencedb['ruleST']; ?> </p>
-			<center>Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property.</center>
+			<center>Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property.
+
+			<?php 
+
+//$order = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
+//				 $nice = mysqli_query($conn, $order);
+
+
+	$inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
+	 $queryinference = mysqli_query($conn, $inference);
+	 if($row = $queryinference->fetch_assoc()) {
+      $invar = $row['inferenceID']; }
+ 				
+	$claim= "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
+	 $queryclaim = mysqli_query($conn, $claim);
+if($row = $queryclaim->fetch_assoc()) {
+      $clvar = $row['claimID']; }
+
+echo $invar;
+echo $clvar;
+//	$inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
+//	 $queryinference = mysqli_query($conn, $inference);
+?>
+
+</center>
 
 
 
@@ -132,39 +153,35 @@ clearInput();
 if(isset($_POST['flag']))
 	{	
 
-$flagType = 'thesisRival';
-$active = '1'; //alter preexisting flags to inactive if flagged.... so if id has a match in inferenceIDFlagged, active = 0. if active = 0, text = red. 
-
-
- $order = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
-				 $nice = mysqli_query($conn, $order);
-
- 				if($row = $nice->fetch_assoc()) {
-      $inferenceIDFlagger = $row['inferenceID']; }
- 
-
-	 $sql5 = "INSERT INTO flagsdb(inferenceIDFlagged, flagType, inferenceIDFlagger, active) VALUES('$inferenceIDFlagged', '$flagType','$inferenceIDFlagger','$active')";
-
-		if(mysqli_query($conn, $sql5)){
-				// success
-				header('Location: index.php');
-			} else {
-				echo 'query error: '. mysqli_error($conn);
-			}
-
-
-mysqli_close($conn); 
-    
 
 	}
 	// Colorcode *specific* parts of the flag limb. 
+		// IF flag = x, y, z, text = ruleflag/red. if flag = u, m, v, text = reasonflag/red. 
+
+
+
+	// display pramana for each flag in db, including condition for supportmeans in claimsdb for the displa
+
+	// testimony- summary of argument/timestamp/excerpt. also, description. 
+
+
+
+	// Use UPDATE in mysql to change flag to 'active = 0' when flagged. 
+
+	// flags are clearly explained
+
+// ----------- Finished! ------------
+	// Perception/testimony development.
+		// done!
+	
+
 	// Link claimIDs and inferenceIDs. 
+		//select claimID from claimdb of last entry, update claim id in inferenceID on last entry 
+		// done!!
+				
+
 	// Fix isset POST command. 
-	// Use UPDATE in mysql to change 'active' when flagged.
-	// Perception/testimony development. 
-	// display pramana for each flag in db
-	// testimony provides summary of argument or source/excerpt, perhaps timestamps. 
-	// in addition to summary, a description for video or image. 
+		// done!!!!!!
 
 
 ?>
@@ -264,6 +281,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example Statement</textarea><br>
 <textarea id="url" name = "URL" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
 <textarea id="rd" name = "rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
+<!-- for testimony -->
+<textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
+
+<textarea id="description" name = "description" value="<?php echo htmlspecialchars($description) ?>">Description</textarea><br>
 
 <script type="text/javascript">
 
@@ -295,8 +316,12 @@ if (union.options[union.selectedIndex].value === 'Perception') {
 
 if (union.options[union.selectedIndex].value === 'Testimony') {
         rd.style.display = '';
+        summary.style.display = '';
+        description.style.display = '';
     } else {
         rd.style.display = 'none';
+        summary.style.display = 'none';
+        description.style.display = 'none';
       
     }
 
@@ -309,7 +334,7 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
 
 			<div class="center">
 				<button id="submit">Submit</button>	
-				<button id="flag" value="flag" name = "flag">Flag</button>	</div>
+					</div>
 		</form>
 	</section>
 

@@ -94,10 +94,18 @@ endforeach;  ?>
   			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Ambiguous</option>
   			</select><br><br>
 
-  			<br><u>Inference Flags</u><br>
+<br><u>Inference Flags</u><br>
 				<select name="infFlags" onchange="location = this.value;">
 		  	<option value="" selected>Select...</option>
-  			<option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">No direct familiarity/rumored</option>
+  			<option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">Reason not in subject</option>
+  			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Errant information</option>
+  			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Uncertain/Ambiguous</option>
+  			</select><br><br>
+
+  			<br><u>Testimony Flags</u><br>
+				<select name="testFlags" onchange="location = this.value;">
+		  	<option value="" selected>Select...</option>
+  			<option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">No direct familiarity</option>
   			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Errant information</option>
   			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Uncertain/Ambiguous</option>
   			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Alternative agendas/motivations</option>
@@ -115,12 +123,24 @@ endforeach;  ?>
 		 $active = $flagsdb2['active'];
 		 	if($inferenceIDFlagged == $inferenceID && $active == '1')
 {
-				echo htmlspecialchars('ID being flagged: ' . $flagsdb2['inferenceIDFlagged']); 
-	?><br>
-	<?php				echo htmlspecialchars('Type of flag: ' . $flagsdb2['flagType']);  ?><br>
+echo htmlspecialchars('ID being flagged: ' . $flagsdb2['inferenceIDFlagged'] . '<br>'); 
+
+echo htmlspecialchars('Type of flag: ' . $flagsdb2['flagType']. '<br>');  ?>
+
+
 
 				<a href ="details.php?id=<?php echo $flagsdb['inferenceIDFlagger']?>"><?php echo htmlspecialchars('ID of FLAGGER for THIS inference: ' . $flagsdb2['inferenceIDFlagger']); ?> </a> <?php
 						}
+
+/*						if($inferenceIDFlagger == $inferenceIDFlagged)
+	{
+	$update = "UPDATE flagsdb SET active='0' WHERE inferenceID='$invar'";
+	
+if ($conn->query($update) === TRUE) {
+    echo "Record updated successfully";
+} } */    
+
+
 		
 						if($flagsdb2['inferenceIDFlagged'] == $inferenceID)
 						{ 
