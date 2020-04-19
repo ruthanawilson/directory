@@ -4,19 +4,18 @@
 	if(isset($_GET['id'])){
 		
 		// escape sql chars
-		$inferenceID = mysqli_real_escape_string($conn, $_GET['id']);
+		$claimID = mysqli_real_escape_string($conn, $_GET['id']);
 		// make sql
-		$sql = "SELECT * FROM inferencedb WHERE inferenceID = $inferenceID";
+		$sql = "SELECT * FROM claimsdb WHERE claimID = $claimID";
 		// get the query result
 		$result = mysqli_query($conn, $sql);
 		// fetch result in array format
-		$inferencedb = '';
-		$inferencedb = mysqli_fetch_assoc($result);
+		$claimsdb = mysqli_fetch_assoc($result);
 		mysqli_free_result($result);
 
 		}
 
-	$sql2 = 'SELECT inferenceIDFlagged, inferenceIDFlagger, flagType, active FROM flagsdb';
+	$sql2 = 'SELECT claimIDFlagged, claimIDFlagger, flagType, active FROM flagsdb';
 	// get the result set (set of rows)
 	$result2 = mysqli_query($conn, $sql2);
 	// fetch the resulting rows as an array // was $result
@@ -24,7 +23,7 @@
 
 
 
-	$sql3 = 'SELECT inferenceIDFlagged, inferenceIDFlagger, flagType, active FROM flagsdb';
+	$sql3 = 'SELECT claimIDFlagged, claimIDFlagger, flagType, active FROM flagsdb';
 	// get the result set (set of rows)
 	$result3 = mysqli_query($conn, $sql3);
 	// fetch the resulting rows as an array // was $result
@@ -48,22 +47,24 @@
 	<?php foreach($flagsdb as $flagsdb): 
 
 		 $color = '';
-		 $inferenceIDFlagged = $flagsdb['inferenceIDFlagged'];
+		 $claimIDFlagged = $flagsdb['claimIDFlagged'];
 		 $active = $flagsdb['active'];
-		 	if($inferenceIDFlagged == $inferenceID && $active == '1')
+		 	if($claimIDFlagged == $claimID && $active == '1')
  { $color = "red"; break;}
 else{ $color = "green"; } 
 endforeach;  ?>
 <font color = "<?php echo $color; ?>">	
-			<p><b>Inference ID:</b>  <?php echo $inferencedb['inferenceID']; ?> </p>
-			<p><b>Thesis Statement:</b>  <?php echo $inferencedb['thesisST']; ?> </p>
-			<p><b>Reason Statement:</b>  <?php echo $inferencedb['reasonST']; ?> </p>
-			<p><b>Rule Statement:</b>  <?php echo $inferencedb['ruleST']; ?> </p></font>
+			<p><b>Claim ID:</b>  <?php echo $claimsdb['claimID']; ?> </p>
+			<p><b>Rule Statement:</b>  <?php echo $claimsdb['supportMeans']; ?> </p></font>
+			<p><b>Thesis Statement:</b>  <?php echo $claimsdb['thesisST']; ?> </p>
+			<p><b>Reason Statement:</b>  <?php echo $claimsdb['reasonST']; ?> </p>
+			<p><b>Rule Statement:</b>  <?php echo $claimsdb['ruleST']; ?> </p></font>
+			
 
 				<br><u>Thesis Flags</u><br>
 				<select name="thesisFlags" onchange="location = this.value;">
 		  	<option value="" selected>Select...</option>
-  			<option value="thesisRival.php?id=<?php echo $inferencedb['inferenceID']?>">Has Rival</option>
+  			<option value="thesisRival.php?id=<?php echo $claimsdb['claimID']?>">Has Rival</option>
   			<option value="thesisEarly.php?id=<?php echo $inferencedb['inferenceID']?>">Too Early</option>
   			<option value="thesisLate.php?id=<?php echo $inferencedb['inferenceID']?>">Too Late</option>
   			</select><br><br>
@@ -119,17 +120,17 @@ endforeach;  ?>
 	foreach($flagsdb2 as $flagsdb2):
 ?> <?php
 	
-		$inferenceIDFlagged = $flagsdb2['inferenceIDFlagged'];
+		$claimIDFlagged = $flagsdb2['claimIDFlagged'];
 		 $active = $flagsdb2['active'];
-		 	if($inferenceIDFlagged == $inferenceID && $active == '1')
+		 	if($claimIDFlagged == $claimID && $active == '1')
 {
-echo htmlspecialchars('ID being flagged: ' . $flagsdb2['inferenceIDFlagged'] . '<br>'); 
+echo htmlspecialchars('ID being flagged: ' . $flagsdb2['claimIDFlagged'] . '<br>'); 
 
 echo htmlspecialchars('Type of flag: ' . $flagsdb2['flagType']. '<br>');  ?>
 
 
 
-				<a href ="details.php?id=<?php echo $flagsdb['inferenceIDFlagger']?>"><?php echo htmlspecialchars('ID of FLAGGER for THIS inference: ' . $flagsdb2['inferenceIDFlagger']); ?> </a> <?php
+				<a href ="details.php?id=<?php echo $flagsdb['claimIDFlagger']?>"><?php echo htmlspecialchars('ID of FLAGGER for THIS inference: ' . $flagsdb2['claimIDFlagger']); ?> </a> <?php
 						}
 
 /*						if($inferenceIDFlagger == $inferenceIDFlagged)
@@ -142,7 +143,7 @@ if ($conn->query($update) === TRUE) {
 
 
 		
-						if($flagsdb2['inferenceIDFlagged'] == $inferenceID)
+						if($flagsdb2['claimIDFlagged'] == $claimID)
 						{ 
 							$empty = "false";
 
@@ -151,7 +152,7 @@ if ($conn->query($update) === TRUE) {
 	endforeach;
 	if($empty = "true")
 	{
-		echo "This inference has never been flagged.";
+		echo "This claim has never been flagged.";
 	}
 
 ?> <br>

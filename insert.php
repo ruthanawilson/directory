@@ -25,9 +25,9 @@ $c = uniqid (rand (),true);
 $supportID =  $c;
 
 		
-		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description')";
+		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST,ruleST) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST')";
 
-		$sql2 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID', '$thesisST','$reasonST','$ruleST', '$claimID')";
+	//	$sql2 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID', '$thesisST','$reasonST','$ruleST', '$claimID')";
 
 
 			$temp = $targetP;
@@ -43,20 +43,20 @@ $active = '1'; //alter preexisting flags to inactive if flagged.... so if id has
 // $inferenceIDFlagger = new auto incremented ID....
 
 
-		$sql3 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description')";
-		
-		$sql4 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID', '$thesisST','$reasonST','$ruleST', '$claimID')";
+		$sql2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST,ruleST) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST')";
+
+//		$sql4 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID',  '$claimID')";
  
 
 			// save to db and check
 
-			if(mysqli_query($conn, $sql1) && mysqli_query($conn, $sql2) && mysqli_query($conn, $sql3) && mysqli_query($conn, $sql4)){
+			if(mysqli_query($conn, $sql1) && mysqli_query($conn, $sql2)){
 				// success
 			} else {
 				echo 'query error: '. mysqli_error($conn);
 			}
 				
-
+/*
 	$claim= "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
 	 $queryclaim = mysqli_query($conn, $claim);
 if($row = $queryclaim->fetch_assoc()) {
@@ -74,7 +74,7 @@ $inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
 if ($conn->query($sql) === TRUE) {
     echo "Record updated successfully";
 }
-
+*/
 
 
 		/* $sql5 = "INSERT INTO flagsdb(inferenceIDFlagged, flagType, inferenceIDFlagger, active) VALUES('$inferenceIDFlagged', '$flagType','$inferenceIDFlagger','$active')";
@@ -92,18 +92,18 @@ $flagType = 'thesisRival';
 $active = '1'; //alter preexisting flags to inactive if flagged.... so if id has a match in inferenceIDFlagged, active = 0. if active = 0, text = red. 
 
 
- 				$order = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
+ 				$order = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
 				 $nice = mysqli_query($conn, $order);
 
  				if($row = $nice->fetch_assoc()) {
-      $inferenceIDFlagger = $row['inferenceID']; }
+      $claimIDFlagger = $row['claimID']; }
 
 
 //On page 2
-$inferenceIDFlagged = $_SESSION['varname'];
+$claimIDFlagged = $_SESSION['varname'];
  
  // this function below inserts into database
-	 $sql5 = "INSERT INTO flagsdb(inferenceIDFlagged, flagType, inferenceIDFlagger, active) VALUES('$inferenceIDFlagged', '$flagType','$inferenceIDFlagger','$active')";
+	 $sql5 = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, active) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$active')";
 
 
 //		$inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";

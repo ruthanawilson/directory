@@ -4,13 +4,13 @@
 	if(isset($_GET['id'])){ //also the flag name
 		
 		// escape sql chars
-		$inferenceID = mysqli_real_escape_string($conn, $_GET['id']); //get the flag name too
+		$claimID = mysqli_real_escape_string($conn, $_GET['id']); //get the flag name too
 		// make sql
-		$sql = "SELECT * FROM inferencedb WHERE inferenceID = $inferenceID";
+		$sql = "SELECT * FROM claimsdb WHERE claimID = $claimID";
 		// get the query result
 		$result = mysqli_query($conn, $sql);
 		// fetch result in array format
-		$inferencedb = mysqli_fetch_assoc($result);
+		$claimsdb = mysqli_fetch_assoc($result);
 		mysqli_free_result($result);
 	}
 ?>
@@ -22,26 +22,26 @@
 	<?php include('templates/header.php'); ?>
 <center>
 	<div class="container center">
-		<?php if ($inferencedb): ?>
+		<?php if ($claimsdb): ?>
 
-			<p><b>Inference ID:</b>  <?php echo $inferencedb['inferenceID']; ?> </p>
-			<p><b>Thesis Statement:</b>  <?php echo $inferencedb['thesisST']; ?> </p>
-			<p><b>Reason Statement:</b>  <?php echo $inferencedb['reasonST']; ?> </p>
-			<?php $inferenceIDFlagged = $inferencedb['inferenceID']; 
+			<p><b>Claim ID:</b>  <?php echo $claimsdb['claimID']; ?> </p>
+			<!-- <p><b>Thesis Statement:</b>  <?php echo $inferencedb['thesisST']; ?> </p>
+			<p><b>Reason Statement:</b>  <?php echo $inferencedb['reasonST']; ?> </p> -->
+			<?php $claimIDFlagged = $claimsdb['claimID']; 
 				//echo $inferenceIDFlagged;
 			session_start();
-			$_SESSION['varname'] = $inferenceIDFlagged;
+			$_SESSION['varname'] = $claimIDFlagged;
 echo $_SESSION['varname'];
 
  // $inferenceIDFlagger = mysqli_insert_id($conn);
  // echo "meow" . $inferenceIDFlagger;
 
-				 $order = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
-				 $nice = mysqli_query($conn, $order);
+			//	 $order = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
+			//	 $nice = mysqli_query($conn, $order);
 
  	?>
 
-			<p><b>Rule Statement:</b>  <?php echo $inferencedb['ruleST']; ?> </p>
+			<!-- <p><b>Rule Statement:</b>  <?php echo $inferencedb['ruleST']; ?> </p> -->
 			<center>Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property.
 
 			<?php 
@@ -50,18 +50,7 @@ echo $_SESSION['varname'];
 //				 $nice = mysqli_query($conn, $order);
 
 
-	$inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
-	 $queryinference = mysqli_query($conn, $inference);
-	 if($row = $queryinference->fetch_assoc()) {
-      $invar = $row['inferenceID']; }
- 				
-	$claim= "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
-	 $queryclaim = mysqli_query($conn, $claim);
-if($row = $queryclaim->fetch_assoc()) {
-      $clvar = $row['claimID']; }
-
-echo $invar;
-echo $clvar;
+	
 //	$inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
 //	 $queryinference = mysqli_query($conn, $inference);
 ?>
@@ -82,24 +71,7 @@ echo $clvar;
 
 <?php
 	include('config/db_connect.php');
-	$inferenceID = $temp = $result = $array = $claim_fk = $claimID = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
-	echo '22j ' . $inferenceIDFlagged; 
-
-//$name=$_POST["name"];
-//$ctgr=$_POST["ctgr"];
-
-			
-
-			/*$flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
-			$reason = mysqli_real_escape_string($conn, $_POST['reason']);
-			$example = mysqli_real_escape_string($conn, $_POST['example']);
-			$URL = mysqli_real_escape_string($conn, $_POST['url']);
-			$rd = mysqli_real_escape_string($conn, $_POST['rd']);
-			$subject = mysqli_real_escape_string($conn, $_POST['subject']);
-			$supportMeans = mysqli_real_escape_string($conn, $_POST['union']);
-			$targetP = mysqli_real_escape_string($conn, $_POST['targetP']);
-*/
-
+	$claimID = $temp = $result = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
 
 
 ?>
@@ -117,16 +89,6 @@ echo $clvar;
 $("#submit").click(function(){
 
 
-
-/*var flagType=$("#flagType").val();
-var reason=$("#reason").val();
-var example=$("#example").val();
-var url=$("#url").val();
-var rd=$("#rd").val();
-var subject=$("#subject").val();
-var supportMeans=$("#supportMeans").val();
-var targetP=$("#targetP").val();
-*/
 
 
  $.post( $("#myForm").attr("action"), 
@@ -150,12 +112,7 @@ clearInput();
 
 </script>
 <?php
-if(isset($_POST['flag']))
-	{	
-
-
-	}
-	// Colorcode *specific* parts of the flag limb. 
+		// Colorcode *specific* parts of the flag limb. 
 		// IF flag = x, y, z, text = ruleflag/red. if flag = u, m, v, text = reasonflag/red. 
 
 
@@ -169,19 +126,6 @@ if(isset($_POST['flag']))
 	// Use UPDATE in mysql to change flag to 'active = 0' when flagged. 
 
 	// flags are clearly explained
-
-// ----------- Finished! ------------
-	// Perception/testimony development.
-		// done!
-	
-
-	// Link claimIDs and inferenceIDs. 
-		//select claimID from claimdb of last entry, update claim id in inferenceID on last entry 
-		// done!!
-				
-
-	// Fix isset POST command. 
-		// done!!!!!!
 
 
 ?>

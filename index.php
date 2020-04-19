@@ -1,10 +1,10 @@
 <?php 
 	include('config/db_connect.php');
-	$sql = 'SELECT thesisST, reasonST, ruleST, inferenceID FROM inferencedb';
+	$sql = 'SELECT thesisST, reasonST, ruleST, claimID FROM claimsdb';
 	// get the result set (set of rows)
 	$result = mysqli_query($conn, $sql);
 	// fetch the resulting rows as an array // was $result
-	$inferencedb = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	$claimsdb = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	
 	// close connection
 	mysqli_close($conn);
@@ -22,13 +22,13 @@
 	<div class="container">
 		<div class="row">
 			<center>
-			<?php foreach($inferencedb as $inferencedb): ?>
+			<?php foreach($claimsdb as $claimsdb): ?>
 
 				<div class="col s6 m4">
 					<div class="card z-depth-0">
 						<div class="card-content center">
 								<br><br>
-							<?php echo htmlspecialchars('Thesis statement: ' . $inferencedb['thesisST']); ?>
+							<?php echo htmlspecialchars('Thesis statement: ' . $claimsdb['thesisST']); ?>
 					
 
 		</select>
@@ -83,7 +83,7 @@
 						</div>
 
 						<div class="card-action right-align">
-							<a class="brand-text" href="details.php?id=<?php echo $inferencedb['inferenceID']?>">details</a>
+							<a class="brand-text" href="details.php?id=<?php echo $claimsdb['claimID']?>">details</a>
 							
 						</div>
 					</div>
