@@ -83,7 +83,7 @@ body {
 
     <div class="container">
      
-        <li><a href="http://localhost/directory/add.php" class="btn brand z-depth-0">Add Claim</a></li>
-      </ul>
+  <!--      <li><a href="http://localhost/directory/add.php" class="btn brand z-depth-0">Add Claim</a></li>
+      </ul> -->
     </div>
   </nav>

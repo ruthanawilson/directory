@@ -1,190 +1,182 @@
-<?php
-	include('config/db_connect.php');
-	$inferenceID = $temp = $result = $array = $claim_fk = $claimID = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL = $reason = '';
+<?php include('config/db_connect.php'); ?>
 
-	$errors = array('subject' => '', 'thesis' => '', 'reason' => '','example' => '');
-	if(isset($_POST['submit']))
-	{	
-		$supportMeans = $_POST['supportMeans'];
-
-		
-		if(array_filter($errors)){
-			//echo 'errors in form';
-		} else {
-			// escape sql chars
-			$subject = mysqli_real_escape_string($conn, $_POST['subject']);
-			$thesis = mysqli_real_escape_string($conn, $_POST['thesis']);
-			$reason = mysqli_real_escape_string($conn, $_POST['reason']);
-			$example = mysqli_real_escape_string($conn, $_POST['example']);
- 
-			$NewOld = mysqli_real_escape_string($conn, $_POST['NewOld']);
-			$oldClaim = mysqli_real_escape_string($conn, $_POST['oldClaim']);
-			$targetP = mysqli_real_escape_string($conn, $_POST['targetP']);
-			$supportMeans = mysqli_real_escape_string($conn, $_POST['supportMeans']);
-
-			$supportforID = mysqli_real_escape_string($conn, $_POST['supportforID']);
-		
-			$URL = mysqli_real_escape_string($conn, $_POST['URL']);
-			// for base data
-
-// $inferenceID= ; Fx -- If [[<SupportMeans> = "Inference"] AND SupportMeansID = Lowest] Then <SupportMEANSID$>
-
-// $claimID= 
-
-
-
-
-
-if ($SupportMeansID == $InferenceID && $SupportMeansID == $claimID)
-{
-$thesisST= $subject ." " . $targetP. ".";
-}
-//else
-//{
-//}
-
-//if ($SupportForID == $InferenceID && $SupportMeansID != $claimID)
-//{
-$reasonST= "Because " . $subject . " " . $reason. ".";
-//}
-
-
-if ($SupportMeansID == $SupportForID)
-{
-$ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $example. ".";
-}
-
-$c = uniqid (rand (),true);
-
-$supportID =  $c;
-
-
-//			$thesisSt = $subject . $thesis;
-//			$reasonSt = $subject . $reason;
-//			$ruleSt = "Whatever " . $reason . $thesis . " as in the case of" . $example;
-		//	echo $thesisSt;
-		//	echo htmlspecialchars($reasonSt);
-		//	$thesisSt = mysqli_real_escape_string($conn, $_POST['thesisSt']);
-		//	$reasonSt = mysqli_real_escape_string($conn, $_POST['reasonSt']);
-		//	$ruleSt = mysqli_real_escape_string($conn, $_POST['ruleSt']);
-		//		INSERT INTO statements
-		// VALUES ("A001","Jodi","London","075-1248798");
-
-
-			
-// thesis st and reason st differentiation 
-		
-			$sql1 = "INSERT INTO claimsdb(oldClaim, subject, targetP, supportMeans, supportID, example, URL, reason) VALUES('$oldClaim','$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason')";
-
-			$sql2 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID', '$thesisST','$reasonST','$ruleST', '$claimID')";
-
-
-			$temp = $targetP;
-			$targetP = $reason; 
-			$reason = $temp;
-			
-
-			if ($SupportMeansID == $InferenceID && $SupportMeansID == $claimID)
-{
-$thesisST= $subject ." " . $targetP. ".";
-}
-//else
-//{
-//}
-
-//if ($SupportForID == $InferenceID && $SupportMeansID != $claimID)
-//{
-$reasonST= "Because " . $subject . " " . $reason. ".";
-//}
-
-
-if ($SupportMeansID == $SupportForID)
-{
-$ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $example. ".";
-}
-
-
-
-		$sql3 = "INSERT INTO claimsdb(oldClaim, subject, targetP, supportMeans, supportID, example, URL, reason) VALUES('$oldClaim','$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason')";
-
-
-			$sql4 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST, ruleST, claimID) VALUES('$inferenceID', '$thesisST','$reasonST','$ruleST', '$claimID')";
-
-
-
-			// save to db and check
-			if(mysqli_query($conn, $sql1)){
-				// success
-				header('Location: add.php');
-			} else {			echo 'query error: '. mysqli_error($conn);}
-			
-
-
-			if(mysqli_query($conn, $sql2)){
-				// success
-				header('Location: add.php');
-			} else {
-			echo 'query error: '. mysqli_error($conn); }
-
-
-
-
-			if(mysqli_query($conn, $sql3)){
-				// success
-				header('Location: add.php');
-			} else {
-				echo 'query error: '. mysqli_error($conn);	}
-
-
-			if(mysqli_query($conn, $sql4)){
-				// success
-				header('Location: add.php');
-			} else {
-				echo 'query error: '. mysqli_error($conn); }
-		}
-	} // end POST check
-// Close connection
-mysqli_close($conn);
-
-
-
-
-?>
 
 
 <!DOCTYPE html>
 <html>
-	
-	<?php include('templates/header.php'); ?>
-<div class="content">
+ 
+	<?php include('templates/header.php');
+	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
+session_start();
+ ?>
 <center>
+		<script src="script/jquery-1.8.1.min.js" type="text/javascript"></script>
+<script src="script/my_script.js" type="text/javascript"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
 
-  <section class="container grey-text">
-		<h4 class="center">Add Claim</h4>
-		<form class="white" action="add.php" method="POST">
+	$(document).ready(function() {
+	
+$("#submit").click(function(){
+
+
+
+
+ $.post( $("#myForm").attr("action"), 
+         $("#myForm :input").serializeArray(), 
+         function(info){ $("#result").html(info); 
+  });
+clearInput();
+		});
+
+	$("#myForm").submit( function() {
+  return false;	
+});
+
+	function clearInput() {
+	$("#myForm :input").each( function() {
+	   $(this).val('');
+	});
+}
+});
+
+
+</script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+
+	<?php include('templates/header.php'); ?>
+<br>
+<b>Add claim </b>
+		<br>	
+			<!-- Trigger/Open The Modal -->
+<button id="myBtn">Add Claim</button>
+
+
+</div>
+
+	</div>
+	
+</head>
+
+
+
+<body>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+    <center>
+<form method="POST" id = "myForm" action="insert.php">
+
+	<?php $addPage = 'yes';
+  $_SESSION['addPage'] = $addPage;
+   ?>
+			
+<label>Topic</label><br>
+        <select name="topic">
+        <option value="" selected>Select...</option>
+        <option value="Abortion">Abortion</option>
+        <option value="Religion">Religion</option>
+        <option value="Personhood">Personhood</option>
+        <option value="Trans Rights">Trans Rights</option>
+        <option value="Immigration">Immigration</option>
+        <option value="Gun Control">Gun Control</option>
+        </select><br>
+
 <label>Subject</label><br>
-			<input type="text" name="subject" value="<?php echo htmlspecialchars($subject) ?>">
-			<div class="red-text"><?php echo $errors['subject']; ?></div>
+<input type="text" name="subject" value="<?php echo htmlspecialchars($subject) ?>"><br>
 
-			<label>Target Property</label><br>
-			<input type="text" name="targetP" value="<?php echo htmlspecialchars($targetP) ?>"> <br>
+<label>Target Property</label><br>
+<input type="text" name="targetP" value="<?php echo htmlspecialchars($targetP) ?>"> <br>
 
+<style>
 
+	body {
+  padding: 50px 10px;
+  margin: 0 auto;
+  max-width: 900px;
+}
 
-<label>Support Means</label><br>
+#explain-element {
+  border: 1px solid #ccc;
+  display: none;
+  font-size: 10px;
+  margin-top: 10px;
+  padding: 5px;
+  text-transform: uppercase;
+}
 
+#some-div:hover #explain-element {
+  display: block;
+}
+</style>
+
+			<label>Support Means</label><br>
 <select name="union" id="union">
 <option value="choose">Choose One</option>
-<option value="inference">Inference</option>
-<option value="testimony">Testimony</option>
-<option value="perception">Perception</option>
+<option value="Inference">Inference</option>
+<option value="Testimony">Testimony</option>
+<option value="Perception">Perception</option>
 </select>
 <br>
 
-<textarea id="otherUnion" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Statement</textarea><br>
+
+<textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Statement</textarea><br>
 <textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example Statement</textarea><br>
 <textarea id="url" name = "URL" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
 <textarea id="rd" name = "rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
+<!-- for testimony -->
+<textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
+
+<textarea id="description" name = "description" value="<?php echo htmlspecialchars($description) ?>">Description</textarea><br>
 
 <script type="text/javascript">
 
@@ -194,31 +186,34 @@ union.onchange();
 
 function checkOtherUnion() {
     var union = this;
-    var otherUnion = document.getElementById('otherUnion');
-    
-
-    if (union.options[union.selectedIndex].value === 'inference') {
-        otherUnion.style.display = '';
+    var reason = document.getElementById('reason');
+    var example = document.getElementById('example');
+    var url = document.getElementById('url');
+ 	var rd = document.getElementById('rd');
+    if (union.options[union.selectedIndex].value === 'Inference') {
+        reason.style.display = '';
         example.style.display = '';
     } else {
-        otherUnion.style.display = 'none';
+        reason.style.display = 'none';
         example.style.display = 'none';
     }
 
 
-if (union.options[union.selectedIndex].value === 'perception') {
+if (union.options[union.selectedIndex].value === 'Perception') {
         url.style.display = '';
     } else {
         url.style.display = 'none';
       
     }
 
-
-
-if (union.options[union.selectedIndex].value === 'testimony') {
+if (union.options[union.selectedIndex].value === 'Testimony') {
         rd.style.display = '';
+        summary.style.display = '';
+        description.style.display = '';
     } else {
         rd.style.display = 'none';
+        summary.style.display = 'none';
+        description.style.display = 'none';
       
     }
 
@@ -230,15 +225,42 @@ if (union.options[union.selectedIndex].value === 'testimony') {
 
 
 			<div class="center">
-				<input type="submit" name="submit" value="Submit" class="btn brand z-depth-0">
-			</div>
+				<button id="submit">Submit</button>	
+					</div>
 		</form>
 	</section>
 
-</center>
-</div>
-	
+  </div>
 
-	<?php include('templates/footer.php'); ?>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+<?php include('templates/footer.php'); ?>
+</body>
 
 </html>
