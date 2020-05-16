@@ -37,23 +37,29 @@ echo nl2br("\r\n");
          $nice2 = mysqli_query($conn, $order1);
 
 $numhits2 = mysqli_num_rows($nice2);
-print "Your search yielded $numhits2 results for root claims. Results below.";;
 
  $arrflagger = Array();
-
+echo nl2br("\r\n");
+      echo "Everthing below is a result from the recursion";
+      echo nl2br("\r\n");
  while($row = $nice2->fetch_assoc()) {
           $arrflagger[] = $row['claimID'];
- //     $next = $row['claimID']; 
-        }
+      sortclaims($row['claimID']);
 
+        }
+        echo "Recursion finished";
  echo nl2br("\r\n");
 
+
+echo "------------------------QUERY TESTING---------------------------------";
+echo nl2br("\r\n");
+print "Your search yielded $numhits2 results for root claims. Results below.";
 for($i = 0; $i<$numhits2; $i++)
 {
 
  echo nl2br("\r\n");
 echo $arrflagger[$i];
-  $tester = $arrflagger[1];
+  $tester = $arrflagger[3];
 
 }
 echo nl2br("\r\n");
@@ -71,7 +77,35 @@ echo nl2br("\r\n");
 
 
 
+function sortclaims($claimid)
+{
 
+include('config/db_connect.php');
+  $sql1 = "SELECT DISTINCT claimIDFlagger
+        from claimsdb, flagsdb
+        WHERE ? = claimIDFlagged"; // SQL with parameters
+$stmt1 = $conn->prepare($sql1); 
+$stmt1->bind_param("i", $claimid);
+$stmt1->execute();
+$result1 = $stmt1->get_result(); // get the mysqli result
+$numhits1 = mysqli_num_rows($result1);
+//echo $numhits1;
+echo $claimid;
+echo nl2br("\r\n");
+while($user = $result1->fetch_assoc())
+{
+ if($numhits1 == 0)
+  {
+   // echo $claimid . "hello?";
+   echo nl2br("\r\n");
+ }
+   
+   else { sortclaims($user['claimIDFlagger']); }
+    
+
+} // end while loop
+
+} // end of function
 
 // starting --------------------------- 
   echo nl2br("\r\n");
@@ -108,7 +142,7 @@ echo nl2br("\r\n");
 
  echo nl2br("\r\n");
   
-  $arr = Array();
+  //$arr = Array();
 
  //while($row = $nice->fetch_assoc()) {
    //       $arr[] = $row['claimIDFlagger'];
