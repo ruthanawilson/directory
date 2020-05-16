@@ -1,121 +1,173 @@
-$blue: #1686d9;
+/* FUNCTIONAL - Needed for the tree diagram */
+@import url("https://fonts.googleapis.com/css?family=Questrial");
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  overflow: auto;
+    /*& [type="checkbox"], & .more {
+      display: none;
+    }
 
-h1, h3 {
-	color: white;
-	font-weight: 400;
+    & input:checked ~ ul *{
+      display: none;
+    }
+
+    & input:checked ~ ul .more{
+      display: block;
+    }*/
+}
+.wrapper ul {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  white-space: nowrap;
+  list-style: none;
+}
+.wrapper ul li {
+  display: inline-block;
+  vertical-align: top;
 }
 
-header {
-	display: flex;
-	padding: 0 15px;
-	max-width: 800px;
-	margin: 0 auto;
-	justify-content: space-between;
-	align-items: center;
-	img {
-		width: 30px;
-	}
+/* MAKE-UP - Pure esthetics*/
+::-webkit-scrollbar-button {
+  display: none;
 }
 
-ul {
-	list-style: none;
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
 }
 
-li {
-	display: inline;
-	padding: 6px;
-	a {
-		text-decoration: none;
-		color: black;
-		&:hover {
-			text-decoration: underline;
-		}
-	}
+::-webkit-scrollbar-thumb {
+  background: white;
+  border: 1px solid white;
+  cursor: pointer;
 }
 
-.hero {
-	background-image: url("http://richardmiddleton.me/modal-hero.jpg");
-	background-size: cover;
-	height: 420px;
-	width: 100%;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+::-webkit-scrollbar-track {
+  background: transparent;
+  width: calc(2px * 2);
+  border: 2px solid rgba(26, 26, 26, 0);
 }
 
-.button {
-	background-color: $blue;
-	border: 2px solid white;
-	border-radius: 30px;
-	text-decoration: none;
-	padding: 10px 28px;
-	color: white;
-	margin-top: 10px;
-	display: inline-block;
-	&:hover {
-		background-color: white;
-		color: $blue;
-		border: 2px solid $blue;
-	}
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+  width: calc(2px / 2);
+  border: 2px solid rgba(26, 26, 26, 0);
 }
 
-.card-container {
-	max-width: 800px;
-	margin: 50px auto;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
+body {
+  scrollbar-face-color: white;
+  scrollbar-track-color: transparent;
 }
 
-.card {
-	height: 300px;
-	width: 230px;
-	border: 1px solid darkgray;
-	border-radius: 3px;
-	margin: 10px;
+@media (min-width: 480px) {
+  :root {
+    font-size: calc(0.75rem + ((1vw - 4.8px) * 0.5556));
+  }
+}
+@media (min-width: 1920px) {
+  :root {
+    font-size: 20px;
+  }
+}
+div, ul, li {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+div:before, div:after, ul:before, ul:after, li:before, li:after {
+  content: '';
+  position: absolute;
+  display: block;
+  box-sizing: border-box;
 }
 
-// MODAL STARTS HERE //
-
-.bg-modal {
-	background-color: rgba(0, 0, 0, 0.8);
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	display: none;
-	justify-content: center;
-	align-items: center;
+body {
+  color: white;
+  font-family: 'Questrial', sans-serif;
+  background: #333;
 }
-
-.modal-contents {
-	height: 300px;
-	width: 500px;
-	background-color: white;
-	text-align: center;
-	padding: 20px;
-	position: relative;
-	border-radius: 4px;
+body .message {
+  position: absolute;
+  right: 0.5vw;
+  bottom: 1vw;
+  max-width: 30vw;
+  font-size: 0.75vmin;
+  font-family: "Open Sans", sans-serif;
+  color: white;
 }
-
-input {
-	margin: 15px auto;
-	display: block;
-	width: 50%;
-	padding: 8px;
-	border: 1px solid gray;
+body .message a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
 }
-
-.close {
-	position: absolute;
-	top: 0;
-	right: 10px;
-	font-size: 42px;
-	color: #333;
-	transform: rotate(45deg);
-	cursor: pointer;
-	&:hover {
-		color: #666;
-	}
+body .message a:hover {
+  border-width: 3px;
+}
+body .wrapper ul > li {
+  margin: 1em 0;
+  padding: 1em;
+  line-height: 1.5em;
+  transition: all 0.5s ease;
+}
+body .wrapper ul > li:before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: grey;
+}
+body .wrapper ul > li:first-of-type:before {
+  left: 50%;
+  width: 50%;
+}
+body .wrapper ul > li:last-of-type:before {
+  width: 50%;
+}
+body .wrapper ul > li:only-of-type:before {
+  width: 10%;
+  left: 45%;
+}
+body .wrapper ul > li.noline:before {
+  background: transparent;
+}
+body .wrapper ul > li label {
+  padding: 0.5em 1em;
+  border: 1px solid grey;
+  cursor: pointer;
+}
+body .wrapper ul [type="checkbox"] {
+  display: none;
+}
+body .wrapper ul .more {
+  opacity: 0;
+  display: block;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin-left: 50%;
+  transition: all 0.25s ease;
+}
+body .wrapper ul input:checked ~ ul * {
+  opacity: 0;
+  max-width: 1px;
+  max-height: 1px;
+  padding: 0;
+}
+body .wrapper ul input:checked ~ ul .more {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin-left: 0;
+  transition: all 0.01s;
 }

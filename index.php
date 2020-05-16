@@ -30,18 +30,14 @@
 					<div class="card z-depth-0">
 						<div class="card-content center">
 								<br><br>
-					<?php 
-					echo htmlspecialchars('Thesis statement: ' . $claimsdb['thesisST']);
-					echo nl2br("\r\n");
-					echo htmlspecialchars('Support Means : ' . $claimsdb['supportMeans']);
+	<?php echo htmlspecialchars('Thesis statement: ' . $claimsdb['thesisST']);
+		  echo nl2br("\r\n");
+		  echo htmlspecialchars('Support Means : ' . $claimsdb['supportMeans']);
 					 ?>
-					
+			</div>
 
-		</select>
-<br>		</ul>	</div>
-
-						<div class="card-action right-align">
-							<a class="brand-text" href="details.php?id=<?php echo $claimsdb['claimID']?>">details</a>
+		<div class="card-action right-align">
+<a class="brand-text" href="details.php?id=<?php echo $claimsdb['claimID']?>">details</a>
 							
 						</div>
 					</div>

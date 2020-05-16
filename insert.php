@@ -32,27 +32,35 @@ $supportID =  $c;
 	//	$sql2 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID', '$thesisST','$reasonST','$ruleST', '$claimID')";
 
 
-			$temp = $targetP;
+/*			$temp = $targetP;
 			$targetP = $reason; 
 			$reason = $temp;
 			
 
 $thesisST= $subject ." " . $targetP. ".";
 $reasonST= "Because " . $subject . " " . $reason. ".";
-$ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $example. ".";
+$ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $example. "."; */
 $flagType = 'thesisRival';
 $active = '1'; //alter preexisting flags to inactive if flagged.... so if id has a match in inferenceIDFlagged, active = 0. if active = 0, text = red. 
 // $inferenceIDFlagger = new auto incremented ID....
 
 
-		$sql2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic')";
-
+	/*	$sql2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic')";
+*/
 //		$sql4 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID',  '$claimID')";
  
 
 			// save to db and check
 
-			if(mysqli_query($conn, $sql1) && mysqli_query($conn, $sql2)){
+/*			if(mysqli_query($conn, $sql1) && mysqli_query($conn, $sql2)){
+				// success
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+*/
+
+			if(mysqli_query($conn, $sql1)){
 				// success
 			} else {
 				echo 'query error: '. mysqli_error($conn);
