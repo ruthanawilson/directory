@@ -320,8 +320,25 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <?php //------------ ONE
 if( $claimsdb['supportMeans'] == "Inference")
 { ?>
-<br><u>Thesis Flags</u><br>
-<select name="thesisFlags" >
+	
+<br><u>Inference Flags</u><br>
+	<select name="flagType" >
+		  	<option value="" selected>Select...</option>
+  			<option value="thesisRival">Thesis - Has Rival</option>
+  			<option value="thesisEarly">Thesis - Too Early</option>
+  			<option value="thesisLate">Thesis - Late</option>
+  			<option value="reasonUS">Reason - Unestablished Subject</option>
+  			<option value="reasonUI">Reason - Itself Unestablished</option>
+  			<option value="reasonHostile">Reason - Hostile</option>
+  			<option value="ruleNarrow">Rule - Too Narrow</option>
+  			<option value="ruleBroad">Rule - Too Broad</option>
+  			<option value="ruleUnest">Rule - Unestablished Universal</option>
+  			<option value="ruleContri">Rule - Contrived Universal</option>
+
+  			</select><br>
+
+	<!-- <br><u>Thesis Flags</u><br>
+	<select name="flagType" >
 		  	<option value="" selected>Select...</option>
   			<option value="thesisRival">Has Rival</option>
   			<option value="thesisEarly">Too Early</option>
@@ -329,7 +346,7 @@ if( $claimsdb['supportMeans'] == "Inference")
   			</select><br>
 
 		<br><u>Reason Flags</u><br>
-				<select name="reasonFlags" >
+				<select name="flagType" >
 		  	<option value="" selected>Select...</option>
   			<option value="reasonUS">Unestablished Subject</option>
   			<option value="reasonUI">Itself Unestablished</option>
@@ -337,14 +354,14 @@ if( $claimsdb['supportMeans'] == "Inference")
   			</select><br>
 
 					<br><u>Rule Flags</u><br>
-			<select name="ruleFlags">
+			<select name="flagType">
 		  	<option value="" selected>Select...</option>
   			<option value="ruleNarrow">Too Narrow</option>
   			<option value="ruleBroad">Too Broad</option>
   			<option value="ruleUnest">Unestablished Universal</option>
   			<option value="ruleContri">Contrived Universal</option>
 		</select><br>
-
+-->
 
 <!-- <br><u>Inference Flags</u><br>
 				<select name="infFlags">
@@ -353,7 +370,8 @@ if( $claimsdb['supportMeans'] == "Inference")
   			<option value="ErrantInfo">Errant information</option>
   			<option value="Uncertain">Uncertain/Ambiguous</option>
   			</select><br>
--->
+question - can a claim be flagged as has a rival more than once?
+question - specific details of how a claim would be seen as in active 'limbo'-->
 
 
 <?php } ?>
@@ -364,7 +382,7 @@ if( $claimsdb['supportMeans'] == "Perception")
 { ?>
 	
 	<br><u>Perception Flags</u><br>
-				<select name="perFlags">
+				<select name="flagType">
 		  	<option value="" selected>Select...</option>
   			<option value="ContactObject">No contact with object from sense organ</option>
   			<option value="Verbal">Relies on language</option>
@@ -379,7 +397,7 @@ if( $claimsdb['supportMeans'] == "Testimony")
 { ?>
 
 <br><u>Testimony Flags</u><br>
-				<select name="testFlags">
+				<select name="flagType">
 		  	<option value="" selected>Select...</option>
   			<option value="NoDirect">No direct familiarity</option>
   			<option value="ErrantInfo">Errant information</option>

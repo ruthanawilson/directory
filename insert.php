@@ -13,6 +13,7 @@ include('config/db_connect.php');
 			$targetP = $_POST['targetP'];
 			$summary = $_POST['summary'];
 			$description = $_POST['description'];
+		//	$flagType = $_POST['flagType'];
 session_start();
 
 $thesisST= $subject ." " . $targetP. ".";
@@ -40,10 +41,11 @@ $supportID =  $c;
 $thesisST= $subject ." " . $targetP. ".";
 $reasonST= "Because " . $subject . " " . $reason. ".";
 $ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $example. "."; */
-$flagType = 'thesisRival';
+//$flagType = 'thesisRival';
 $active = '1'; //alter preexisting flags to inactive if flagged.... so if id has a match in inferenceIDFlagged, active = 0. if active = 0, text = red. 
 // $inferenceIDFlagger = new auto incremented ID....
-
+//where claimidflagger = claimidFlagged
+//active = 0
 
 	/*	$sql2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic')";
 */
@@ -84,6 +86,16 @@ $claimIDFlagged = $_SESSION['varname'];
  
  // this function below inserts into database
 	 $sql5 = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, active) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$active')";
+
+	 $update = "UPDATE flagsdb 
+SET active = 0
+WHERE claimIDFlagged = ? "; // SQL with parameters
+$stmt2 = $conn->prepare($update); 
+$stmt2->bind_param("i", $claimIDFlagged);
+$stmt2->execute();
+$result2 = $stmt2->get_result(); // get the mysqli result
+
+
 
 
 //		$inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
