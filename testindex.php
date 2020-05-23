@@ -79,6 +79,11 @@ $numhits2 = mysqli_num_rows($nice2);
       echo nl2br("\r\n");
    //   echo "Everthing below is a result from the recursion";
       echo nl2br("\r\n");
+
+$i = -1;
+$arrflagtype = Array();
+
+
  while($row = $nice2->fetch_assoc()) {
       sortclaims($row['claimID']);
         }
@@ -88,11 +93,12 @@ $numhits2 = mysqli_num_rows($nice2);
       // -------------- function below
 
 
+
 function sortclaims($claimid)
 {
-// display subject and target property where claimid is
+  global $i;
 include('config/db_connect.php');
-  $sql1 = "SELECT DISTINCT claimIDFlagger, flagType
+  $sql1 = "SELECT DISTINCT claimIDFlagger
         from claimsdb, flagsdb
         WHERE ? = claimIDFlagged"; // SQL with parameters
 $stmt1 = $conn->prepare($sql1); 
@@ -105,50 +111,72 @@ $numhits1 = mysqli_num_rows($result1);
 
 <?php // if flagType = 'thesisRival' then just echo the claim.. without formatting 
 //echo '420';
+//echo $user['flagType'];
 
 
- $arrflagged = Array();
- $arrflagtype = Array();
- while($row = $result1->fetch_assoc()) {
-          $arrflagged[] = $row['claimIDFlagger'];
-          $arrflagtype[] = $row['flagType'];
-        }
+   // echo $user['flagType'];
+
+$flag = "SELECT DISTINCT flagType
+        from flagsdb
+        WHERE ? = claimIDFlagger"; // SQL with parameters
+$stmt4 = $conn->prepare($flag); 
+$stmt4->bind_param("i", $claimid);
+$stmt4->execute();
+$result2 = $stmt4->get_result(); // get the mysqli result
+
+//echo $i;
+//if($i > -1)
+//{
+//echo $arrflagtype[$i-1];
+//}
+
+?>
 
 
-for($i = 0; $i<$numhits1; $i++)
-{
- 
-
-
-
-if($arrflagtype[$i] == 'flag5')
-  { 
-   
-    echo "rival";
-  }
-
-  ?>
-
- <li> <label for="<?php echo $claimid; ?>"><?php 
+  <li> <label for="<?php echo $claimid; ?>"><?php 
 
 
  echo $claimid . "    ";?>
 <a class="brand-text" style=" color : #fff;" href ="add.php">Link</a>
  </label><input id="<?php echo $claimid; ?>" type="checkbox">
       <ul> <span class="more">&hellip;</span>
-<?php
 
+        
+<?php
+while($flagge = $result2->fetch_assoc())
+{
+ 
+      echo nl2br("\r\n");
+echo $flagge['flagType'];
+      echo nl2br("\r\n");
+echo $claimid;
+      echo nl2br("\r\n");
+}
 // echo $claimid;
 // 1. rival as active - brainstorm first
 // 2. fixing more dropdowns details in tree diagram
 // 3. incorparate details of popup
 
+while($user = $result1->fetch_assoc())
+{
 
  if($numhits1 == 0)
-  { }
-   else { sortclaims($arrflagged[$i]); }
+  {
+   // echo $claimid . "hello?";
+  
+ }
+   
+   else { 
+   // $arrflagtype[] = $user['flagType'];
+    // $i=$i+1;
     
+    sortclaims($user['claimIDFlagger']);
+    
+     }
+    
+
 } // end while loop
+
 ?></ul><?php
 } // end of function
 ?>
