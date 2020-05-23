@@ -30,37 +30,8 @@ $supportID =  $c;
 		
 		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic')";
 
-	//	$sql2 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID', '$thesisST','$reasonST','$ruleST', '$claimID')";
-
-
-/*			$temp = $targetP;
-			$targetP = $reason; 
-			$reason = $temp;
-			
-
-$thesisST= $subject ." " . $targetP. ".";
-$reasonST= "Because " . $subject . " " . $reason. ".";
-$ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $example. "."; */
-//$flagType = 'thesisRival';
-$active = '1'; //alter preexisting flags to inactive if flagged.... so if id has a match in inferenceIDFlagged, active = 0. if active = 0, text = red. 
-// $inferenceIDFlagger = new auto incremented ID....
-//where claimidflagger = claimidFlagged
-//active = 0
-
-	/*	$sql2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic')";
-*/
-//		$sql4 = "INSERT INTO inferencedb(inferenceID, thesisST, reasonST,ruleST, claimID) VALUES('$inferenceID',  '$claimID')";
- 
-
-			// save to db and check
-
-/*			if(mysqli_query($conn, $sql1) && mysqli_query($conn, $sql2)){
-				// success
-			} else {
-				echo 'query error: '. mysqli_error($conn);
-			}
-
-*/
+	
+$active = '1'; 
 
 			if(mysqli_query($conn, $sql1)){
 				// success
@@ -70,9 +41,8 @@ $active = '1'; //alter preexisting flags to inactive if flagged.... so if id has
 			$addPage = $_SESSION['addPage'];	
 if($addPage == 'no')
 {
-//$flagType = 'thesisRival';
-$active = '1'; //alter preexisting flags to inactive if flagged.... so if id has a match in inferenceIDFlagged, active = 0. if active = 0, text = red. 
 
+$active = '1';
 
  				$order = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
 				 $nice = mysqli_query($conn, $order);
@@ -95,14 +65,33 @@ $stmt2->bind_param("i", $claimIDFlagged);
 $stmt2->execute();
 $result2 = $stmt2->get_result(); // get the mysqli result
 
+if($flagType = 'thesisRival')
+{
+	$temp = $claimIDFlagged;
+	$claimIDFlagged = $claimIDFlagger;
+	$claimIDFlagger = $temp;
+	//$active = 0;
+	$flagrival = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, active) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$active')";
 
+	if(mysqli_query($conn, $flagrival)){
+				// success
+				header('Location: index.php');
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+}
 
+//question - can a claim be flagged as has a rival more than once?
+// only one rival per claim. 
+//1. thesis and counterthesis - pair identification
+//2. if additional rival claim - restricted. 
+//thesis will suddenl flag the counter thesis
 
-//		$inference = "SELECT * from inferencedb ORDER BY inferenceID DESC LIMIT 1";
-//	 $queryinference = mysqli_query($conn, $inference);
-
-//	$sql = "UPDATE flagsdb SET active='0' WHERE inferenceID="$inference"";
-	
+//
+//question - specific details of how a claim would be seen as in active 'limbo'
+//question - 
+// change foreach to be query..change intro query to be a prepared statement
+// have page load into center...
 
 		if(mysqli_query($conn, $sql5)){
 				// success

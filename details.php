@@ -85,15 +85,19 @@ if( $claimsdb['supportMeans'] == "Testimony")
 <?php } 
 
 
-	$empty = '';
 	foreach($flagsdb2 as $flagsdb2):
 ?> 
 <?php
 	
 		$claimIDFlagged = $flagsdb2['claimIDFlagged'];
 		 $active = $flagsdb2['active'];
-		 	if($claimIDFlagged == $claimID && $active == '1')
-{
+	if($active == '1')
+	{ // if active 
+		echo "These are active flags";
+		 	if($claimIDFlagged == $claimID)
+	
+			{
+
 ?> 
 
 <a href ="details.php?id=<?php echo $flagsdb['claimIDFlagger']?>"><?php echo htmlspecialchars(' Being flagged by: ' . $flagsdb2['claimIDFlagger']); ?> </a> 
@@ -105,27 +109,32 @@ echo nl2br("\r\n");
 
 }
 
-/*						if($inferenceIDFlagger == $inferenceIDFlagged)
-	{
-	$update = "UPDATE flagsdb SET active='0' WHERE inferenceID='$invar'";
+} // end if active
+
+
+
+if($active == '0')
+	{ // if active 
+		echo "These are inactive flags";
+		 	if($claimIDFlagged == $claimID)
 	
-if ($conn->query($update) === TRUE) {
-    echo "Record updated successfully";
-} } */    
+			{
 
+?> 
 
-		
-						if($flagsdb2['claimIDFlagged'] == $claimID)
-						{ 
-							$empty = "false";
+<a href ="details.php?id=<?php echo $flagsdb['claimIDFlagger']?>"><?php echo htmlspecialchars(' Being flagged by: ' . $flagsdb2['claimIDFlagger']); ?> </a> 
 
-						}
+<?php	
+echo nl2br("\r\n");
+echo htmlspecialchars('Type of flag: ' . $flagsdb2['flagType'] ); 
+echo nl2br("\r\n");
+
+}
+
+} // end if active
+						
 					
 	endforeach;
-	if($empty = "true")
-	{
-//		echo "This claim has never been flagged.";
-	}
 
 ?> 
 
@@ -336,42 +345,6 @@ if( $claimsdb['supportMeans'] == "Inference")
   			<option value="ruleContri">Rule - Contrived Universal</option>
 
   			</select><br>
-
-	<!-- <br><u>Thesis Flags</u><br>
-	<select name="flagType" >
-		  	<option value="" selected>Select...</option>
-  			<option value="thesisRival">Has Rival</option>
-  			<option value="thesisEarly">Too Early</option>
-  			<option value="thesisLate">Too Late</option>
-  			</select><br>
-
-		<br><u>Reason Flags</u><br>
-				<select name="flagType" >
-		  	<option value="" selected>Select...</option>
-  			<option value="reasonUS">Unestablished Subject</option>
-  			<option value="reasonUI">Itself Unestablished</option>
-  			<option value="reasonHostile">Hostile</option>
-  			</select><br>
-
-					<br><u>Rule Flags</u><br>
-			<select name="flagType">
-		  	<option value="" selected>Select...</option>
-  			<option value="ruleNarrow">Too Narrow</option>
-  			<option value="ruleBroad">Too Broad</option>
-  			<option value="ruleUnest">Unestablished Universal</option>
-  			<option value="ruleContri">Contrived Universal</option>
-		</select><br>
--->
-
-<!-- <br><u>Inference Flags</u><br>
-				<select name="infFlags">
-		  	<option value="" selected>Select...</option>
-  			<option value="ReasonSub">Reason not in subject</option>
-  			<option value="ErrantInfo">Errant information</option>
-  			<option value="Uncertain">Uncertain/Ambiguous</option>
-  			</select><br>
-question - can a claim be flagged as has a rival more than once?
-question - specific details of how a claim would be seen as in active 'limbo'-->
 
 
 <?php } ?>

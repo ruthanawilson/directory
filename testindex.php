@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
   include('config/db_connect.php');
-  $sql = 'SELECT thesisST, reasonST, ruleST, supportMeans, claimID FROM claimsdb';
+  $sql = 'SELECT thesisST, reasonST, ruleST, supportMeans, subject, targetP, claimID FROM claimsdb';
   // get the result set (set of rows)
   $result = mysqli_query($conn, $sql);
   // fetch the resulting rows as an array // was $result
@@ -47,10 +47,6 @@ ini_set('display_errors', 1);
 
          <!-- partial:index.partial.html -->
 
-
-  
-  <?php include('templates/header.php'); ?>
-
   <br>
   </center>
 
@@ -72,7 +68,7 @@ ini_set('display_errors', 1);
 
  $order1 = "SELECT DISTINCT claimID
         from claimsdb, flagsdb
-        WHERE claimID NOT IN (SELECT DISTINCT claimIDFlagger FROM flagsdb)
+        WHERE claimID NOT IN (SELECT DISTINCT claimIDFlagger FROM flagsdb) 
         ";
 
          $nice2 = mysqli_query($conn, $order1);
@@ -92,12 +88,11 @@ $numhits2 = mysqli_num_rows($nice2);
       // -------------- function below
 
 
-  ?> <ul> <?php
 function sortclaims($claimid)
 {
-
+// display subject and target property where claimid is
 include('config/db_connect.php');
-  $sql1 = "SELECT DISTINCT claimIDFlagger
+  $sql1 = "SELECT DISTINCT claimIDFlagger, flagType
         from claimsdb, flagsdb
         WHERE ? = claimIDFlagged"; // SQL with parameters
 $stmt1 = $conn->prepare($sql1); 
@@ -109,76 +104,57 @@ $numhits1 = mysqli_num_rows($result1);
 ?>
 
 <?php // if flagType = 'thesisRival' then just echo the claim.. without formatting 
-//echo '420';?>
+//echo '420';
 
- <li> <label> <?php echo $claimid; ?></label><input type="checkbox">
+
+ $arrflagged = Array();
+ $arrflagtype = Array();
+ while($row = $result1->fetch_assoc()) {
+          $arrflagged[] = $row['claimIDFlagger'];
+          $arrflagtype[] = $row['flagType'];
+        }
+
+
+for($i = 0; $i<$numhits1; $i++)
+{
+ 
+
+
+
+if($arrflagtype[$i] == 'flag5')
+  { 
+   
+    echo "rival";
+  }
+
+  ?>
+
+ <li> <label for="<?php echo $claimid; ?>"><?php 
+
+
+ echo $claimid . "    ";?>
+<a class="brand-text" style=" color : #fff;" href ="add.php">Link</a>
+ </label><input id="<?php echo $claimid; ?>" type="checkbox">
       <ul> <span class="more">&hellip;</span>
-
 <?php
+
 // echo $claimid;
 // 1. rival as active - brainstorm first
 // 2. fixing more dropdowns details in tree diagram
 // 3. incorparate details of popup
 
-while($user = $result1->fetch_assoc())
-{
- if($numhits1 == 0)
-  {
-   // echo $claimid . "hello?";
-  
- }
-   
-   else { sortclaims($user['claimIDFlagger']); }
-    
 
+ if($numhits1 == 0)
+  { }
+   else { sortclaims($arrflagged[$i]); }
+    
 } // end while loop
 ?></ul><?php
 } // end of function
 ?>
 
-
-<!-- meow
-  <ul> 
-  <li> <label>1</label><input type="checkbox">
-      
-  <ul> <span class="more">&hellip;</span>
-      
-  <li><label>1.1</label><input type="checkbox"></li>
-  <li><label>1.2</label><input type="checkbox"></li> 
-  </ul></li>
-
-
-  <li><label for="item2">2</label><input id="item2" type="checkbox">
-              <ul>
-                <span class="more">&hellip;</span>
-                <li> <label for="item2.1">2.1</label><input id="item2.1" type="checkbox">
-                  <ul>
-                    <span class="more">&hellip;</span>
-                    <li>
-                      <label for="item2.1.1">2.1.1</label><input id="item2.1.1" type="checkbox">
-                      <ul>
-                        <span class="more">&hellip;</span>
-                        <li><label for="item2.1.1.1">2.1.1.1</label><input id="item2.1.1.1" type="checkbox"></li>
-                      
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><label for="item2.2">2.2</label><input id="item2.2" type="checkbox"></li>
-              </ul>
-             </li>
- 
-
-               </ul>
-             </li>
-        </ul>
-      </li>
-    </ul>
-</div>
-meow -->
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script><script  src="./script.js"></script>
- <!-- <?php include('templates/footer.php'); ?> -->
-</body>
+ </body>
 </html>
 <?php mysqli_close($conn); ?>
