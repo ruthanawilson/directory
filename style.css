@@ -24,7 +24,6 @@
   position: relative;
   display: block;
   margin: 0 auto;
-  white-space: nowrap;
   list-style: none;
 }
 .wrapper ul li {
@@ -170,4 +169,8 @@ body .wrapper ul input:checked ~ ul .more {
   max-height: 100%;
   margin-left: 0;
   transition: all 0.01s;
+}
+div.a {
+    width: 20px;
+    word-wrap: break-word;
 }

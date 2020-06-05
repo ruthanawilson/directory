@@ -43,10 +43,7 @@ ini_set('display_errors', 1);
       <li class="noline">
          CLAIMS
           <br>
-<a class="brand-text" href="add.php" style=" color : #fff;">Add Claim</a><br><br>
-Claims displayed as a <font color = "seagreen"> green font </font> mean that they are currently active. <br> Claims displayed as a <font color = "#FFFF99"> yellow font </font> mean that the are currently inactive. <br>
-
-
+<a class="brand-text" href="add.php" style=" color : #fff;">Add Claim</a>
 
 
          <!-- partial:index.partial.html -->
@@ -272,8 +269,6 @@ $stmt1->execute();
 $result1 = $stmt1->get_result(); // get the mysqli result
 $numhits1 = mysqli_num_rows($result1);
 //echo $numhits1;
-
-
 ?>
 
 <!-- <label> -->
@@ -299,44 +294,6 @@ while($user = $result1->fetch_assoc())
 
 } // end of rivalfunction
 
-/*
-function restoreactivity ($claimid)
-{
-
-$act = "SELECT DISTINCT claimIDFlagger
-        from flagsdb
-        WHERE claimIDFlagged = ?"; // SQL with parameters
-$s = $conn->prepare($act); 
-$s->bind_param("i", $claimid);
-$s->execute();
-$activity = $s->get_result(); // get the mysqli result
-
-while($activestatus = $activity->fetch_assoc())
-  { 
-
-    $h = "SELECT DISTINCT active
-        from claimsdb
-        WHERE ? = claimID"; // SQL with parameters
-$noce = $conn->prepare($h); 
-$noce->bind_param("i", $activestatus['claimIDFlagger']);
-$noce->execute();
-$res = $noce->get_result(); // get the mysqli result
-  while($r = $res->fetch_assoc())
-  {  
-    if($r['active'] == 1)
-    {
-      // BELOW CHANGES THE ACTIVE STATE OF OTHER CLAIMS
-$act = "UPDATE claimsdb 
-SET active = 1
-WHERE claimID = ? 
-"; // SQL with parameters
-$st1 = $conn->prepare($act); 
-$st1->bind_param("i", $claimid);
-$st1->execute();
-
-//THIS ABOVE CHANGES THE ACTIVE STATE OF OTHER CLAIMS
-    }
-  } */ 
 
 
 
@@ -355,7 +312,12 @@ $numhits1 = mysqli_num_rows($result1);
 //echo $numhits1;
 ?>
 
-<?php 
+<?php // if flagType = 'thesisRival' then just echo the claim.. without formatting 
+//echo '420';
+//echo $user['flagType'];
+
+
+   // echo $user['flagType'];
 
 $flag = "SELECT DISTINCT flagType, claimIDFlagger, claimIDFlagged
         from flagsdb
@@ -365,78 +327,30 @@ $stmt4->bind_param("i", $claimid);
 $stmt4->execute();
 $result2 = $stmt4->get_result(); // get the mysqli result
 $numhitsflag = mysqli_num_rows($result2);
-
-
-/* while($activestatus = $result2->fetch_assoc())
-  { 
-
-// BELOW CHANGES THE ACTIVE STATE OF OTHER CLAIMS
-$act = "UPDATE claimsdb 
-SET active = 1
-WHERE claimID = ? 
-"; // SQL with parameters
-$st1 = $conn->prepare($act); 
-$st1->bind_param("i", $claimid);
-$st1->execute();
-
-//THIS ABOVE CHANGES THE ACTIVE STATE OF OTHER CLAIMS
-}*/
-
-
-// THIS IS SIMPLY FOR DISPLAY OF SUBJECT/TARGETP BELOW
-
-$dis = "SELECT DISTINCT subject, targetP, active
-        from claimsdb
-        where ? = claimID
-         
-        "; // SQL with parameters
-$st = $conn->prepare($dis); 
-$st->bind_param("i", $claimid);
-$st->execute();
-$disp = $st->get_result(); // get the mysqli result
-
-
-// SIMPLY FOR DISPLAY ABOVE THIS POINT
+//echo $i;
+//if($i > -1)
+//{
+//echo $arrflagtype[$i-1];
+//}
 
 ?>
 
+
   <li> <label for="<?php echo $claimid; ?>"><?php 
-while($d = $disp->fetch_assoc())
-{
-  // FONT CHANGING
- if($d['active'] == 1)
-{ $font = 'seagreen';
 
- }
-else {
-  $font = '#FFFF99'; } ?>
+/* if( active = 1 for this $claimid)
+{ font = green; }
+else
+  font = yellow;
 
-<font color = "<?php echo $font; ?>"> 
-<?php    // END FONT CHANGING
+  ... <font = $font>
 
+  query = where claimid = claimidflagged 
+  if active =1
+  claim id active set = 0; 
 
-
- echo $claimid . "    ";
-
-
-  ?> <div class='a'> <?php
-
-
- // echo $d['subject'];
- //echo nl2br("\r\n");
-  //echo $d['targetP'];
-
-  /*$subject = wordwrap($d['subject'], 8, "\n", true);
-$targetP = wordwrap($d['targetP'], 8, "\n", true);
-  echo $subject;
-  echo $targetP;
-*/
-  ?> </div> <?php
-}
-
-
- ?>
-
+  // unless the case of NULL*/
+ echo $claimid . "    ";?>
 <!-- <a class="brand-text" style=" color : #fff;" href ="add.php">Link</a> -->
  </label><input id="<?php echo $claimid; ?>" type="checkbox">
       <ul> <span class="more">&hellip;</span>
@@ -449,6 +363,7 @@ $targetP = wordwrap($d['targetP'], 8, "\n", true);
 
   while($flagge = $result2->fetch_assoc())
   {
+
  if($flagge['flagType'] == "thesisRival")
       {
       echo nl2br("\r\n");

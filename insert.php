@@ -28,7 +28,7 @@ $c = uniqid (rand (),true);
 $supportID =  $c;
 
 		
-		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic')";
+		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic, active) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic', '$active')";
 
 	
 $active = '1'; 
@@ -53,33 +53,94 @@ $active = '1';
 
 //On page 2
 $claimIDFlagged = $_SESSION['varname'];
- 
+ $isRootRival = 0;
  // this function below inserts into database
-	 $sql5 = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, active) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$active')";
+// fix this code to where thesisrival works here as well 
+	 $sql5 = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, isRootRival) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$isRootRival')";
 
-	 $update = "UPDATE flagsdb 
-SET active = 0
-WHERE claimIDFlagged = ? "; // SQL with parameters
-$stmt2 = $conn->prepare($update); 
-$stmt2->bind_param("i", $claimIDFlagged);
-$stmt2->execute();
-$result2 = $stmt2->get_result(); // get the mysqli result
-
-if($flagType = 'thesisRival')
-{
-	$temp = $claimIDFlagged;
-	$claimIDFlagged = $claimIDFlagger;
-	$claimIDFlagger = $temp;
-	//$active = 0;
-	$flagrival = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, active) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$active')";
-
-	if(mysqli_query($conn, $flagrival)){
+if(mysqli_query($conn, $sql5)){
 				// success
 				header('Location: index.php');
 			} else {
 				echo 'query error: '. mysqli_error($conn);
 			}
+
+	 $update = "UPDATE claimssdb 
+SET active = 0
+WHERE claimID = ? "; // SQL with parameters
+$stmt2 = $conn->prepare($update); 
+$stmt2->bind_param("i", $claimIDFlagged);
+$stmt2->execute();
+$result2 = $stmt2->get_result(); // get the mysqli result
+
+if($flagType == 'thesisRival')
+{
+
+	//$active = 0;
+// CHECKING TO SEE IF IT IS A ROOT CLAIM
+	$root1 = "SELECT DISTINCT claimID
+        from claimsdb, flagsdb 
+            WHERE claimID NOT IN (SELECT DISTINCT claimIDFlagger FROM flagsdb) AND claimID = ?
+        "; // SQL with parameters
+$stmt5 = $conn->prepare($root1); 
+$stmt5->bind_param("i", $claimIDFlagger);
+$stmt5->execute();
+$rootresult1 = $stmt5->get_result(); // get the mysqli result
+$numhitsroot = mysqli_num_rows($rootresult1);
+// END CHECKING TO SEE IF IT IS A ROOT CLAIM
+
+while($j = $rootresult1->fetch_assoc())
+{
+	echo $j['claimID']; 
+	if($j['claimID'] == $claimIDFlagger)
+		{ $isRootRival = '1';
+		echo $isRootRival; }
 }
+	$temp = $claimIDFlagged;
+	$claimIDFlagged = $claimIDFlagger;
+	$claimIDFlagger = $temp;
+
+	$flagrival = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, isRootRival) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger', $isRootRival')";
+
+if(mysqli_query($conn, $flagrival)){
+				// success
+				header('Location: index.php');
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+
+
+$fix = "SELECT flagID from flagsdb ORDER BY flagID DESC LIMIT 1";
+				 $i = mysqli_query($conn, $fix);
+
+ 				if($res = $i->fetch_assoc()) {
+      $flagID = $res['flagID']; 
+  	}
+
+
+	 $fix2 = "UPDATE flagsdb 
+SET isRootRival = 1
+WHERE flagID = ? "; // SQL with parameters
+$stmt10 = $conn->prepare($fix2); 
+$stmt10->bind_param("i", $flagID);
+$stmt10->execute();
+$result10 = $stmt10->get_result(); // get the mysqli result
+	
+$flagID = $flagID - 1;
+
+ $fix3 = "UPDATE flagsdb 
+SET isRootRival = 1
+WHERE flagID = ? "; // SQL with parameters
+$stmt11 = $conn->prepare($fix3); 
+$stmt11->bind_param("i", $flagID);
+$stmt11->execute();
+$result11 = $stmt11->get_result(); // get the mysqli result
+	
+
+
+}//does rival also have to be an inference as supp =
+// rival can be supported by either inference, testimony, or perception.
 
 //question - can a claim be flagged as has a rival more than once?
 // only one rival per claim. 
@@ -93,12 +154,7 @@ if($flagType = 'thesisRival')
 // change foreach to be query..change intro query to be a prepared statement
 // have page load into center...
 
-		if(mysqli_query($conn, $sql5)){
-				// success
-				header('Location: index.php');
-			} else {
-				echo 'query error: '. mysqli_error($conn);
-			}
+		
 
 }
 mysqli_close($conn); ?>

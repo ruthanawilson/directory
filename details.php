@@ -115,7 +115,7 @@ echo nl2br("\r\n");
 
 if($active == '0')
 	{ // if active 
-		echo "These are inactive flags";
+		echo "These are infactive flags";
 		 	if($claimIDFlagged == $claimID)
 	
 			{
