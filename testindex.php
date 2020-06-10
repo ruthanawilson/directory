@@ -22,6 +22,10 @@ ini_set('display_errors', 1);
   <meta charset="UTF-8">
   <link rel="stylesheet" href="./style.css">
 
+
+
+
+
 </head>
 <body>
 
@@ -41,6 +45,20 @@ ini_set('display_errors', 1);
 <div class="wrapper">
     <ul>
       <li class="noline">
+         
+<!-- --------------------------------------------------- -->
+<div class="header">
+  <a href="#default" class="logo">Vada Claims</a>
+  <div class="header-right">
+    <a class="active" href="#home">Home</a>
+    <a href="#contact">Contact</a>
+    <a href="#about">About</a>
+  </div>
+</div>
+
+
+<!-- --------------------------------------------------- -->
+<BR><BR>
          CLAIMS
           <br>
 <a class="brand-text" href="add.php" style=" color : #fff;">Add Claim</a><br><br>
@@ -299,10 +317,10 @@ while($user = $result1->fetch_assoc())
 
 } // end of rivalfunction
 
-/*
+
 function restoreactivity ($claimid)
 {
-
+include('config/db_connect.php');
 $act = "SELECT DISTINCT claimIDFlagger
         from flagsdb
         WHERE claimIDFlagged = ?"; // SQL with parameters
@@ -311,37 +329,69 @@ $s->bind_param("i", $claimid);
 $s->execute();
 $activity = $s->get_result(); // get the mysqli result
 
+
+
 while($activestatus = $activity->fetch_assoc())
   { 
-
     $h = "SELECT DISTINCT active
         from claimsdb
         WHERE ? = claimID"; // SQL with parameters
-$noce = $conn->prepare($h); 
-$noce->bind_param("i", $activestatus['claimIDFlagger']);
-$noce->execute();
-$res = $noce->get_result(); // get the mysqli result
+      $noce = $conn->prepare($h); 
+      $noce->bind_param("i", $activestatus['claimIDFlagger']);
+      $noce->execute();
+      $res = $noce->get_result(); // get the mysqli result
+      $numh = mysqli_num_rows($res);
+
+
+    
+  //    echo nl2br("\r\n");
+    //  echo $activestatus['claimIDFlagger'];
+      //echo nl2br("\r\n");
+
+$everyInactive = 'true';
+//echo $everyInactive;
   while($r = $res->fetch_assoc())
   {  
+    
     if($r['active'] == 1)
     {
-      // BELOW CHANGES THE ACTIVE STATE OF OTHER CLAIMS
+      global $everyInactive;
+      $everyInactive = 'false';
+  //    echo $everyInactive;
+      $act = "UPDATE claimsdb 
+SET active = 0
+WHERE claimID = ? 
+"; // SQL with parameters
+$upd = $conn->prepare($act); 
+$upd->bind_param("i", $claimid);
+$upd->execute();
+    }
+  }
+
+
+  if($everyInactive == 'true')
+  {
+  
+//echo "ANSWER" . $everyInactive;
+// BELOW CHANGES THE ACTIVE STATE OF OTHER CLAIMS
 $act = "UPDATE claimsdb 
 SET active = 1
 WHERE claimID = ? 
 "; // SQL with parameters
-$st1 = $conn->prepare($act); 
-$st1->bind_param("i", $claimid);
-$st1->execute();
+$upd = $conn->prepare($act); 
+$upd->bind_param("i", $claimid);
+$upd->execute();
+ } // end of second if statement
+     } //end first while loop
 
 //THIS ABOVE CHANGES THE ACTIVE STATE OF OTHER CLAIMS
-    }
-  } */ 
-
+  
+  }  // end function
 
 
 function sortclaims($claimid)
 {
+ restoreactivity($claimid);
 
 include('config/db_connect.php');
   $sql1 = "SELECT DISTINCT claimIDFlagger
@@ -415,23 +465,33 @@ else {
 <?php    // END FONT CHANGING
 
 
+/*?><h2>Let the borders collapse:</h2>
 
- echo $claimid . "    ";
+<table>
+  <tr>
+    <th>Firstname</th>
+  </tr> </table>
+<?php
+*/
+ echo $claimid;
+
+echo nl2br("\r\n");      
+  ?>  <div class='a'> <?php
+
+  echo $d['subject'] . ' ';
+// echo nl2br("\r\n");
+  echo $d['targetP'];
 
 
-  ?> <div class='a'> <?php
-
-
- // echo $d['subject'];
- //echo nl2br("\r\n");
-  //echo $d['targetP'];
-
-  /*$subject = wordwrap($d['subject'], 8, "\n", true);
+/*  $subject = wordwrap($d['subject'], 8, "\n", true);
 $targetP = wordwrap($d['targetP'], 8, "\n", true);
   echo $subject;
-  echo $targetP;
-*/
+  echo $targetP;*/
+
   ?> </div> <?php
+?>  <br><button class="button" id="myBtn">DETAILS</button>
+
+<?php
 }
 
 
@@ -442,6 +502,18 @@ $targetP = wordwrap($d['targetP'], 8, "\n", true);
       <ul> <span class="more">&hellip;</span>
 
 
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+    <center>
+
+<?php echo "HELLO!";?>
+</div>
+</div>
 
 
 <?php
@@ -477,10 +549,22 @@ while($user = $result1->fetch_assoc())
    else { sortclaims($user['claimIDFlagger']); }
     
 } // end while loop
-
+restoreactivity($claimid);
 ?></ul><?php
 } // end of function
+//account for null instances in the active/inactive setting and updating algorithm 
 ?>
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script><script  src="./script.js"></script>

@@ -16,7 +16,7 @@ include('config/db_connect.php');
 		//	$flagType = $_POST['flagType'];
 session_start();
 
-$thesisST= $subject ." " . $targetP. ".";
+$thesisST= $subject . " " . $targetP. ".";
 
 $reasonST= "Because " . $subject . " " . $reason. ".";
 
@@ -27,12 +27,12 @@ $c = uniqid (rand (),true);
 
 $supportID =  $c;
 
+$active = '1'; 
+
 		
 		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic, active) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic', '$active')";
 
 	
-$active = '1'; 
-
 			if(mysqli_query($conn, $sql1)){
 				// success
 			} else {
@@ -41,8 +41,6 @@ $active = '1';
 			$addPage = $_SESSION['addPage'];	
 if($addPage == 'no')
 {
-
-$active = '1';
 
  				$order = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
 				 $nice = mysqli_query($conn, $order);
@@ -65,7 +63,7 @@ if(mysqli_query($conn, $sql5)){
 				echo 'query error: '. mysqli_error($conn);
 			}
 
-	 $update = "UPDATE claimssdb 
+	 $update = "UPDATE claimsdb 
 SET active = 0
 WHERE claimID = ? "; // SQL with parameters
 $stmt2 = $conn->prepare($update); 
