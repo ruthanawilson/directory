@@ -392,7 +392,7 @@ for(let i=0;i<spans.length;i++){
 	
 
 			<label>What is your Support Means?</label><br>
-<select name="union" id="union">
+<select name="union" id="union" class ="union">
 <option value="choose">Choose One</option>
 <option value="Inference">Inference</option>
 <option value="Testimony">Testimony</option>
@@ -400,30 +400,35 @@ for(let i=0;i<spans.length;i++){
 </select>
 <br>
 
-<textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea><br>
-<textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea><br>
-<textarea id="url" name = "URL" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
-<textarea id="rd" name = "rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
+<textarea id="reason" name = "reason" class ="reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea><br>
+<textarea id="example" name = "example" class = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea><br>
+<textarea id="url" name = "URL" class = "url" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
+<textarea id="rd" name = "rd" class ="rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
 <!-- for testimony -->
-<textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
+<textarea id="summary" name = "summary" class = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
 
 
 
 </p>
-<?php } // end of flagging function ?>
+<?php } // end of flagging function?> 
 
 <script type="text/javascript">
 
-var union = document.getElementById('union');
+var union = document.getElementsByClassName('union');
 union.onchange = checkOtherUnion;
 union.onchange();
 
+</script>
+
+
+<script type="text/javascript">
+
 function checkOtherUnion() {
     var union = this;
-    var reason = document.getElementById('reason');
-    var example = document.getElementById('example');
-    var url = document.getElementById('url');
- 	var rd = document.getElementById('rd');
+    var reason = document.getElementsByClassName('reason');
+    var example = document.getElementsByClassName('example');
+    var url = document.getElementsByClassName('url');
+ 	var rd = document.getElementsByClassName('rd');
     if (union.options[union.selectedIndex].value === 'Inference') {
         reason.style.display = '';
         example.style.display = '';
@@ -443,11 +448,13 @@ if (union.options[union.selectedIndex].value === 'Perception') {
 if (union.options[union.selectedIndex].value === 'Testimony') {
         rd.style.display = '';
         summary.style.display = '';
+        description.style.display = '';
     } else {
         rd.style.display = 'none';
         summary.style.display = 'none';
        
-    }
+    } //end of else
 
-}
+} //end of function
+
 </script>

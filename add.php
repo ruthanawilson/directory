@@ -4,7 +4,8 @@
 
 <!DOCTYPE html>
 <html>
- 
+   <link rel="stylesheet" href="./style.css"> 
+
 	<?php include('templates/header.php');
 	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
 session_start();
@@ -42,62 +43,8 @@ clearInput();
 
 
 </script>
-
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-</style>
-
-	<?php include('templates/header.php'); ?>
 <br>
 <b>Add claim </b>
-		<br>	
-			<!-- Trigger/Open The Modal -->
-<button id="myBtn">Add Claim</button>
-
-
-</div>
-
-	</div>
 	
 </head>
 
@@ -106,14 +53,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <body>
 
 
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-
-    <span class="close">&times;</span>
-    <center>
 <form method="POST" id = "myForm" action="insert.php">
 
 	<?php $addPage = 'yes';
@@ -176,8 +115,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <!-- for testimony -->
 <textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
 
-<textarea id="description" name = "description" value="<?php echo htmlspecialchars($description) ?>">Description</textarea><br>
-
 <script type="text/javascript">
 
 var union = document.getElementById('union');
@@ -209,11 +146,10 @@ if (union.options[union.selectedIndex].value === 'Perception') {
 if (union.options[union.selectedIndex].value === 'Testimony') {
         rd.style.display = '';
         summary.style.display = '';
-        description.style.display = '';
     } else {
         rd.style.display = 'none';
         summary.style.display = 'none';
-        description.style.display = 'none';
+        
       
     }
 
@@ -228,39 +164,7 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
 				<button id="submit">Submit</button>	
 					</div>
 		</form>
-	</section>
 
-  </div>
-
-</div>
-
-<script>
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-</script>
-<?php include('templates/footer.php'); ?>
 </body>
 
 </html>

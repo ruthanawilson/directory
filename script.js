@@ -7,7 +7,7 @@ You can use it for whatever purpose you like, except evil.
 
 */
 // Get the modal
-var modal = document.getElementById("myModal");
+/*var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
@@ -30,4 +30,27 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+*/
 
+
+/*
+var modal = document.getElementById('myModal');
+//var modal = document.querySelectorAll('.myModal.modal'); 
+var btns = document.querySelectorAll('.button.button'); 
+var span = document.getElementsByClassName("close")[0];
+
+[].forEach.call(btns, function(el) {
+  el.onclick = function() {
+      modal.style.display = "block";
+  }
+})
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+} 
+*/

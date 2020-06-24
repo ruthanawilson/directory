@@ -1,7 +1,6 @@
 <?php 
 	include('config/db_connect.php');
 	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
-	?> <center><?php include('templates/header.php');
 	// check GET request id param
 	if(isset($_GET['id'])){
 		
@@ -19,24 +18,12 @@ $s = $conn->prepare($act);
 $s->bind_param("i", $claimID);
 $s->execute();
 $activity = $s->get_result(); // get the mysqli result
-} //end isset check
-	
-	// close connection
-//	mysqli_close($conn);
 
-include('config/db_connect.php');
-	
 
 ?> <center><?php
 
 while($details = $activity->fetch_assoc())
 	{
-session_start();
-		$_SESSION['varname'] = $details['claimID'];
-		$addPage = 'no';
-		$_SESSION['addPage'] = $addPage;
-
-
 		?> 
 <p><b>Claim ID:</b>  <?php echo $details['claimID']; ?> </p>
 			<p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p></font>
@@ -46,247 +33,54 @@ session_start();
 <?php //------------ ONE
 if( $details['supportMeans'] == "Inference")
 { ?>
-
-
-
-	<b>Thesis Statement:</b>  <?php echo $details['thesisST']; ?>	
-			<!-- Trigger/Open The Modal -->
-<button class="openmodal myBtn">Flag Thesis</button>
-
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
-  </span>
-</div>
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	<select name="flagType" >
-		  	<option value="" selected>Select...</option>
-  			<option value="thesisRival">Thesis - Has Rival</option>
-  			<option value="thesisEarly">Thesis - Too Early</option>
-  			<option value="thesisLate">Thesis - Late</option>
-  			
-  			</select><br>
-<?php flagging(); ?>
-
-<div class="center">
-				<button id="submit">Submit</button>	
-					</div>
-
-</p>
-</form></div>
-</div>
-<!--------------------------------------------------------------------------------------------------------------------------->
-
-
+	<b>Thesis Statement:</b>  <?php echo $details['thesisST']; ?>			<!-- Trigger/Open The Modal -->
+<button id="myBtnT">Flag Thesis</button>
 <BR><br>
 			<b>Reason Statement:</b>  <?php echo $details['reasonST']; ?>
-			
-
-
-			<button class="openmodal myBtn">Flag Reason</button>
-
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
-  </span>
-</div>
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	<select name="flagType" >
-		  	<option value="" selected>Select...</option>
-  			<option value="reasonUS">Reason - Unestablished Subject</option>
-  			<option value="reasonUI">Reason - Itself Unestablished</option>
-  			<option value="reasonHostile">Reason - Hostile</option>
-  			</select><br>
-<?php flagging(); ?>
-
-<div class="center">
-				<button id="submit">Submit</button>	
-					</div>
-
-</p>
-</form>
-</div>
-</div>
-
-<!--------------------------------------------------------------------------------------------------------------------------->
-
-
+			<button id="myBtnR">Flag Reason</button>
 <br><br>
 			<b>Rule Statement:</b>  <?php echo $details['ruleST']; ?>
-<button class="openmodal myBtn">Flag Rule & Example</button>
+<button id="myBtnE">Flag Rule & Example</button>
 
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
-  </span>
-</div>
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	<select name="flagType" >
-		  	<option value="" selected>Select...</option>
-  			<option value="ruleNarrow">Rule - Too Narrow</option>
-  			<option value="ruleBroad">Rule - Too Broad</option>
-  			<option value="ruleUnest">Rule - Unestablished Universal</option>
-  			<option value="ruleContri">Rule - Contrived Universal</option>
-
-  			</select><br>
-<?php flagging(); ?>
-
-<div class="center">
-				<button id="submit">Submit</button>	
-					</div>
-
-</p>
-</form></div>
-</div>
-
-<!--------------------------------------------------------------------------------------------------------------------------->
-
-<?php }  // end inference check ?>
+<?php } ?>
   
 
  <?php // ------------- TWO
 if( $details['supportMeans'] == "Perception")
 { ?>
 	<p><b>Url of perception:</b>  <?php echo $details['URL']; ?> </p>
-	
+	<button id="myBtnPerTes">Flag Perception</button>
 
-<button class="openmodal myBtn">Flag Perception</button>
-
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
-  </span>
-</div>
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	
-
-	<br><u>Perception Flags</u><br>
-				<select name="flagType">
-		  	<option value="" selected>Select...</option>
-  			<option value="ContactObject">No contact with object from sense organ</option>
-  			<option value="Verbal">Relies on language</option>
-  			<option value="Errant">Errant</option>
-  			<option value="Ambiguous">Ambiguous</option>
-  			</select><br>
-
-<?php flagging(); ?>
-
-<div class="center">
-				<button id="submit">Submit</button>	
-					</div>
-
-</p>
-</form>
-</div>
-</div>
-
-
-		<!--------------------------------------------------------------------------------------------------------------------------->
-	
-<?php } // end perception check ?>
+			
+<?php } ?>
 
    <?php // ------------- THREE
 if( $details['supportMeans'] == "Testimony")
 { ?>
 	<p><b>Research Document:</b>  <?php echo $details['rd']; ?> </p>
 	<p><b>Summary:</b>  <?php echo $details['summary']; ?> </p>
-	
-
-<button class="openmodal myBtn">Flag Testimony</button>
-
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
-  </span>
-</div>
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	
-<br><u>Testimony Flags</u><br>
-				<select name="flagType">
-		  	<option value="" selected>Select...</option>
-  			<option value="NoDirect">No direct familiarity</option>
-  			<option value="ErrantInfo">Errant information</option>
-  			<option value="Uncertain">Uncertain/Ambiguous</option>
-  			<option value="AlternativeAgendas">Alternative agendas/motivations</option>
-  			<option value="Misstatement">Misstatement</option>
-  			</select><br>
-
-<?php flagging(); ?>
-
-<div class="center">
-				<button id="submit">Submit</button>	
-					</div>
-
-</p>
-</form>
-</div>
-</div>
+	<button id="myBtnPerTes">Flag Testimony</button>
 
 			
-<?php } // end testimony check 
+<?php } 
 
 
 
 
-	
+	session_start();
+		$_SESSION['varname'] = $details['claimID'];
+		$addPage = 'no';
+		$_SESSION['addPage'] = $addPage;
 
+$supportMeans = $details['supportMeans'];
 	}//end while loop
-			
+			} //end isset check
+	
+	// close connection
+//	mysqli_close($conn);
+
+include('config/db_connect.php');
+	
 
 
 
@@ -326,7 +120,8 @@ clearInput();
 
 </script>
 <?php
-		// Colorcode *specific* parts of the flag limb. -IF flag = x, y, z, text = ruleflag/red. if flag = u, m, v, text = reasonflag/red. 
+		// Colorcode *specific* parts of the flag limb. 
+		// IF flag = x, y, z, text = ruleflag/red. if flag = u, m, v, text = reasonflag/red. 
 
 ?>
 
@@ -342,25 +137,276 @@ clearInput();
 
 <body>
 
+
+<!-- The Modal -->
+<div id="myModalT" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+    <center>
+<form method="POST" id = "myForm" action="insert.php">
+
+<div id="some-div">
+    <img src = "https://i.ibb.co/YfHKPmM/question.png">
+  
+  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
+  </span>
+</div>
+<html>
+<p style="color:#000000";><font = #000000>
+<br>What are you flagging it for?<br> </font>
+	<select name="flagType" >
+		  	<option value="" selected>Select...</option>
+  			<option value="thesisRival">Thesis - Has Rival</option>
+  			<option value="thesisEarly">Thesis - Too Early</option>
+  			<option value="thesisLate">Thesis - Late</option>
+  			
+  			</select><br>
+<?php flagging(); ?>
+
+<div class="center">
+				<button id="submit">Submit</button>	
+					</div>
+
+</p>
+</form>
+</div>
+</div>
+
+
+<!-- The Modal -->
+<div id="myModalR" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+    <center>
+<form method="POST" id = "myForm" action="insert.php">
+
+<div id="some-div">
+    <img src = "https://i.ibb.co/YfHKPmM/question.png">
+  
+  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
+  </span>
+</div>
+<html>
+<p style="color:#000000";><font = #000000>
+<br>What are you flagging it for?<br> </font>
+	<select name="flagType" >
+		  	<option value="" selected>Select...</option>
+  			<option value="reasonUS">Reason - Unestablished Subject</option>
+  			<option value="reasonUI">Reason - Itself Unestablished</option>
+  			<option value="reasonHostile">Reason - Hostile</option>
+  			</select><br>
+<?php flagging(); ?>
+
+<div class="center">
+				<button id="submit">Submit</button>	
+					</div>
+
+</p>
+</form>
+</div>
+</div>
+
+<!-- The Modal -->
+<div id="myModalE" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+    <center>
+<form method="POST" id = "myForm" action="insert.php">
+
+<div id="some-div">
+    <img src = "https://i.ibb.co/YfHKPmM/question.png">
+  
+  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
+  </span>
+</div>
+<html>
+<p style="color:#000000";><font = #000000>
+<br>What are you flagging it for?<br> </font>
+	<select name="flagType" >
+		  	<option value="" selected>Select...</option>
+  			<option value="ruleNarrow">Rule - Too Narrow</option>
+  			<option value="ruleBroad">Rule - Too Broad</option>
+  			<option value="ruleUnest">Rule - Unestablished Universal</option>
+  			<option value="ruleContri">Rule - Contrived Universal</option>
+
+  			</select><br>
+<?php flagging(); ?>
+
+<div class="center">
+				<button id="submit">Submit</button>	
+					</div>
+
+</p>
+</form>
+</div>
+</div>
+			
+ 
+		
+<!-- The Modal -->
+<div id="myModalPerTes" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+    <center>
+<form method="POST" id = "myForm" action="insert.php">
+
+<div id="some-div">
+    <img src = "https://i.ibb.co/YfHKPmM/question.png">
+  
+  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
+  </span>
+</div>
+<html>
+<p style="color:#000000";><font = #000000>
+<br>What are you flagging it for?<br> </font>
+	
+
+
+	 <?php // ------------- TWO
+if( $supportMeans == "Perception")
+{ ?>
+	
+	<br><u>Perception Flags</u><br>
+				<select name="flagType">
+		  	<option value="" selected>Select...</option>
+  			<option value="ContactObject">No contact with object from sense organ</option>
+  			<option value="Verbal">Relies on language</option>
+  			<option value="Errant">Errant</option>
+  			<option value="Ambiguous">Ambiguous</option>
+  			</select><br>
+
+<?php } ?>
+
+   <?php // ------------- THREE
+if( $supportMeans == "Testimony")
+{ ?>
+
+<br><u>Testimony Flags</u><br>
+				<select name="flagType">
+		  	<option value="" selected>Select...</option>
+  			<option value="NoDirect">No direct familiarity</option>
+  			<option value="ErrantInfo">Errant information</option>
+  			<option value="Uncertain">Uncertain/Ambiguous</option>
+  			<option value="AlternativeAgendas">Alternative agendas/motivations</option>
+  			<option value="Misstatement">Misstatement</option>
+  			</select><br>
+			
+<?php }  ?>
+
+
+
+
+
+
+<?php flagging(); ?>
+
+<div class="center">
+				<button id="submit">Submit</button>	
+					</div>
+
+</p>
+</form>
+</div>
+</div>
 		
 
-<script>
+
+
+
+
+
+
+
+
+
 			
-var modals = document.getElementsByClassName('modal');
-// Get the button that opens the modal
-var btns = document.getElementsByClassName("openmodal");
-var spans=document.getElementsByClassName("close");
-for(let i=0;i<btns.length;i++){
-    btns[i].onclick = function() {
-        modals[i].style.display = "block";
-    }
-}
-for(let i=0;i<spans.length;i++){
-    spans[i].onclick = function() {
-        modals[i].style.display = "none";
-    }
+<script>
+// Get the modal
+var modal = document.getElementById("myModalT");
+var btn = document.getElementById("myBtnT");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
 }
 
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModalR");
+var btn = document.getElementById("myBtnR");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModalE");
+var btn = document.getElementById("myBtnE");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModalPerTes");
+var btn = document.getElementById("myBtn");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
 </script>
 
 
@@ -408,10 +454,6 @@ for(let i=0;i<spans.length;i++){
 <textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
 
 
-
-</p>
-<?php } // end of flagging function ?>
-
 <script type="text/javascript">
 
 var union = document.getElementById('union');
@@ -443,6 +485,7 @@ if (union.options[union.selectedIndex].value === 'Perception') {
 if (union.options[union.selectedIndex].value === 'Testimony') {
         rd.style.display = '';
         summary.style.display = '';
+        description.style.display = '';
     } else {
         rd.style.display = 'none';
         summary.style.display = 'none';
@@ -451,3 +494,6 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
 
 }
 </script>
+</p>
+<?php } // end of flagging function ?>
+

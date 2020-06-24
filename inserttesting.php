@@ -1,77 +1,19 @@
 <?php
 include('config/db_connect.php');
-
-			$flagType = $_POST['flagType'];
-		//	$addPage = $_POST['addPage'];
-			$reason = $_POST['reason'];
-			$topic = $_POST['topic'];
-			$example = $_POST['example'];
-			$URL = $_POST['url'];
-			$rd = $_POST['rd'];
-			$subject = $_POST['subject'];
-			$supportMeans = $_POST['union'];
-			$targetP = $_POST['targetP'];
-			$summary = $_POST['summary'];
-session_start();
-
-$thesisST= $subject . " " . $targetP. ".";
-
-$reasonST= "Because " . $subject . " " . $reason. ".";
-
-$ruleST= "Whomever " . $reason . " " . $targetP. " as in the case of " . $example. ".";
-
+$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
 $c = uniqid (rand (),true);
 
 $supportID =  $c;
-
-$active = '1'; 
-		
-		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic, active) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic', '$active')";
-
-	
-			if(mysqli_query($conn, $sql1)){
-				// success
-			} else {
-				echo 'query error: '. mysqli_error($conn);
-			}
-			$addPage = $_SESSION['addPage'];	
-
-
-//if this was a new claim from the add page, it would NOT be flagging anything. but since it's NOT from the add page, it is flagging. thus, this is the flagger.
-			//we have to go grab the new claimID because it was generated in this very page. 
-if($addPage == 'no')
-{
-
- 				$order = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
+$flagType = "thesisRival";
+$claimIDFlagged = 424;
+echo "HELLO";
+$order = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
 				 $nice = mysqli_query($conn, $order);
 
  				if($row = $nice->fetch_assoc()) {
       $claimIDFlagger = $row['claimID']; 
       echo $claimIDFlagger;
   		}
-
-//On page 2
-$claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is the claimID of the claim being flagged.
- $isRootRival = 0;
- // this function below inserts into database
-	  $sql5 = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, isRootRival) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$isRootRival')";
-
-if(mysqli_query($conn, $sql5)){
-				// success
-				header('Location: index.php');
-			} else {
-				echo 'query error: '. mysqli_error($conn);
-			}
-
-//this below just updates our newly-flagged claim to be inactive. 
-	 $update = "UPDATE claimsdb 
-SET active = 0
-WHERE claimID = ? "; // SQL with parameters
-$stmt2 = $conn->prepare($update); 
-$stmt2->bind_param("i", $claimIDFlagged);
-$stmt2->execute();
-$result2 = $stmt2->get_result(); // get the mysqli result
-
 if($flagType == 'thesisRival')
 {
 echo "HELLO";
@@ -152,8 +94,6 @@ $result11 = $stmt11->get_result(); // get the mysqli result
 // have page load into center...
 
 		
-
- }////end of addpage = no
 
 
 mysqli_close($conn); ?>
