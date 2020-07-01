@@ -359,7 +359,7 @@ function createModal($claimid)
                 // add author as additional column "Source/Name"
                 // combine summary/descrption
                 // for perception: description, the url, 
-
+                //subject targetp on details page not just popup
                 // And now assign this HTML layout in pop-up body
                 $("#modal-body").html(html);
 
@@ -536,6 +536,10 @@ restoreactivity($claimid);
 //account for null instances in the active/inactive setting and updating algorithm 
 // reimpleplement recursion independently for active/inactive
 // reexamine root rivals and troubleshoot multiple instances of it
+
+//input by topic and filter through unique urls
+//add recursion to activity function
+//validate all inputs for injection
 ?>
 
 
