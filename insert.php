@@ -1,17 +1,22 @@
 <?php
 include('config/db_connect.php');
 
-			$flagType = $_POST['flagType'];
-		//	$addPage = $_POST['addPage'];
-			$reason = $_POST['reason'];
-			$topic = $_POST['topic'];
-			$example = $_POST['example'];
-			$URL = $_POST['url'];
-			$rd = $_POST['rd'];
-			$subject = $_POST['subject'];
-			$supportMeans = $_POST['union'];
-			$targetP = $_POST['targetP'];
-			$summary = $_POST['summary'];
+
+
+$flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
+
+
+$reason = mysqli_real_escape_string($conn, $_POST['reason']);
+$topic = mysqli_real_escape_string($conn, $_POST['topic']);
+$example = mysqli_real_escape_string($conn, $_POST['example']);
+$url = mysqli_real_escape_string($conn, $_POST['url']);
+$rd = mysqli_real_escape_string($conn, $_POST['rd']);
+$subject = mysqli_real_escape_string($conn, $_POST['subject']);
+$supportMeans = mysqli_real_escape_string($conn, $_POST['union']);
+$targetP = mysqli_real_escape_string($conn, $_POST['targetP']);
+$summary = mysqli_real_escape_string($conn, $_POST['summary']);
+
+			
 session_start();
 
 $thesisST= $subject . " " . $targetP. ".";
