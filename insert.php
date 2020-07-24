@@ -29,7 +29,14 @@ $c = uniqid (rand (),true);
 
 $supportID =  $c;
 
-$active = '1'; 
+if($flagType == 'thesisRival')
+	{ $active = 0; }
+else
+{
+$active = '1'; 	
+}
+
+//see if it is an instance of a claim being flagged. which one? find preexisting flagType, if any. if it has a flagtype, check if thesisrival: if yes, then error. if no, continue..)
 		
 		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic, active) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic', '$active')";
 
