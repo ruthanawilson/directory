@@ -38,6 +38,28 @@ $numhitsroot = mysqli_num_rows($rootresult12);
          sortclaims($root2['claimID']);
 
   }
+
+  if ($numhitsroot == '0')
+  {
+
+    $root123 = "SELECT DISTINCT claimID
+        from claimsdb
+        "; // SQL with parameters
+$stmt523 = $conn->prepare($root123); 
+$stmt523->execute();
+$rootresult123 = $stmt523->get_result(); // get the mysqli result
+$numhitsroot3 = mysqli_num_rows($rootresult123);
+
+
+if($numhitsroot3 == '1')
+{
+ while($root2 = $rootresult123->fetch_assoc())
+  {
+         sortclaims($root2['claimID']);
+
+  }
+  }
+} //end of if statement 
 //duplicate
 
   $root1 = "SELECT DISTINCT claimID
@@ -88,31 +110,11 @@ while($root22 = $rootresult22->fetch_assoc())
   { 
 
          sortclaimsRIVAL($root22['claimIDFlagger']);
+         echo "<BR>";
         
   }
 
 //duplicate
-
-//sort by topic on each page 
-  //thesisrival can only be flagged once 
-
-
-/*
-$root2 = "SELECT DISTINCT claimIDFlagger
-        from flagsdb 
-            WHERE isRootRival = 1;
-        "; // SQL with parameters
-$stmt12 = $conn->prepare($root2); 
-$stmt12->execute();
-$rootresult2 = $stmt12->get_result(); // get the mysqli result
-$numhitsroot2 = mysqli_num_rows($rootresult2);
-
-while($root2 = $rootresult2->fetch_assoc())
-  { 
-         restoreActivity($root2['claimIDFlagger']);
-       //  echo "RIVAL";
-  }
-*/
 
 //starts two chains of recursion. one with normal root claims. the other with root rivals. the rivals, of course, are put into the rival recursion.
 
@@ -157,12 +159,29 @@ while($flagge = $result2->fetch_assoc())
   {
     $resultFlagType = $flagge['flagType'];
     $r = $flagge['claimIDFlagger'];
+
     $d = $flagge['claimIDFlagged'];
   }
 //above is for rivals
 
-?>
 
+
+ if($resultFlagType == "thesisRival")
+      {
+        echo " <br> Flagged by a rival: " . $r . "<br>";
+      //ECHO "START 1";
+      sortclaimsRival($r);
+      //ECHO "END 1";
+      // for THIS claimid - check for flaggers that aren't rival .. sort claim those
+    
+      //ECHO "START 2";
+      sortclaimsRival($d);
+      //ECHO "END 2";
+      // for the CORRESPONDING claimid - check for flaggers that aren't rival .. sort claim those.
+      }
+      else {
+
+?>
   <li> <label for="<?php echo $claimid; ?>"><?php 
 while($d = $disp->fetch_assoc())
 {
@@ -175,14 +194,13 @@ else
 <font color = "<?php echo $font; ?>"> 
 <?php    // END FONT CHANGING
 
-echo $claimid . "<br>" . $d['subject'] . ' ' . $d['targetP'] . "<br> Flag type: " . $resultFlagType;
+echo $claimid . "<br>" . $d['subject'] . ' ' . $d['targetP'] . "<br> Flag type: " . $resultFlagType . "<br>";
 
 // ------------------------- BELOW is modal code
 createModal($claimid);
 // ------------------------- ABOVE is modal code
 
-}
-
+} //end of while statement 
 
  ?> </label><input id="<?php echo $claimid; ?>" type="checkbox"> <ul> <span class="more">&hellip;</span>
 
@@ -193,13 +211,9 @@ createModal($claimid);
 
 
 
- if($resultFlagType == "thesisRival")
-      {
-      sortclaimsRival($r);
-      // for THIS claimid - check for flaggers that aren't rival .. sort claim those
-      sortclaimsRival($d);
-      // for the CORRESPONDING claimid - check for flaggers that aren't rival .. sort claim those.
-      }
+
+
+
 
 //below is to continue recursion
  $sql1 = "SELECT DISTINCT claimIDFlagger
@@ -225,6 +239,9 @@ while($user = $result1->fetch_assoc())
 // recursion finished here
 
 ?></ul><?php
+
+      } //end of else statement 
+
 } // end of function
 
 
@@ -280,7 +297,7 @@ else
 <?php    // END FONT CHANGING
 
  echo $claimid;
-echo nl2br("\r\n");     
+echo nl2br("\r\n");
 echo "RIVALS #" . $rivaling . "!";
 echo nl2br("\r\n");      
   echo $d['subject'] . ' ';
@@ -297,7 +314,7 @@ createModal($claimid);
  ?>
 
  </label><input id="<?php echo $claimid; ?>" type="checkbox"><ul> <span class="more">&hellip;</span>
-
+</font>
 <?php
 //below finds the flagger and continues the recursion by pushing it back to sortclaims recursion
   $sql1 = "SELECT DISTINCT claimIDFlagger
@@ -314,12 +331,13 @@ while($user = $result1->fetch_assoc())
 {
 if($numhits1 == 0)
   { }
-   else { sortclaims($user['claimIDFlagger']); }
+   else {
+   sortclaims($user['claimIDFlagger']); }
  } // end while loop
 
 //it's pushed - now the function is finished!
 
-?></font></ul><?php 
+?></ul><?php 
 
 } // end of rivalfunction
 
@@ -382,10 +400,6 @@ while($activestatus = $activity->fetch_assoc())
       //checks the active status of the flagger
 
     
-  //    echo nl2br("\r\n");
-    //  echo $activestatus['claimIDFlagger'];
-      //echo nl2br("\r\n");
-
 $everyInactive = 'true';
 //echo $everyInactive;
   while($r = $res->fetch_assoc())
@@ -510,9 +524,6 @@ $h = "SELECT DISTINCT active
       //checks the active status of the flagger
 
     
-  //    echo nl2br("\r\n");
-    //  echo $activestatus['claimIDFlagger'];
-      //echo nl2br("\r\n");
 
 $everyInactiveA = 'true';
 //echo $everyInactive;
@@ -523,39 +534,8 @@ $everyInactiveA = 'true';
     {
       global $everyInactiveA;
       $everyInactiveA = 'false';
-  //    echo $everyInactive;
-      /*$act = "UPDATE claimsdb 
-SET active = 0
-WHERE claimID = ? 
-"; // SQL with parameters
-$upd = $conn->prepare($act); 
-$upd->bind_param("i", $claimid);
-$upd->execute(); */
     } // end of if
   } //end of while loop
-
-
-  if($everyInactiveA == 'true')
-  {
-  
-//echo "ANSWER" . $everyInactive;
-// BELOW CHANGES THE ACTIVE STATE OF OTHER CLAIMS
-/*$act = "UPDATE claimsdb 
-SET active = 1
-WHERE claimID = ? 
-"; // SQL with parameters
-$upd = $conn->prepare($act); 
-$upd->bind_param("i", $claimid);
-$upd->execute();
-*/
- } // end of second if statement
-
-
-
-
-
-
-
 
 
  } // end while loop
@@ -566,7 +546,6 @@ $upd->execute();
 
 
  // ---------------------------------------------------------------
-//echo $rivaling . "MEOW MEOW MEOW MEOW MEOW";
 //now that we have the rival pair, let's push it through to the normal sortclaims so it doesn't get stuck in a loop and it continues into normal restore activity
 
 //this is finding the flaggers for rival B
@@ -602,12 +581,6 @@ $h = "SELECT DISTINCT active
       $numh = mysqli_num_rows($res);
       //checks the active status of the flagger
 
-    
-  //    echo nl2br("\r\n");
-    //  echo $activestatus['claimIDFlagger'];
-      //echo nl2br("\r\n");
-
-//echo $everyInactive;
   while($r = $res->fetch_assoc())
   {  
     
@@ -615,51 +588,13 @@ $h = "SELECT DISTINCT active
     {
       global $everyInactiveB;
       $everyInactiveB = 'false';
-  //    echo $everyInactive;
-      /*$act = "UPDATE claimsdb 
-SET active = 0
-WHERE claimID = ? 
-"; // SQL with parameters
-$upd = $conn->prepare($act); 
-$upd->bind_param("i", $claimid);
-$upd->execute(); */
-//THIS MAKES IT INACTIVE
 
     } // end of if
   } //end of while loop
 
-/*
-  if($everyInactive == 'true')
-  {
-  
-//echo "ANSWER" . $everyInactive;
-// BELOW CHANGES THE ACTIVE STATE OF OTHER CLAIMS
-$act = "UPDATE claimsdb 
-SET active = 1
-WHERE claimID = ? 
-"; // SQL with parameters
-$upd = $conn->prepare($act); 
-$upd->bind_param("i", $claimid);
-$upd->execute();
-
-
-$act = "UPDATE claimsdb 
-SET active = 0
-WHERE claimID = ? 
-"; // SQL with parameters
-$upd = $conn->prepare($act); 
-$upd->bind_param("i", $rivaling);
-$upd->execute();
- 
-
- } // end of second if statement
-*/
-
-
-
-
-
  } // end while loop
+
+
 
 if($everyInactiveA == 'true' && $everyInactiveB == 'true' || $everyInactiveA == 'false' && $everyInactiveB == 'false')
 {
@@ -681,8 +616,6 @@ $upd->bind_param("i", $rivaling);
 $upd->execute();
 
 }
-
-
 
 
 if($everyInactiveA == 'true' && $everyInactiveB == 'false')
@@ -818,10 +751,6 @@ include('config/db_connect.php');
 
                 html += " <BR> <a href=\"details.php?id=" + response.claimID + "\" class = \"button\">  FLAG THIS CLAIM! </a> </div>";
 
-                // add author as additional column "Source/Name"
-                // combine summary/descrption
-                // for perception: description, the url, 
-                //subject targetp on details page not just popup
                 // And now assign this HTML layout in pop-up body
                 $("#modal-body").html(html);
 
@@ -871,22 +800,8 @@ include('config/db_connect.php');
 
 <?php
 
-} 
+} // end of function
 
- // end of function
-
-
-//account for null instances in the active/inactive setting and updating algorithm 
-// reimpleplement recursion independently for active/inactive
-// reexamine root rivals and troubleshoot multiple instances of it
-
-//input by topic and filter through unique urls
-//add recursion to activity function
-//validate all inputs for injection
-
-
-//add flagtype 
-//add tarka into a comments section or dialogue ability. 
 ?>
 
 

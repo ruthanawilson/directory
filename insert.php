@@ -70,7 +70,7 @@ $claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is th
 
 if(mysqli_query($conn, $sql5)){
 				// success
-				header('Location: index.php');
+				//header('Location: index.php');
 			} else {
 				echo 'query error: '. mysqli_error($conn);
 			}
@@ -111,7 +111,7 @@ while($j = $rootresult1->fetch_assoc())
 			$isRootRival = '1';
 		echo $isRootRival; 
 	}
-}
+} //END OF WHILE STATEMENT 
 //we found a root. its been designated, swapped values, and the additional flag for reciprocity is added. however... the original root isn't rootrival =1 (fix happens below) but flagtype value is still the same. 
 	$temp = $claimIDFlagged;
 	$claimIDFlagged = $claimIDFlagger;
@@ -121,7 +121,7 @@ while($j = $rootresult1->fetch_assoc())
 
 if(mysqli_query($conn, $flagrival)){
 				// success
-				header('Location: index.php');
+				//header('Location: index.php');
 			} else {
 				echo 'query error: '. mysqli_error($conn);
 			}
@@ -135,7 +135,9 @@ $fix = "SELECT flagID from flagsdb ORDER BY flagID DESC LIMIT 1";
       $flagID = $res['flagID']; 
   	}
 
-
+if($numhitsroot == 1)
+		{ 
+	
 	 $fix2 = "UPDATE flagsdb 
 SET isRootRival = 1
 WHERE flagID = ? "; // SQL with parameters
@@ -154,15 +156,9 @@ $stmt11->bind_param("i", $flagID);
 $stmt11->execute();
 $result11 = $stmt11->get_result(); // get the mysqli result
 	
-
+} //end of if statement 
 
 } //end of if flagtype == thesisRival
-
-
-//2. if additional rival claim - restricted. 
-// change foreach to be query..change intro query to be a prepared statement
-// have page load into center...
-
 		
 
  }////end of addpage = no
