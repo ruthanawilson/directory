@@ -1,3 +1,33 @@
+<?php /* include('templates/header.php');
+  // check GET request id param
+  if(isset($_GET['topic'])){
+    
+    // escape sql chars
+    $topic = mysqli_real_escape_string($conn, $_GET['topic']);
+    // make sql
+
+
+?><link rel="stylesheet" href="./style.css"> 
+  <link rel="stylesheet" href="./detailsstyle.css"> 
+
+  
+<?php
+
+$act = "SELECT * FROM claimsdb WHERE topic = ?"; // SQL with parameters
+$s = $conn->prepare($act); 
+$s->bind_param("i", $topic);
+$s->execute();
+$activity = $s->get_result(); // get the mysqli result
+} //end isset check
+  
+  // close connection
+//  mysqli_close($conn);
+
+include('config/db_connect.php');
+  
+*/
+?> <center>
+
 <div class="wrapper">
     <ul>
       <li class="noline">
@@ -51,7 +81,7 @@ $rootresult123 = $stmt523->get_result(); // get the mysqli result
 $numhitsroot3 = mysqli_num_rows($rootresult123);
 
 
-if($numhitsroot3 == '1')
+if($numhitsroot3 > 0)
 {
  while($root2 = $rootresult123->fetch_assoc())
   {

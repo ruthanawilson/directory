@@ -14,10 +14,6 @@
   <link rel="stylesheet" href="./detailsstyle.css"> 
 
   
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0" nonce="GeCwsqdO"></script>
-<meta property="fb:app_id" content="910800136088440" />
-
 <?php
 
 $act = "SELECT * FROM claimsdb WHERE claimID = ?"; // SQL with parameters
@@ -349,8 +345,6 @@ clearInput();
 <body>
 
 		
-<br><br>
-<div class="fb-comments" data-href="<?php echo('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); ?>" data-numposts="5" data-width="" data-colorscheme="dark"></div>   
 
 <script>
 			
