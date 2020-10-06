@@ -25,7 +25,7 @@ $activity = $s->get_result(); // get the mysqli result
 	
 	// close connection
 //	mysqli_close($conn);
-
+ 
 include('config/db_connect.php');
 	
 
@@ -37,7 +37,7 @@ session_start();
 		$_SESSION['varname'] = $details['claimID'];
 		$addPage = 'no';
 		$_SESSION['addPage'] = $addPage;
-
+		$topic = $details['topic']; 
 
 		?> 
 <p><b>Claim ID:</b>  <?php echo $details['claimID']; ?> </p>
@@ -149,12 +149,12 @@ if( $details['supportMeans'] == "Inference")
 
 <div id="some-div">
     <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
+  <p style="color:#000000";><font = #000000>
+  <span id="explain-element"> <?php echo '<span style="color:red;"> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statements target property or <br>(b) does not possess the flagee thesis statements target property.</span>';?>
   </span>
 </div>
 <html>
-<p style="color:#000000";><font = #000000>
+
 <br>What are you flagging it for?<br> </font>
 	<select name="flagType" >
 		  	<option value="" selected>Select...</option>
@@ -198,7 +198,7 @@ if( $details['supportMeans'] == "Perception")
 <div id="some-div">
     <img src = "https://i.ibb.co/YfHKPmM/question.png">
   
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
+  <span id="explain-element">  <font = #000000>   <span id="explain-element"> <?php echo '<span style="color:red;"> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statements target property or <br>(b) does not possess the flagee thesis statements target property.</span>';?> </font>
   </span>
 </div>
 <html>
@@ -251,7 +251,7 @@ if( $details['supportMeans'] == "Testimony")
 <div id="some-div">
     <img src = "https://i.ibb.co/YfHKPmM/question.png">
   
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
+  <span id="explain-element">    <span id="explain-element"> <?php echo '<span style="color:red;"> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statements target property or <br>(b) does not possess the flagee thesis statements target property.</span>';?>
   </span>
 </div>
 <html>
@@ -284,13 +284,26 @@ if( $details['supportMeans'] == "Testimony")
 
 
 
-
-	
-
 	}//end while loop
 			
 
-
+echo "<BR> hello <BR>";
+	$fullURL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		if (strpos($fullURL, "sf=empty") == true) {
+			echo "ERROR: COULDN'T BE SUBMITTED. YOU DIDN'T CHOOSE A SUPPORT MEANS.";
+		}
+		elseif (strpos($fullURL, "sf=success") == true) {
+			echo "SUCCESSFULLY SUBMITTED!";
+		}
+		
+//		after 'sumbit' but before it reaches post. 
+/*if(empty($supportMeans))
+{
+	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=empty");
+	exit();
+} else {
+	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=success");
+}*/
 
 ?>
 
@@ -301,6 +314,9 @@ if( $details['supportMeans'] == "Testimony")
 <script src="script/my_script.js" type="text/javascript"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+
+
+
 
 	$(document).ready(function() {
 	
@@ -373,16 +389,11 @@ for(let i=0;i<spans.length;i++){
 { $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
 ?>
 <html> <p style="color:#000000";>
-<label>Topic</label><br>
-        <select name="topic">
-        <option value="" selected>Select...</option>
-        <option value="Abortion">Abortion</option>
-        <option value="Religion">Religion</option>
-        <option value="Personhood">Personhood</option>
-        <option value="Trans Rights">Trans Rights</option>
-        <option value="Immigration">Immigration</option>
-        <option value="Gun Control">Gun Control</option>
-        </select><br>
+ <?php global $topic;
+ $topic = $topic; ?> 
+
+<label>Topic (Read only)</label><br>
+			<input type="text" name="topic" value="<?php echo htmlspecialchars($topic) ?>" readonly><br>
 
 
 <label>Subject</label><br>
@@ -395,10 +406,11 @@ for(let i=0;i<spans.length;i++){
 
 			<label>What is your Support Means?</label><br>
 <select name="union" id="union">
-<option value="choose">Choose One</option>
+<option value="">Choose One</option>
 <option value="Inference">Inference</option>
 <option value="Testimony">Testimony</option>
 <option value="Perception">Perception</option>
+<option value="Tarka">Tarka</option>
 </select>
 <br>
 
@@ -408,7 +420,6 @@ for(let i=0;i<spans.length;i++){
 <textarea id="rd" name = "rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
 <!-- for testimony -->
 <textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
-
 
 
 </p>

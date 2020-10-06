@@ -59,16 +59,8 @@ clearInput();
   $_SESSION['addPage'] = $addPage;
    ?>
 			
-<label>Topic</label><br>
-        <select name="topic">
-        <option value="" selected>Select...</option>
-        <option value="Abortion">Abortion</option>
-        <option value="Religion">Religion</option>
-        <option value="Personhood">Personhood</option>
-        <option value="Trans Rights">Trans Rights</option>
-        <option value="Immigration">Immigration</option>
-        <option value="Gun Control">Gun Control</option>
-        </select><br>
+<label>Topic</label><br>       
+<input type="text" name="topic" value="<?php echo htmlspecialchars($topic) ?>"><br>
 
 <label>Subject</label><br>
 <input type="text" name="subject" value="<?php echo htmlspecialchars($subject) ?>"><br>
@@ -101,6 +93,7 @@ clearInput();
 			<label>Support Means</label><br>
 <select name="union" id="union">
 <option value="choose">Choose One</option>
+<option value="Tarka">Tarka</option>
 <option value="Inference">Inference</option>
 <option value="Testimony">Testimony</option>
 <option value="Perception">Perception</option>

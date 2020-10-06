@@ -1,23 +1,27 @@
 <?php
 include('config/db_connect.php');
+$supportMeans = mysqli_real_escape_string($conn, $_POST['union']);
+
+session_start();
+$claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is the claimID of the claim being flagged.
+
+
+//account for when the add page is used also
+//add a check for thing/person and use whomever/whatever as substitute  
+//fix font color
 
 
 
 $flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
-
-
 $reason = mysqli_real_escape_string($conn, $_POST['reason']);
 $topic = mysqli_real_escape_string($conn, $_POST['topic']);
 $example = mysqli_real_escape_string($conn, $_POST['example']);
 $url = mysqli_real_escape_string($conn, $_POST['url']);
 $rd = mysqli_real_escape_string($conn, $_POST['rd']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
-$supportMeans = mysqli_real_escape_string($conn, $_POST['union']);
 $targetP = mysqli_real_escape_string($conn, $_POST['targetP']);
 $summary = mysqli_real_escape_string($conn, $_POST['summary']);
 
-			
-session_start();
 
 $thesisST= $subject . " " . $targetP. ".";
 
@@ -35,6 +39,8 @@ else
 {
 $active = '1'; 	
 }
+//On page 2
+
 
 //see if it is an instance of a claim being flagged. which one? find preexisting flagType, if any. if it has a flagtype, check if thesisrival: if yes, then error. if no, continue..)
 		
@@ -62,15 +68,13 @@ if($addPage == 'no')
       echo $claimIDFlagger;
   		}
 
-//On page 2
-$claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is the claimID of the claim being flagged.
  $isRootRival = 0;
  // this function below inserts into database
 	  $sql5 = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, isRootRival) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$isRootRival')";
 
 if(mysqli_query($conn, $sql5)){
 				// success
-				//header('Location: index.php');
+			//	header('Location: insert.php');
 			} else {
 				echo 'query error: '. mysqli_error($conn);
 			}
@@ -121,7 +125,7 @@ while($j = $rootresult1->fetch_assoc())
 
 if(mysqli_query($conn, $flagrival)){
 				// success
-				//header('Location: index.php');
+				//header('Location: insert.php');
 			} else {
 				echo 'query error: '. mysqli_error($conn);
 			}
@@ -159,6 +163,12 @@ $result11 = $stmt11->get_result(); // get the mysqli result
 } //end of if statement 
 
 } //end of if flagtype == thesisRival
+
+
+//2. if additional rival claim - restricted. 
+// change foreach to be query..change intro query to be a prepared statement
+// have page load into center...
+
 		
 
  }////end of addpage = no

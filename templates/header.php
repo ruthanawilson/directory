@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 	<title> Vada Project </title>
+
+	<center>
 <!-- --------------------------------------------------- -->
 <div class="header">
-  <a href="#default" class="logo">Vada Claims</a>
+  <a class="logo">Vada Claims</a><br><br>
   <div class="header-right">
-    <a class="active" href="http://www.vadaproject.com">Home & Claims</a>
+    <a class="active" href="http://www.vadaproject.com">Home & Topics</a>
     <a href="#contact">Contact</a>
     <a href="#about">About</a>
   </div>
@@ -14,4 +16,5 @@
 
 
 <!-- --------------------------------------------------- -->
+</center>
 </head>

@@ -1,38 +1,3 @@
-<?php /* include('templates/header.php');
-  // check GET request id param
-  if(isset($_GET['topic'])){
-    
-    // escape sql chars
-    $topic = mysqli_real_escape_string($conn, $_GET['topic']);
-    // make sql
-
-
-?><link rel="stylesheet" href="./style.css"> 
-  <link rel="stylesheet" href="./detailsstyle.css"> 
-
-  
-<?php
-
-$act = "SELECT * FROM claimsdb WHERE topic = ?"; // SQL with parameters
-$s = $conn->prepare($act); 
-$s->bind_param("i", $topic);
-$s->execute();
-$activity = $s->get_result(); // get the mysqli result
-} //end isset check
-  
-  // close connection
-//  mysqli_close($conn);
-
-include('config/db_connect.php');
-  
-*/
-?> <center>
-
-<div class="wrapper">
-    <ul>
-      <li class="noline">
-
-
 <?php include('config/db_connect.php');
 include('templates/header.php');?>
 
@@ -41,13 +6,22 @@ include('templates/header.php');?>
 
 
 
+<?php  
+  if(isset($_GET['topic'])){
+     $topic = mysqli_real_escape_string($conn, $_GET['topic']); 
+    } //end isset check ?>
 
+
+<div class="wrapper">
+    <ul>
+      <li class="noline">
 
 
 <BR><BR>
+<BR><BR>
     
 <a class="brand-text" href="add.php" style=" color : #fff;">Add New Claim</a><br><br>
-
+<h3>TOPIC: <?php echo $topic; ?> <BR> </h3>
 Claims displayed as a <font color = "seagreen"> green font </font> mean that they are currently active. <br> 
 Claims displayed as a <font color = "#FFFF99"> yellow font </font> mean that the are currently inactive. <br>
 
@@ -57,9 +31,10 @@ Claims displayed as a <font color = "#FFFF99"> yellow font </font> mean that the
         //this code finds ALL claims that are not flaggers (all root claims)
 $root12 = "SELECT DISTINCT claimID
         from claimsdb, flagsdb 
-        WHERE claimID NOT IN (SELECT DISTINCT claimIDFlagger FROM flagsdb)
+        WHERE claimID NOT IN (SELECT DISTINCT claimIDFlagger FROM flagsdb) AND topic = ?
         "; // SQL with parameters
-$stmt52 = $conn->prepare($root12); 
+$stmt52 = $conn->prepare($root12);
+$stmt52->bind_param("s", $topic);
 $stmt52->execute();
 $rootresult12 = $stmt52->get_result(); // get the mysqli result
 $numhitsroot = mysqli_num_rows($rootresult12);
@@ -74,8 +49,10 @@ $numhitsroot = mysqli_num_rows($rootresult12);
 
     $root123 = "SELECT DISTINCT claimID
         from claimsdb
+        WHERE topic = ? AND (SELECT DISTINCT flagID FROM flagsdb) IS NULL
         "; // SQL with parameters
 $stmt523 = $conn->prepare($root123); 
+$stmt523->bind_param("s", $topic);
 $stmt523->execute();
 $rootresult123 = $stmt523->get_result(); // get the mysqli result
 $numhitsroot3 = mysqli_num_rows($rootresult123);
@@ -84,8 +61,8 @@ $numhitsroot3 = mysqli_num_rows($rootresult123);
 if($numhitsroot3 > 0)
 {
  while($root2 = $rootresult123->fetch_assoc())
-  {
-         sortclaims($root2['claimID']);
+  { 
+      sortclaims($root2['claimID']);
 
   }
   }
@@ -94,9 +71,10 @@ if($numhitsroot3 > 0)
 
   $root1 = "SELECT DISTINCT claimID
         from claimsdb, flagsdb 
-        WHERE claimID NOT IN (SELECT DISTINCT claimIDFlagger FROM flagsdb)
+        WHERE claimID NOT IN (SELECT DISTINCT claimIDFlagger FROM flagsdb) AND topic = ?
         "; // SQL with parameters
 $stmt5 = $conn->prepare($root1); 
+$stmt5->bind_param("s", $topic);
 $stmt5->execute();
 $rootresult1 = $stmt5->get_result(); // get the mysqli result
 $numhitsroot = mysqli_num_rows($rootresult1);
@@ -113,36 +91,86 @@ $numhitsroot = mysqli_num_rows($rootresult1);
 
 $root2 = "SELECT DISTINCT claimIDFlagger
         from flagsdb 
-            WHERE isRootRival = 1;
+            WHERE isRootRival = 1
         "; // SQL with parameters
 $stmt12 = $conn->prepare($root2); 
+// $stmt12->bind_param("s", $topic);
 $stmt12->execute();
 $rootresult2 = $stmt12->get_result(); // get the mysqli result
-$numhitsroot2 = mysqli_num_rows($rootresult2);
+$numhitsroot28 = mysqli_num_rows($rootresult2);
+
+
 
 while($root2 = $rootresult2->fetch_assoc())
-  {      restoreActivityRIVAL($root2['claimIDFlagger']);
-       //  echo "RIVAL";
-  }
+  {   
+    if($numhitsroot28 > 0)
+   {
+
+$r = "SELECT DISTINCT claimID, topic
+        from claimsdb 
+            WHERE claimID = ?
+        "; // SQL with parameters
+$s = $conn->prepare($r); 
+$s->bind_param("i", $root2['claimIDFlagger']);
+$s->execute();
+$rres = $s->get_result(); // get the mysqli result
+
+      while($results = $rres->fetch_assoc())
+      {
+        if($results['topic'] == $topic)
+       { restoreActivityRIVAL($results['claimID']); } // end of if topic = topic
+
+      } // end of while
+
+    } //end of if numhits
+
+  } // end of while
+
+
+
+
+
+
+
 
 
 
 $root22 = "SELECT DISTINCT claimIDFlagger
         from flagsdb 
-            WHERE isRootRival = 1;
+            WHERE isRootRival = 1
         "; // SQL with parameters
 $stmt122 = $conn->prepare($root22); 
+// $stmt122->bind_param("s", $topic);
 $stmt122->execute();
 $rootresult22 = $stmt122->get_result(); // get the mysqli result
-$numhitsroot2 = mysqli_num_rows($rootresult22);
+$numhitsroot29 = mysqli_num_rows($rootresult22);
+
+
 
 while($root22 = $rootresult22->fetch_assoc())
-  { 
+  {   
+    if($numhitsroot29 > 0)
+   {
 
-         sortclaimsRIVAL($root22['claimIDFlagger']);
-         echo "<BR>";
-        
-  }
+$r2 = "SELECT DISTINCT claimID, topic
+        from claimsdb 
+            WHERE claimID = ?
+        "; // SQL with parameters
+$s2 = $conn->prepare($r2); 
+$s2->bind_param("i", $root22['claimIDFlagger']);
+$s2->execute();
+$rres2 = $s2->get_result(); // get the mysqli result
+
+      while($results2 = $rres2->fetch_assoc())
+      {
+        if($results2['topic'] == $topic)
+       { sortclaimsRIVAL($results2['claimID']); } // end of if topic = topic
+
+      } // end of while
+
+    } //end of if numhits
+
+  } // end of while
 
 //duplicate
 
@@ -487,31 +515,30 @@ function restoreActivityRIVAL ($claimid)
 //below finds the flagger and continues the recursion by pushing it back to normal restore activity function 
   // IN ADDITION below is to check active status of flagging claims OF INITIAL RIVAL 
 
- 
 $everyInactiveA = 'true';
 
 $everyInactiveB = 'true';
 
 include('config/db_connect.php');
 
-  $sql1 = "SELECT DISTINCT claimIDFlagger
+  $sql188 = "SELECT DISTINCT claimIDFlagger
         from claimsdb, flagsdb
         where ? = claimIDFlagged AND flagType NOT LIKE 'thesisRival'
         ";
-$stmt1 = $conn->prepare($sql1); 
-$stmt1->bind_param("i", $claimid);
-$stmt1->execute();
-$result1 = $stmt1->get_result(); 
-$numhits1 = mysqli_num_rows($result1);
+$stmt188 = $conn->prepare($sql188); 
+$stmt188->bind_param("i", $claimid);
+$stmt188->execute();
+$result188 = $stmt188->get_result(); 
+$numhits1 = mysqli_num_rows($result188);
 //above looks for normal non-rival flags for this rivaling claim.
-while($user = $result1->fetch_assoc())
+while($user = $result188->fetch_assoc())
 {
 
   $nodeFlaggers = $user['claimIDFlagger'];
 if($numhits1 == 0)
   { }
    else { restoreActivity($nodeFlaggers); } //end of  restoreactivity push FOR THIS SIDE OF THE RIVAL PAIR. the rival companion is pushed to restoreactivity at the bottom of this function.
-
+}
 //above it finds rival A's flaggers.
 
 
@@ -539,8 +566,6 @@ while($user = $result12->fetch_assoc())
 
 
 
-
-
 //this is the flaggers for rival A. 
 
 $h = "SELECT DISTINCT active
@@ -554,9 +579,6 @@ $h = "SELECT DISTINCT active
       //checks the active status of the flagger
 
     
-
-$everyInactiveA = 'true';
-//echo $everyInactive;
   while($r = $res->fetch_assoc())
   {  
     
@@ -564,11 +586,10 @@ $everyInactiveA = 'true';
     {
       global $everyInactiveA;
       $everyInactiveA = 'false';
+    //  ECHO $everyInactiveA . ".....THIS IS THE QUERY FOR A <BR>";
     } // end of if
   } //end of while loop
 
-
- } // end while loop
 
 //above is to check active status of flagging claims OF INITIAL RIVAL
 
@@ -579,19 +600,19 @@ $everyInactiveA = 'true';
 //now that we have the rival pair, let's push it through to the normal sortclaims so it doesn't get stuck in a loop and it continues into normal restore activity
 
 //this is finding the flaggers for rival B
-$sql1 = "SELECT DISTINCT claimIDFlagger
+$sql167 = "SELECT DISTINCT claimIDFlagger
         from claimsdb, flagsdb
         where ? = claimIDFlagged AND flagType NOT LIKE 'thesisRival'
         ";
-$stmt1 = $conn->prepare($sql1); 
-$stmt1->bind_param("i", $rivaling);
-$stmt1->execute();
-$result1 = $stmt1->get_result(); 
-$numhits1 = mysqli_num_rows($result1);
+$stmt167 = $conn->prepare($sql167); 
+$stmt167->bind_param("i", $rivaling);
+$stmt167->execute();
+$result167 = $stmt167->get_result(); 
+$numhits167 = mysqli_num_rows($result167);
 //above looks for normal non-rival flags for this rivaling claim.
-while($userRIVALING = $result1->fetch_assoc())
+while($userRIVALING = $result167->fetch_assoc())
 {
-if($numhits1 == 0)
+if($numhits167 == 0)
   { }
    else {restoreActivity($userRIVALING['claimIDFlagger']); }
  
@@ -601,23 +622,25 @@ if($numhits1 == 0)
 
 
 
-$h = "SELECT DISTINCT active
+$h1 = "SELECT DISTINCT active
         from claimsdb
         WHERE ? = claimID"; // SQL with parameters
-      $noce = $conn->prepare($h); 
-      $noce->bind_param("i", $userRIVALING['claimIDFlagger']);
-      $noce->execute();
-      $res = $noce->get_result(); // get the mysqli result
-      $numh = mysqli_num_rows($res);
+      $noce1 = $conn->prepare($h1); 
+      $noce1->bind_param("i", $userRIVALING['claimIDFlagger']);
+      $noce1->execute();
+      $res1 = $noce1->get_result(); // get the mysqli result
+      $numh = mysqli_num_rows($res1);
       //checks the active status of the flagger
 
-  while($r = $res->fetch_assoc())
+  while($r = $res1->fetch_assoc())
   {  
     
     if($r['active'] == 1)
     {
+    
       global $everyInactiveB;
       $everyInactiveB = 'false';
+    //  ECHO $everyInactiveB . ".....THIS IS THE QUERY FOR B <BR>";
 
     } // end of if
   } //end of while loop
@@ -625,7 +648,7 @@ $h = "SELECT DISTINCT active
  } // end while loop
 
 
-
+ // echo "CLAIM ID:" . $claimid . "<BR> ACTIVE B: " . $everyInactiveB . "<BR> ACTIVE A: " . $everyInactiveA . "<BR><BR><BR><BR><BR><BR><BR><BR>";
 if($everyInactiveA == 'true' && $everyInactiveB == 'true' || $everyInactiveA == 'false' && $everyInactiveB == 'false')
 {
 $act = "UPDATE claimsdb 
@@ -647,7 +670,8 @@ $upd->execute();
 
 }
 
-
+//if its true, there are no flags. 
+//if false, there are flags.
 if($everyInactiveA == 'true' && $everyInactiveB == 'false')
 {
 $act = "UPDATE claimsdb 
@@ -776,6 +800,11 @@ include('config/db_connect.php');
                 if(response.supportMeans == 'Inference')
                 {
                   html += "Thesis: " + response.thesisST + " <BR> Reason: " + response.reasonST + "<BR> Rule & Example: " + response.ruleST;
+               
+                }
+                if(response.supportMeans == 'Tarka')
+                {
+                  html += "Tarka is an element of conversation used to discuss errors in debate form and communication with moderators.";
                
                 }
 
