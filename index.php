@@ -5,18 +5,19 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<div class="wrapper">
-    <ul>
-      <li class="noline">
 
 <?php include('templates/header.php');
 ?>
-
+<center>
 
 <BR><BR>
-
+<!-- <table style=\"width:60%\">
+  <tr><th> --> 
+<h1>Welcome!</h1> This is a debate website made by creating claims using <a href="/directory/styleguide.php">Vada Logic</a>. Users can create new claims using the Vada structure, or particpate and observe pre-existing debates. <br><br><br>
+ 
+<h3>Topics to select from:</h3>
 <?php
-echo "Topics to select from: <BR><BR>";
+
 $root12 = "SELECT DISTINCT topic
         from claimsdb
         "; // SQL with parameters
@@ -28,15 +29,20 @@ $numhitsroot = mysqli_num_rows($rootresult12);
   {
 
   	?>
-<a class="brand-text" style=" color : #fff;" href="ajaxindex.php?topic=<?php echo $root2['topic']?>"> <?php echo $root2['topic'] ?></a>
-
+<a href="ajaxindex.php?topic=<?php echo $root2['topic']?>"><button> <?php echo $root2['topic'] ?></button></a>
         
 <?php   
 } 
-echo "<BR><BR>Want to start a new topic? <BR>";
+echo "<BR><BR><BR><BR><BR>Want to start a new topic? <BR>";
 ?>
 
     
-<a class="brand-text" href="add.php" style=" color : #fff;">Add New Claim</a><br><br>
-    
-<a class="brand-text" href="privpolicy.php" style=" color : #fff;">Privacy Policy</a><br><br>
+<a class="brand-text" href="add.php"><button>Add New Claim</button></a><br><br>
+
+    <footer> 
+
+    	Vada Project <a class="brand-text" href="privpolicy.php" style=" color : #fff; ">Privacy Policy</a>
+
+    </footer>
+
+<!-- style=" color : #fff; " -->

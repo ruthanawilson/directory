@@ -20,10 +20,10 @@ include('templates/header.php');?>
 <BR><BR>
 <BR><BR>
     
-<a class="brand-text" href="add.php" style=" color : #fff;">Add New Claim</a><br><br>
+<a class="brand-text" href="add.php">Add New Claim</a><br><br>
 <h3>TOPIC: <?php echo $topic; ?> <BR> </h3>
 Claims displayed as a <font color = "seagreen"> green font </font> mean that they are currently active. <br> 
-Claims displayed as a <font color = "#FFFF99"> yellow font </font> mean that the are currently inactive. <br>
+Claims displayed as a <font color = "B7B802"> yellow font </font> mean that the are currently inactive. <br>
 
 </center>
 <center>
@@ -247,7 +247,7 @@ while($d = $disp->fetch_assoc())
  if($d['active'] == 1)
 { $font = 'seagreen'; }
 else 
-{ $font = '#FFFF99'; } ?>
+{ $font = '#B7B802'; } ?>
 
 <font color = "<?php echo $font; ?>"> 
 <?php    // END FONT CHANGING
@@ -865,11 +865,5 @@ include('config/db_connect.php');
 
 
 
-
-
-<!-- partial 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-  <script  src="./script.js"></script>-->
- </body>
 </html>
 <?php mysqli_close($conn); ?>

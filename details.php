@@ -1,6 +1,6 @@
 <?php 
 	include('config/db_connect.php');
-	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
+	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
 	?> <center><?php include('templates/header.php');
 	// check GET request id param
 	if(isset($_GET['id'])){
@@ -52,51 +52,16 @@ if( $details['supportMeans'] == "Inference")
 
 
 	<b>Thesis Statement:</b>  <?php echo $details['thesisST']; ?>	
-			<!-- Trigger/Open The Modal -->
-<button class="openmodal myBtn">Flag Thesis</button>
-
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
-  </span>
-</div>
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	<select name="flagType" >
-		  	<option value="" selected>Select...</option>
-  			<option value="thesisRival">Thesis - Has Rival</option>
-  			<option value="thesisEarly">Thesis - Too Early</option>
-  			<option value="thesisLate">Thesis - Late</option>
-  			
-  			</select><br>
-<?php flagging(); ?>
-
-<div class="center">
-				<button id="submit">Submit</button>	
-					</div>
-
-</p>
-</form></div>
-</div>
-<!--------------------------------------------------------------------------------------------------------------------------->
-
 
 <BR><br>
-			<b>Reason Statement:</b>  <?php echo $details['reasonST']; ?>
-			
+      <b>Reason Statement:</b>  <?php echo $details['reasonST']; ?>
+      
+      <br><br>
+      <b>Rule Statement:</b>  <?php echo $details['ruleST']; ?>
+<br><br>
 
-
-			<button class="openmodal myBtn">Flag Reason</button>
+			<!-- Trigger/Open The Modal -->
+<button class="openmodal myBtn">Flag Thesis, Reason, or Rule/Example</button>
 
 <!-- The Modal -->
 <div class="modal myModal">
@@ -114,57 +79,83 @@ if( $details['supportMeans'] == "Inference")
 </div>
 <html>
 <p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	<select name="flagType" >
+
+
+<br>Are you flagging the Thesis property, the Reason property, or the Rule and Example property?<br> </font>
+  <select name="tre" id="tre" value="tre">
+        <option value="" selected>Select...</option>
+        <option value="thesis">Thesis</option>
+        <option value="reason">Reason</option>
+        <option value="rule">Rule</option> </select>
+
+
+<br>What are you flagging it for?<br>
+	<select name="flagTypeT" id="flagTypeT" value="flagType">
 		  	<option value="" selected>Select...</option>
-  			<option value="reasonUS">Reason - Unestablished Subject</option>
-  			<option value="reasonUI">Reason - Itself Unestablished</option>
-  			<option value="reasonHostile">Reason - Hostile</option>
-  			</select><br>
+  			<option value="thesisRival">Has Rival</option>
+  			<option value="TooEarly">Too Early</option>
+  			<option value="TooLate">Too Late</option>
+        </select>
+
+
+  <select name="flagTypeR" id="flagTypeR" value="flagType">
+        <option value="" selected>Select...</option>
+        <option value="reasonUnestablishedSubject">Unestablished Subject</option>
+        <option value="reasonItselfUnestablished">Itself Unestablished</option>
+        <option value="reasonHostile">Hostile</option>
+        </select>
+
+  <select name="flagTypeE" id="flagTypeE" value="flagType">
+        <option value="" selected>Select...</option>
+        <option value="ruleNarrow">Too Narrow</option>
+        <option value="ruleBroad">Too Broad</option>
+        <option value="ruleUnestablishedUniversal">Unestablished Universal</option>
+        <option value="ruleContri">Contrived Universal</option>
+      </select>
+
+  			
 <?php flagging(); ?>
 
-<div class="center">
-				<button id="submit">Submit</button>	
-					</div>
+<!-- //------------------------- -->
 
-</p>
-</form>
-</div>
-</div>
+<script type="text/javascript">
 
-<!--------------------------------------------------------------------------------------------------------------------------->
+var union = document.getElementById('tre');
+union.onchange = checkOtherUnion;
+union.onchange();
+
+function checkOtherUnion() {
+    var union = this;
+    var thesis = document.getElementById('flagTypeT');
+    var reason = document.getElementById('flagTypeR');
+    var example = document.getElementById('flagTypeE');
+    if (union.options[union.selectedIndex].value === 'thesis') {
+        thesis.style.display = '';
+    } else {
+        thesis.style.display = 'none';
+    }
 
 
-<br><br>
-			<b>Rule Statement:</b>  <?php echo $details['ruleST']; ?>
-<button class="openmodal myBtn">Flag Rule & Example</button>
+if (union.options[union.selectedIndex].value === 'reason') {
+        reason.style.display = '';
+    } else {
+        reason.style.display = 'none';
+      
+    }
 
-<!-- The Modal -->
-<div class="modal myModal">
+if (union.options[union.selectedIndex].value === 'rule') {
+        example.style.display = '';
+    } else {
+        example.style.display = 'none';
+       
+    }
 
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
+}
+</script>
 
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  <p style="color:#000000";><font = #000000>
-  <span id="explain-element"> <?php echo '<span style="color:red;"> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statements target property or <br>(b) does not possess the flagee thesis statements target property.</span>';?>
-  </span>
-</div>
-<html>
+<!-- //------------------------- -->
 
-<br>What are you flagging it for?<br> </font>
-	<select name="flagType" >
-		  	<option value="" selected>Select...</option>
-  			<option value="ruleNarrow">Rule - Too Narrow</option>
-  			<option value="ruleBroad">Rule - Too Broad</option>
-  			<option value="ruleUnest">Rule - Unestablished Universal</option>
-  			<option value="ruleContri">Rule - Contrived Universal</option>
 
-  			</select><br>
-<?php flagging(); ?>
 
 <div class="center">
 				<button id="submit">Submit</button>	
@@ -173,13 +164,23 @@ if( $details['supportMeans'] == "Inference")
 </p>
 </form></div>
 </div>
-
 <!--------------------------------------------------------------------------------------------------------------------------->
 
 <?php }  // end inference check ?>
-  
+  <?php
 
- <?php // ------------- TWO
+  if( $details['supportMeans'] == "Tarka")
+{ ?>
+
+
+<BR><br><?php
+echo'Tarka is an element of conversation used to discuss errors in debate form and communication with moderators.<br><br>'; ?>
+      <b>Claim: </b><br>  <?php echo $details['subject']; ?><?php echo " ".$details['targetP']; 
+
+ echo'<br><br><br>Please explain argument in the Facebook comments section below.';
+}
+
+  // ------------- TWO
 if( $details['supportMeans'] == "Perception")
 { ?>
 	<p><b>Url of perception:</b>  <?php echo $details['URL']; ?> </p>
@@ -207,7 +208,7 @@ if( $details['supportMeans'] == "Perception")
 	
 
 	<br><u>Perception Flags</u><br>
-				<select name="flagType">
+				<select name="flagType" id="flagType" value="flagType">
 		  	<option value="" selected>Select...</option>
   			<option value="ContactObject">No contact with object from sense organ</option>
   			<option value="Verbal">Relies on language</option>
@@ -234,8 +235,9 @@ if( $details['supportMeans'] == "Perception")
    <?php // ------------- THREE
 if( $details['supportMeans'] == "Testimony")
 { ?>
-	<p><b>Research Document:</b>  <?php echo $details['rd']; ?> </p>
-	<p><b>Summary:</b>  <?php echo $details['summary']; ?> </p>
+<p><b>Research Document:</b> <a href="<?php echo $details['rd']; ?>"> <?php echo $details['rd']; ?> </a> </p>
+  
+  	<p><b>Summary:</b>  <?php echo $details['summary']; ?> </p>
 	
 
 <button class="openmodal myBtn">Flag Testimony</button>
@@ -259,9 +261,9 @@ if( $details['supportMeans'] == "Testimony")
 <br>What are you flagging it for?<br> </font>
 	
 <br><u>Testimony Flags</u><br>
-				<select name="flagType">
+				<select name="flagType" id="flagType" value="flagType">
 		  	<option value="" selected>Select...</option>
-  			<option value="NoDirect">No direct familiarity</option>
+  			<option value="NoDirectFamiliarity">No direct familiarity</option>
   			<option value="ErrantInfo">Errant information</option>
   			<option value="Uncertain">Uncertain/Ambiguous</option>
   			<option value="AlternativeAgendas">Alternative agendas/motivations</option>
@@ -271,7 +273,21 @@ if( $details['supportMeans'] == "Testimony")
 <?php flagging(); ?>
 
 <div class="center">
+
 				<button id="submit">Submit</button>	
+
+			<?php 	/* // if submit, then 
+
+		if(empty($supportMeans))
+{
+	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=empty");
+	exit();
+} else {
+	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=success");
+} */ 
+?> 
+
+
 					</div>
 
 </p>
@@ -285,26 +301,8 @@ if( $details['supportMeans'] == "Testimony")
 
 
 	}//end while loop
-			
-
-echo "<BR> hello <BR>";
-	$fullURL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-		if (strpos($fullURL, "sf=empty") == true) {
-			echo "ERROR: COULDN'T BE SUBMITTED. YOU DIDN'T CHOOSE A SUPPORT MEANS.";
-		}
-		elseif (strpos($fullURL, "sf=success") == true) {
-			echo "SUCCESSFULLY SUBMITTED!";
-		}
-		
-//		after 'sumbit' but before it reaches post. 
-/*if(empty($supportMeans))
-{
-	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=empty");
-	exit();
-} else {
-	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=success");
-}*/
-
+/*
+*/
 ?>
 
 <!DOCTYPE html>
@@ -315,19 +313,190 @@ echo "<BR> hello <BR>";
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
 
+// BELOW IS WHERE SUBMIT BUTTON DISABLED HAPPENS
+jQuery("#submit").prop('disabled', true);
+    var card = document.getElementById("union");
+//support means = union
+//var toValidate = jQuery('#subject');
+//var toValidateP = jQuery('#targetP');
+var toValidate = jQuery('#subject, #targetp');
+
+//var toValidate2 = jQuery('#union');
+    validTextArea = false;
+
+toValidate.keyup(function () {
+
+    if (jQuery(this).val().length > 0) {
+        jQuery(this).data('valid', true);
+    } else {
+        jQuery(this).data('valid', false);
+    }
+
+        toValidate.each(function () {
+        if (jQuery(this).data('valid') == true) {
+            validTextArea = true;
+
+        } else {
+            validTextArea = false;
+        }
+
+if (validTextArea == true && validDropDown == true) {
+        jQuery("#submit").prop('disabled', false);
+
+    } else {
+                 
+        jQuery("#submit").prop('disabled', true);
+      }
+
+    });
 
 
+});
+
+
+
+//var clientCode = document.querySelector("#clientCode");
+//clientCode.addEventListener("change", clientChangeHandler. false);
+
+
+
+
+var toValidate2 = jQuery('#union');
+    validDropDown = false;
+
+
+toValidate2.change(function () {
+
+
+  if (jQuery(this)[0].selectedIndex == 1 || jQuery(this)[0].selectedIndex == 2 || jQuery(this)[0].selectedIndex == 3 || jQuery(this)[0].selectedIndex == 4|| jQuery(this)[0].selectedIndex == 5) {
+        jQuery(this).data('valid', true);
+    } else {
+        jQuery(this).data('valid', false);
+    }
+
+
+
+        toValidate2.each(function () {
+        if (jQuery(this).data('valid') == true) {
+            validDropDown = true;
+                        
+        } else {
+            validDropDown = false;
+   //           window.alert(jQuery(this)[0].selectedIndex);
+
+        }
+
+if (validTextArea == true && validDropDown == true) {
+        jQuery("#submit").prop('disabled', false);
+
+    } else {
+                  
+        jQuery("#submit").prop('disabled', true);
+      }
+
+    });
+
+if (validTextArea == true && validDropDown == true) {
+        jQuery("#submit").prop('disabled', false);
+
+    } else {
+              
+        jQuery("#submit").prop('disabled', true);
+      }
+
+});
+
+
+
+
+
+/*
+
+
+
+PHIL 4460: Applied Study of Indian Theories of Knowledge and Debate
+In this Major Themes course, students will gain familiarity with contemporary social epistemological crises identified in mainstream western philosophy, with structural forms of epistemic injustice identified in feminist philosophy and critical race theory, and with classical Indian theories of knowledge and debate. In their final paper projects, students will apply or assess applications of classical Indian theories of knowledge and debate either to these contemporary epistemological problems or to contemporary or classical philosophical problems of their choosing. 
+
+*/
+
+/*
+var selectElem = document.getElementById('select')
+var pElem = document.getElementById('p')
+
+// When a new <option> is selected
+selectElem.addEventListener('change', function() {
+  var index = selectElem.selectedIndex;
+  // Add that data to the <p>
+  pElem.innerHTML = 'selectedIndex: ' + index;
+})
+*/
+
+
+/*
+    if (jQuery(this).val().selectedIndex == 1 || jQuery(this).val().selectedIndex == 2 || jQuery(this).val().selectedIndex == 3 || jQuery(this).val().selectedIndex == 4) {
+        jQuery(this).data('valid', true);
+    } else {
+        jQuery(this).data('valid', false);
+    } */
+
+/*if(card.selectedIndex == 0) {
+valid = false;
+}
+else
+{valid = true; 
+}*/
+
+
+
+
+
+  
+
+
+    /*
+
+    if (valid === true) {
+        jQuery("#submit").prop('disabled', false);
+    } else {
+        jQuery("#submit").prop('disabled', true);
+    } */
+
+
+
+
+
+
+
+
+    
+
+/*
+
+
+
+
+
+var ddl = document.getElementById("cardtype");
+ var selectedValue = ddl.options[ddl.selectedIndex].value;
+    if (selectedValue == "selectcard")
+   {
+    alert("Please select a card type");
+   }
+   */
+// above IS WHERE SUBMIT BUTTON DISABLED HAPPENS 
 
 	$(document).ready(function() {
 	
 $("#submit").click(function(){
-
+  window.alert("Submitted!");
+window.location.assign("ajaxindex.php?topic=<?php echo $topic?>");
 
  $.post( $("#myForm").attr("action"), 
          $("#myForm :input").serializeArray(), 
          function(info){ $("#result").html(info); 
   });
 clearInput();
+
 		});
 
 	$("#myForm").submit( function() {
@@ -337,6 +506,7 @@ clearInput();
 	function clearInput() {
 	$("#myForm :input").each( function() {
 	   $(this).val('');
+
 	});
 }
 });
@@ -386,7 +556,7 @@ for(let i=0;i<spans.length;i++){
 
 
 <?php function flagging()
-{ $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
+{ $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $grammar = $active = '';
 ?>
 <html> <p style="color:#000000";>
  <?php global $topic;
@@ -397,15 +567,27 @@ for(let i=0;i<spans.length;i++){
 
 
 <label>Subject</label><br>
-			<input type="text" name="subject" value="<?php echo htmlspecialchars($subject) ?>"><br>
+			<input type="text" name="subject" id="subject" value="<?php echo htmlspecialchars($subject) ?>"><br>
 
 			<label>Target Property</label><br>
-			<input type="text" name="targetP" value="<?php echo htmlspecialchars($targetP) ?>"> <br>
-  			
-	
+			<input type="text" name="targetP" id="targetP" value="<?php echo htmlspecialchars($targetP) ?>"> <br>
 
-			<label>What is your Support Means?</label><br>
-<select name="union" id="union">
+<label> Is the subject an object or a person? </label><br>
+<select name="grammar" id="grammar" value="grammar">
+<option value="">Choose One</option>
+<option value="object">Object</option>
+<option value="person">Person</option>
+</select> <br>
+  			
+	<label>What is your Support Means?</label><br>
+
+<!--
+  <div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <div id="union" name="union" value = "union" class="dropdown-content" selectBoxOptions="Canada;Denmark;Finland;Germany;Mexico">>
+  </div>
+</div> -->
+<select name="union" id="union" value="union">
 <option value="">Choose One</option>
 <option value="Inference">Inference</option>
 <option value="Testimony">Testimony</option>
@@ -413,7 +595,6 @@ for(let i=0;i<spans.length;i++){
 <option value="Tarka">Tarka</option>
 </select>
 <br>
-
 <textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea><br>
 <textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea><br>
 <textarea id="url" name = "URL" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
@@ -459,6 +640,11 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
     } else {
         rd.style.display = 'none';
         summary.style.display = 'none';
+       
+    }
+if (union.options[union.selectedIndex].value === 'Tarka') {
+        window.alert("A requirement of Tarka is to use the Facebook comments feature in the Tarka claim following submission.");
+    } else {
        
     }
 

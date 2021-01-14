@@ -439,7 +439,7 @@ small,
 mark,
 .mark {
   padding: 0.2em;
-  background-color: #fcf8e3;
+  background-color: #f4f4ec;
 }
 
 .list-unstyled {
@@ -529,7 +529,7 @@ kbd {
   padding: 0.2rem 0.4rem;
   font-size: 87.5%;
   color: #fff;
-  background-color: #212529;
+  background-color: #e8e7df;
   border-radius: 0.2rem;
 }
 
