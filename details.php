@@ -13,7 +13,6 @@
 ?><link rel="stylesheet" href="./style.css"> 
   <link rel="stylesheet" href="./detailsstyle.css"> 
 
-  
 <?php
 
 $act = "SELECT * FROM claimsdb WHERE claimID = ?"; // SQL with parameters

@@ -15,7 +15,8 @@ include('templates/header.php');?>
 <div class="wrapper">
     <ul>
       <li class="noline">
-
+<BR><BR><BR><BR>
+      <h1> PLEASE...DO NOT FORGET TO HIT CTRL F5 PLEASE </h1>
 
 <BR><BR>
 <BR><BR>
