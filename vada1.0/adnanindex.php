@@ -11,6 +11,7 @@
         $sql = "SELECT * FROM claimsdb WHERE claimID='$id'";
         $result = mysqli_query($conn, $sql);
         $row = mysqli_fetch_object($result);
+
         // Important to echo the record in JSON format
         echo json_encode($row);
 
