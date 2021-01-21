@@ -14,7 +14,7 @@
 <!-- <table style=\"width:60%\">
   <tr><th> --> 
   	<h1> DO NOT FORGET TO HIT CTRL F5 PLEASE </h1>
-<h1>Welcome!</h1> This is a debate website made by creating claims using <a href="/directory/styleguide.php">Vada Logic</a>. Users can create new claims using the Vada structure, or particpate and observe pre-existing debates. <br><br><br>
+<h1>Welcome!</h1> This is a debate website made by creating claims using Vada Logic. Users can create new claims using the Vada structure, or particpate and observe pre-existing debates. <br><br><br>
  
 <h3>Topics to select from:</h3>
 <?php
