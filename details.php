@@ -107,9 +107,9 @@ if( $details['supportMeans'] == "Inference")
   <select name="flagTypeE" id="flagTypeE" value="flagType">
         <option value="" selected>Select...</option>
         <option value="ruleNarrow">Too Narrow</option>
-        <option value="ruleBroad">Too Broad</option>
-        <option value="ruleUnestablishedUniversal">Unestablished Universal</option>
-        <option value="ruleContri">Contrived Universal</option>
+        <option value="ruleBroadCounterexample">Too Broad (Counterexample)</option>
+        <option value="ruleBroadUnestablishedUniversal">Too Broad (Unestabilshed Universal)</option>
+       <option value="ruleContri">Contrived Universal</option>
       </select>
 
   			
@@ -157,7 +157,7 @@ if (union.options[union.selectedIndex].value === 'rule') {
 
 
 <div class="center">
-				<button id="submit">Submit</button>	
+				<button onclick="setTimeout(myFunction, 3000)" id="submit">Submit</button>	
 					</div>
 
 </p>
@@ -209,8 +209,8 @@ if( $details['supportMeans'] == "Perception")
 	<br><u>Perception Flags</u><br>
 				<select name="flagType" id="flagType" value="flagType">
 		  	<option value="" selected>Select...</option>
-  			<option value="ContactObject">No contact with object from sense organ</option>
-  			<option value="Verbal">Relies on language</option>
+  			<option value="NoSenseObjectContact">No Sense-Object Contact</option>
+  			<option value="DependsOnWords">Depends on Words</option>
   			<option value="Errant">Errant</option>
   			<option value="Ambiguous">Ambiguous</option>
   			</select><br>
@@ -234,9 +234,8 @@ if( $details['supportMeans'] == "Perception")
    <?php // ------------- THREE
 if( $details['supportMeans'] == "Testimony")
 { ?>
-<p><b>Research Document:</b> <a href="<?php echo $details['rd']; ?>"> <?php echo $details['rd']; ?> </a> </p>
   
-  	<p><b>Summary:</b>  <?php echo $details['summary']; ?> </p>
+  	<p><b>Transcription:</b>  <?php echo $details['transcription']; ?>   <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
 	
 
 <button class="openmodal myBtn">Flag Testimony</button>
@@ -264,8 +263,8 @@ if( $details['supportMeans'] == "Testimony")
 		  	<option value="" selected>Select...</option>
   			<option value="NoDirectFamiliarity">No direct familiarity</option>
   			<option value="ErrantInfo">Errant information</option>
-  			<option value="Uncertain">Uncertain/Ambiguous</option>
-  			<option value="AlternativeAgendas">Alternative agendas/motivations</option>
+  			<option value="Ambiguous">Ambiguous</option>
+  			<option value="Faithless">Faithless</option>
   			<option value="Misstatement">Misstatement</option>
   			</select><br>
 
@@ -318,7 +317,7 @@ jQuery("#submit").prop('disabled', true);
 //support means = union
 //var toValidate = jQuery('#subject');
 //var toValidateP = jQuery('#targetP');
-var toValidate = jQuery('#subject, #targetp');
+var toValidate = jQuery('#subject, #targetP');
 
 //var toValidate2 = jQuery('#union');
     validTextArea = false;
@@ -354,13 +353,21 @@ if (validTextArea == true && validDropDown == true) {
 
 
 
+
+
+
+
+
+
+
+
 //var clientCode = document.querySelector("#clientCode");
 //clientCode.addEventListener("change", clientChangeHandler. false);
 
 
 
 
-var toValidate2 = jQuery('#union');
+var toValidate2 = jQuery('#union, #grammar');
     validDropDown = false;
 
 
@@ -406,82 +413,6 @@ if (validTextArea == true && validDropDown == true) {
 });
 
 
-
-
-
-/*
-
-
-
-PHIL 4460: Applied Study of Indian Theories of Knowledge and Debate
-In this Major Themes course, students will gain familiarity with contemporary social epistemological crises identified in mainstream western philosophy, with structural forms of epistemic injustice identified in feminist philosophy and critical race theory, and with classical Indian theories of knowledge and debate. In their final paper projects, students will apply or assess applications of classical Indian theories of knowledge and debate either to these contemporary epistemological problems or to contemporary or classical philosophical problems of their choosing. 
-
-*/
-
-/*
-var selectElem = document.getElementById('select')
-var pElem = document.getElementById('p')
-
-// When a new <option> is selected
-selectElem.addEventListener('change', function() {
-  var index = selectElem.selectedIndex;
-  // Add that data to the <p>
-  pElem.innerHTML = 'selectedIndex: ' + index;
-})
-*/
-
-
-/*
-    if (jQuery(this).val().selectedIndex == 1 || jQuery(this).val().selectedIndex == 2 || jQuery(this).val().selectedIndex == 3 || jQuery(this).val().selectedIndex == 4) {
-        jQuery(this).data('valid', true);
-    } else {
-        jQuery(this).data('valid', false);
-    } */
-
-/*if(card.selectedIndex == 0) {
-valid = false;
-}
-else
-{valid = true; 
-}*/
-
-
-
-
-
-  
-
-
-    /*
-
-    if (valid === true) {
-        jQuery("#submit").prop('disabled', false);
-    } else {
-        jQuery("#submit").prop('disabled', true);
-    } */
-
-
-
-
-
-
-
-
-    
-
-/*
-
-
-
-
-
-var ddl = document.getElementById("cardtype");
- var selectedValue = ddl.options[ddl.selectedIndex].value;
-    if (selectedValue == "selectcard")
-   {
-    alert("Please select a card type");
-   }
-   */
 // above IS WHERE SUBMIT BUTTON DISABLED HAPPENS 
 
 	$(document).ready(function() {
@@ -513,8 +444,7 @@ clearInput();
 
 </script>
 <?php
-		// Colorcode *specific* parts of the flag limb. -IF flag = x, y, z, text = ruleflag/red. if flag = u, m, v, text = reasonflag/red. 
-
+		
 ?>
 
 
@@ -555,7 +485,7 @@ for(let i=0;i<spans.length;i++){
 
 
 <?php function flagging()
-{ $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $grammar = $active = '';
+{ $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $url =  $rd = $reason =  $flagType = $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $grammar = $active = '';
 ?>
 <html> <p style="color:#000000";>
  <?php global $topic;
@@ -566,10 +496,10 @@ for(let i=0;i<spans.length;i++){
 
 
 <label>Subject</label><br>
-			<input type="text" name="subject" id="subject" value="<?php echo htmlspecialchars($subject) ?>"><br>
+			<input type="text" name="subject" id="subject" value="<?php echo htmlspecialchars($subject) ?>" required><br>
 
 			<label>Target Property</label><br>
-			<input type="text" name="targetP" id="targetP" value="<?php echo htmlspecialchars($targetP) ?>"> <br>
+			<input type="text" name="targetP" id="targetP" value="<?php echo htmlspecialchars($targetP) ?>" required> <br>
 
 <label> Is the subject an object or a person? </label><br>
 <select name="grammar" id="grammar" value="grammar">
@@ -596,12 +526,13 @@ for(let i=0;i<spans.length;i++){
 <br>
 <textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea><br>
 <textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea><br>
-<textarea id="url" name = "URL" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
-<textarea id="rd" name = "rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
+<textarea id="url" name = "url" value="<?php echo htmlspecialchars($url) ?>">Enter URL</textarea><br>
+<!--<textarea id="rd" name = "rd" value="<?php //echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br> -->
+<!-- for perception -->
 <!-- for testimony -->
-<textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
-
-
+<textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea><br>
+<textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Enter citation. Please include: Author, title, publication, and date of publication.  </textarea><br>
+<textarea id="vidtimestamp" name = "vidtimestamp" value="<?php echo htmlspecialchars($vidtimestamp) ?>">Enter timestamp of specified material</textarea><br>
 </p>
 <?php } // end of flagging function ?>
 
@@ -617,35 +548,40 @@ function checkOtherUnion() {
     var example = document.getElementById('example');
     var url = document.getElementById('url');
  	var rd = document.getElementById('rd');
+
+        reason.style.display = 'none';
+        example.style.display = 'none';
+        citation.style.display = 'none';
+        url.style.display = 'none';
+        vidtimestamp.style.display = 'none';
+        transcription.style.display = 'none';
+
+
+    if (union.options[union.selectedIndex].value === '') {
+        citation.style.display = 'none';
+    }
     if (union.options[union.selectedIndex].value === 'Inference') {
         reason.style.display = '';
         example.style.display = '';
-    } else {
-        reason.style.display = 'none';
-        example.style.display = 'none';
+        citation.style.display = 'none';
     }
 
 
 if (union.options[union.selectedIndex].value === 'Perception') {
         url.style.display = '';
-    } else {
-        url.style.display = 'none';
-      
+        vidtimestamp.style.display = '';
+        citation.style.display = '';
     }
 
 if (union.options[union.selectedIndex].value === 'Testimony') {
-        rd.style.display = '';
-        summary.style.display = '';
-    } else {
-        rd.style.display = 'none';
-        summary.style.display = 'none';
-       
-    }
+        transcription.style.display = '';
+        citation.style.display = '';
+    } 
+    
 if (union.options[union.selectedIndex].value === 'Tarka') {
         window.alert("A requirement of Tarka is to use the Facebook comments feature in the Tarka claim following submission.");
-    } else {
-       
-    }
+         citation.style.display = 'none';
+    } 
 
 }
 </script>

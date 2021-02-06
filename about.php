@@ -12,7 +12,6 @@
 <script src="script/my_script.js" type="text/javascript"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<br><br><br><br><br><br>
 <style>
 div.b {
   text-align: left;

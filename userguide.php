@@ -23,9 +23,6 @@ p.big {
 
 <body>
 
-
-<br><br><br><br><br><br>
-
 <style>
 div.b {
   text-align: left;

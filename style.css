@@ -1,7 +1,7 @@
 /* FUNCTIONAL - Needed for the tree diagram */
 @import url("https://fonts.googleapis.com/css?family=Questrial");
 .wrapper {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100vw;
@@ -123,7 +123,7 @@ body .wrapper ul > li:before {
   left: 0;
   width: 100%;
   height: 1px;
-  background: #e8e7df;
+  background: grey;
 }
 body .wrapper ul > li:first-of-type:before {
   left: 50%;
@@ -315,5 +315,4 @@ div.a {
     float: none;
   }
 }
-
 

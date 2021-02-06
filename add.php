@@ -1,4 +1,8 @@
-<?php include('config/db_connect.php'); ?>
+<?php include('config/db_connect.php'); 
+
+
+
+?>
 
 
 
@@ -59,8 +63,22 @@ clearInput();
   $_SESSION['addPage'] = $addPage;
    ?>
 			
+
+   <?php   
+  if(isset($_GET['topic'])){
+
+?> <label>Topic</label><br>       
+<input type="text" name="topic" value="<?php echo $_GET['topic'] ?>" readonly><br>
+
+<?php 
+
+}
+else{
+?>
 <label>Topic</label><br>       
 <input type="text" name="topic" value="<?php echo htmlspecialchars($topic) ?>"><br>
+<?php }
+?>
 
 <label>Subject</label><br>
 <input type="text" name="subject" value="<?php echo htmlspecialchars($subject) ?>"><br>
@@ -89,6 +107,14 @@ clearInput();
   display: block;
 }
 </style>
+<label> Is the subject an object or a person? </label><br>
+<select name="grammar" id="grammar" value="grammar">
+<option value="">Choose One</option>
+<option value="object">Object</option>
+<option value="person">Person</option>
+</select> <br>
+        
+  <label>What is your Support Means?</label><br>
 
 			<label>Support Means</label><br>
 <select name="union" id="union">
@@ -99,14 +125,18 @@ clearInput();
 <option value="Perception">Perception</option>
 </select>
 <br>
-
-
-<textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Statement</textarea><br>
-<textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example Statement</textarea><br>
+<br>
+<textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea><br>
+<textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea><br>
 <textarea id="url" name = "URL" value="<?php echo htmlspecialchars($URL) ?>">Enter URL</textarea><br>
-<textarea id="rd" name = "rd" value="<?php echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br>
+<!--<textarea id="rd" name = "rd" value="<?php //echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br> -->
+<!-- for perception -->
 <!-- for testimony -->
-<textarea id="summary" name = "summary" value="<?php echo htmlspecialchars($summary) ?>">Summary of Argument/Excerpt. Include timestamps for video, if applicable. </textarea><br>
+<textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea><br>
+<textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Enter citation. Please include: Author, title, publication, and date of publication.  </textarea><br>
+<textarea id="timestamp" name = "timestamp" value="<?php echo htmlspecialchars($timestamp) ?>">Enter timestamp of specified material</textarea><br>
+</p>
+<?php  // end of flagging function ?>
 
 <script type="text/javascript">
 
@@ -119,7 +149,7 @@ function checkOtherUnion() {
     var reason = document.getElementById('reason');
     var example = document.getElementById('example');
     var url = document.getElementById('url');
- 	var rd = document.getElementById('rd');
+  var rd = document.getElementById('rd');
     if (union.options[union.selectedIndex].value === 'Inference') {
         reason.style.display = '';
         example.style.display = '';
@@ -131,24 +161,40 @@ function checkOtherUnion() {
 
 if (union.options[union.selectedIndex].value === 'Perception') {
         url.style.display = '';
+        timestamp.style.display = '';
+        citation.style.display = '';
     } else {
         url.style.display = 'none';
-      
+        timestamp.style.display = 'none';
+        citation.style.display = 'none';
     }
 
 if (union.options[union.selectedIndex].value === 'Testimony') {
-        rd.style.display = '';
-        summary.style.display = '';
+        transcription.style.display = '';
+        citation.style.display = '';
     } else {
-        rd.style.display = 'none';
-        summary.style.display = 'none';
-        
-      
+        transcription.style.display = 'none';
+        citation.style.display = 'none';
+       
+    }
+if (union.options[union.selectedIndex].value === 'Tarka') {
+        window.alert("A requirement of Tarka is to use the Facebook comments feature in the Tarka claim following submission.");
+    } else {
+       
     }
 
 }
 </script>
 
+
+
+
+<script type="text/javascript">
+
+var union = document.getElementById('union');
+union.onchange = checkOtherUnion;
+union.onchange();
+</script>
 
 <br>
 
@@ -158,6 +204,99 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
 					</div>
 		</form>
 
-</body>
+<script>
+// BELOW IS WHERE SUBMIT BUTTON DISABLED HAPPENS
+jQuery("#submit").prop('disabled', true);
+    var card = document.getElementById("union");
+//support means = union
+//var toValidate = jQuery('#subject');
+//var toValidateP = jQuery('#targetP');
+var toValidate = jQuery('#subject, #targetp');
 
-</html>
+//var toValidate2 = jQuery('#union');
+    validTextArea = false;
+
+toValidate.keyup(function () {
+
+    if (jQuery(this).val().length > 0) {
+        jQuery(this).data('valid', true);
+    } else {
+        jQuery(this).data('valid', false);
+    }
+
+        toValidate.each(function () {
+        if (jQuery(this).data('valid') == true) {
+            validTextArea = true;
+
+        } else {
+            validTextArea = false;
+        }
+
+if (validTextArea == true && validDropDown == true) {
+        jQuery("#submit").prop('disabled', false);
+
+    } else {
+                 
+        jQuery("#submit").prop('disabled', true);
+      }
+
+    });
+
+
+});
+
+
+
+//var clientCode = document.querySelector("#clientCode");
+//clientCode.addEventListener("change", clientChangeHandler. false);
+
+
+
+
+var toValidate2 = jQuery('#union');
+    validDropDown = false;
+
+
+toValidate2.change(function () {
+
+
+  if (jQuery(this)[0].selectedIndex == 1 || jQuery(this)[0].selectedIndex == 2 || jQuery(this)[0].selectedIndex == 3 || jQuery(this)[0].selectedIndex == 4|| jQuery(this)[0].selectedIndex == 5) {
+        jQuery(this).data('valid', true);
+    } else {
+        jQuery(this).data('valid', false);
+    }
+
+
+
+        toValidate2.each(function () {
+        if (jQuery(this).data('valid') == true) {
+            validDropDown = true;
+                        
+        } else {
+            validDropDown = false;
+   //           window.alert(jQuery(this)[0].selectedIndex);
+
+        }
+
+if (validTextArea == true && validDropDown == true) {
+        jQuery("#submit").prop('disabled', false);
+
+    } else {
+                  
+        jQuery("#submit").prop('disabled', true);
+      }
+
+    });
+
+if (validTextArea == true && validDropDown == true) {
+        jQuery("#submit").prop('disabled', false);
+
+    } else {
+              
+        jQuery("#submit").prop('disabled', true);
+      }
+
+});
+
+
+

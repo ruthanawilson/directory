@@ -62,7 +62,7 @@ body {
 
 <div class="topnav">
 <!-- <div style="height: 20%; overflow: hidden"> -->
-  <img src="https://i.imgur.com/U7JFrYC.png" width = "283" height = "63"></a>
+  <img src="https://i.imgur.com/SyNUNU6.png" width = "283" height = "63"></a>
   <br><br>
   <a class="active" href="http://www.vadaproject.com/">Home & Topics</a>
   <a href="http://www.vadaproject.com/about.php">About</a>

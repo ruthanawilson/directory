@@ -1,26 +1,18 @@
-<?php
+
+<?php 
 include('config/db_connect.php');
 $supportMeans = mysqli_real_escape_string($conn, $_POST['union']);
 
 session_start();
 $claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is the claimID of the claim being flagged.
 
-//subject is not checking for keyup function
-//account for when the add page is used also
 
-//look for hyperlink functionality
-
-
-//require reason and subject when selected. 
-
-
-//perception - audio/video
-//testimony - optional text explanation
 $flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
 $flagTypeT = mysqli_real_escape_string($conn, $_POST['flagTypeT']);
 $flagTypeR = mysqli_real_escape_string($conn, $_POST['flagTypeR']);
 $flagTypeE = mysqli_real_escape_string($conn, $_POST['flagTypeE']);
 
+//something wrong with main flagtype because perception is flagtype yet it is not triggered 
 if(strlen("$flagType") > 2 )
 {$flagType = $flagType;
   ?><script> window.alert("ONE"); </script> <?php
@@ -37,7 +29,7 @@ elseif(strlen("$flagTypeE") > 2)
 {$flagType = $flagTypeE;
 ?><script> window.alert("four"); </script> <?php }
 else
-  {$flagType = "ERROR".$flagType.$flagTypeT.$flagTypeR.$flagTypeE."ERROR";
+  {$flagType = "ERROR: PERCEPTION OR TESTIMONY FLAG NOT ENTERED".$flagType.$flagTypeT.$flagTypeR.$flagTypeE."ERROR";
 ?><script> window.alert("error"); </script> <?php
 }
 
@@ -45,10 +37,12 @@ $reason = mysqli_real_escape_string($conn, $_POST['reason']);
 $topic = mysqli_real_escape_string($conn, $_POST['topic']);
 $example = mysqli_real_escape_string($conn, $_POST['example']);
 $url = mysqli_real_escape_string($conn, $_POST['url']);
-$rd = mysqli_real_escape_string($conn, $_POST['rd']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
 $targetP = mysqli_real_escape_string($conn, $_POST['targetP']);
-$summary = mysqli_real_escape_string($conn, $_POST['summary']);
+
+$transcription = mysqli_real_escape_string($conn, $_POST['transcription']);
+$citation = mysqli_real_escape_string($conn, $_POST['citation']);
+$vidtimestamp = mysqli_real_escape_string($conn, $_POST['vidtimestamp']);
 
 $grammar = mysqli_real_escape_string($conn, $_POST['grammar']);
 ?><script> window.alert($grammar); </script> <?php
@@ -80,7 +74,7 @@ $active = '1';
 
 //see if it is an instance of a claim being flagged. which one? find preexisting flagType, if any. if it has a flagtype, check if thesisrival: if yes, then error. if no, continue..)
 		
-		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, rd, summary, description, thesisST, reasonST, ruleST, topic, active) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$URL','$reason', '$rd', '$summary', '$description','$thesisST','$reasonST','$ruleST', '$topic', '$active')";
+		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription')";
 
 	
 			if(mysqli_query($conn, $sql1)){
@@ -201,17 +195,6 @@ $result11 = $stmt11->get_result(); // get the mysqli result
 } //end of if flagtype == thesisRival
 
 
-//2. if additional rival claim - restricted. 
-// change foreach to be query..change intro query to be a prepared statement
-// have page load into center...
-
-		//thesis names key created /uncoded 
-// change yellow font
-//research doc = source of testimony + break
-// popup should have summary 
-// summary = transcription
-//please include: name, title, date, publisher, (accessed on date)
-//fix ropdowns for testimony to reflect new flag changes 
 
  }////end of addpage = no
 

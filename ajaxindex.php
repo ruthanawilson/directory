@@ -15,13 +15,9 @@ include('templates/header.php');?>
 <div class="wrapper">
     <ul>
       <li class="noline">
-<BR><BR><BR><BR>
-      <h1> PLEASE...DO NOT FORGET TO HIT CTRL F5 PLEASE </h1>
+<BR><BR>
 
-<BR><BR>
-<BR><BR>
-    
-<a class="brand-text" href="add.php">Add New Claim</a><br><br>
+<a class="brand-text" href="add.php?topic=<?php echo $topic?>">Add New Claim</a><br><br>
 <h3>TOPIC: <?php echo $topic; ?> <BR> </h3>
 Claims displayed as a <font color = "seagreen"> green font </font> mean that they are currently active. <br> 
 Claims displayed as a <font color = "B7B802"> yellow font </font> mean that the are currently inactive. <br>
@@ -227,7 +223,7 @@ while($flagge = $result2->fetch_assoc())
 
  if($resultFlagType == "thesisRival")
       {
-        echo " <br> Flagged by a rival: " . $r . "<br>";
+        echo " <br> The flag " . $r . " has a rival!: " . "<br>";
       //ECHO "START 1";
       sortclaimsRival($r);
       //ECHO "END 1";
@@ -349,7 +345,7 @@ while($d = $disp->fetch_assoc())
  if($d['active'] == 1)
 { $font = 'seagreen'; }
 else 
- { $font = '#FFFF99';} 
+ { $font = '#B7B802';} 
 
 ?>
 <font color = "<?php echo $font; ?>"> 
@@ -786,16 +782,16 @@ include('config/db_connect.php');
                 // Displaying city
 //                html += "<div class='row'>";
  //                   html += "<div class='col-md-6'></div>";
-                    html += "<div class='col-md-6'><p style=\"color:black\">" + "Support Means: " + response.supportMeans + "<BR> ClaimID: " + response.claimID + "</div><BR><p style=\"color:black\">";
+                    html += "<div class='col-md-6'><p style=\"color:black\">" + "Support Means: " + response.supportMeans + "<BR> ClaimID: " + response.claimID + "<BR> Claim: " + response.subject + " " + response.targetP + "</div><BR><p style=\"color:black\">";
 
                 if(response.supportMeans == 'Testimony')
                 {
-                  html += "<BR> Subject: " + response.subject + "<BR> Target Property: " + response.targetP + "URL: " + response.URL + " <BR> Research doc: " + response.rd;
+                  html +=  "Transcription: " + response.transcription + " <BR> Citation: " + response.citation;
                 }
 
                 if(response.supportMeans == 'Perception')
                 {
-                 html += "<BR> Subject: " + response.subject + "<BR> Target Property: " + response.targetP + "Summary: " + response.summary;
+                 html += " <BR> URL: " + response.URL + " <BR> Timestamp: " + response.timestamp + " <BR> Citation: " + response.citation;
                 }
                 
                 if(response.supportMeans == 'Inference')
