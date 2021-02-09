@@ -1,5 +1,6 @@
 <?php include('config/db_connect.php');
 include('templates/header.php');?>
+<meta property="fb:app_id" content="910800136088440" />
 
 <link rel="stylesheet" href="./style.css"> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -44,7 +45,7 @@ $numhitsroot = mysqli_num_rows($rootresult12);
   if ($numhitsroot == '0')
   {
 
-    $root123 = "SELECT DISTINCT claimID
+  /*  $root123 = "SELECT DISTINCT claimID
         from claimsdb
         WHERE topic = ? AND (SELECT DISTINCT flagID FROM flagsdb) IS NULL
         "; // SQL with parameters
@@ -52,6 +53,7 @@ $stmt523 = $conn->prepare($root123);
 $stmt523->bind_param("s", $topic);
 $stmt523->execute();
 $rootresult123 = $stmt523->get_result(); // get the mysqli result
+?> <script> window.alert( "why are you <?php echo $rootresult123; ?> why!!!"); </script> <?php
 $numhitsroot3 = mysqli_num_rows($rootresult123);
 
 
@@ -62,8 +64,8 @@ if($numhitsroot3 > 0)
       sortclaims($root2['claimID']);
 
   }
-  }
-} //end of if statement 
+  }*/
+} //end of if statement  
 //duplicate
 
   $root1 = "SELECT DISTINCT claimID
@@ -249,8 +251,13 @@ else
 <font color = "<?php echo $font; ?>"> 
 <?php    // END FONT CHANGING
 
-echo $claimid . "<br>" . $d['subject'] . ' ' . $d['targetP'] . "<br> Flag type: " . $resultFlagType . "<br>";
-
+echo $claimid . "<br>" . $d['subject'] . ' ' . $d['targetP'] . "<br>";
+if($resultFlagType == '')
+  { }
+else
+{
+  echo"<br> Flag type: " . $resultFlagType . "<br>";
+}
 // ------------------------- BELOW is modal code
 createModal($claimid);
 // ------------------------- ABOVE is modal code
@@ -782,7 +789,7 @@ include('config/db_connect.php');
                 // Displaying city
 //                html += "<div class='row'>";
  //                   html += "<div class='col-md-6'></div>";
-                    html += "<div class='col-md-6'><p style=\"color:black\">" + "Support Means: " + response.supportMeans + "<BR> ClaimID: " + response.claimID + "<BR> Claim: " + response.subject + " " + response.targetP + "</div><BR><p style=\"color:black\">";
+                    html += "<div class='col-md-6'><p style=\"color:black\">" + response.ts + " <br> Support Means: " + response.supportMeans + "<BR> ClaimID: " + response.claimID + "<BR> Claim: " + response.subject + " " + response.targetP + "</div><BR><p style=\"color:black\">";
 
                 if(response.supportMeans == 'Testimony')
                 {
@@ -805,7 +812,7 @@ include('config/db_connect.php');
                
                 }
 
-                html += " <BR> <a href=\"details.php?id=" + response.claimID + "\" class = \"button\">  FLAG THIS CLAIM! </a> </div>";
+                html += " <BR> <div class = \"modal-content-a\"> <a href=\"details.php?id=" + response.claimID + "\" class = \"button\">  FLAG THIS CLAIM! </a> </div></div>";
 
                 // And now assign this HTML layout in pop-up body
                 $("#modal-body").html(html);
@@ -823,11 +830,13 @@ include('config/db_connect.php');
 <div class = "modal fade" id = "myModal" tabindex = "-1" role = "dialog" aria-hidden = "true">
    
    <div class = "modal-dialog">
-      <div class = "modal-content">
+      <div class = "modal-content-a">
+        <b>Claim Details</b> <br>
+         <div class = "modal-content-b">
          
          <div class = "modal-header">
             <h4 class = "modal-title">
-               Claims Details
+
             </h4>
 
 <!--            <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
@@ -836,18 +845,21 @@ include('config/db_connect.php');
          </div>
          
          <div id = "modal-body">
+          
             Press ESC button to exit.
 
             response.claimID
          </div>
+         </div> <!-- modal-content-b -->        
          
-         <div class = "modal-footer">
+<!--         <BR> <a href="details.php?id=<?php echo $claimid; ?>" class = "button">FLAG THIS CLAIM! </a> </div>  -->
+
            <!-- <button type = "button" class = "btn btn-default" data-dismiss = "modal">
                OK
             </button> -->
-         </div>
          
-      </div><!-- /.modal-content -->
+ 
+      </div><!-- /.modal-content-a-->
    </div><!-- /.modal-dialog -->
    
 </div><!-- /.modal -->

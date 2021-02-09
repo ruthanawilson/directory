@@ -157,7 +157,7 @@ if (union.options[union.selectedIndex].value === 'rule') {
 
 
 <div class="center">
-				<button onclick="setTimeout(myFunction, 3000)" id="submit">Submit</button>	
+				<button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>	
 					</div>
 
 </p>
@@ -218,7 +218,7 @@ if( $details['supportMeans'] == "Perception")
 <?php flagging(); ?>
 
 <div class="center">
-				<button id="submit">Submit</button>	
+<button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>	
 					</div>
 
 </p>
@@ -272,7 +272,7 @@ if( $details['supportMeans'] == "Testimony")
 
 <div class="center">
 
-				<button id="submit">Submit</button>	
+				<button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>	
 
 			<?php 	/* // if submit, then 
 
@@ -524,14 +524,16 @@ for(let i=0;i<spans.length;i++){
 <option value="Tarka">Tarka</option>
 </select>
 <br>
-<textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea><br>
-<textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea><br>
-<textarea id="url" name = "url" value="<?php echo htmlspecialchars($url) ?>">Enter URL</textarea><br>
-<!--<textarea id="rd" name = "rd" value="<?php //echo htmlspecialchars($rd) ?>">Enter Speech/Research Document</textarea><br> -->
-<!-- for perception -->
-<!-- for testimony -->
-<textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea><br>
-<textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Enter citation. Please include: Author, title, publication, and date of publication.  </textarea><br>
+<textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea>
+<br>
+<textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea>
+<br>
+<textarea id="url" name = "url" value="<?php echo htmlspecialchars($url) ?>">Enter URL</textarea>
+<br>
+<textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea>
+<br>
+<textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Enter citation. Please include: Author, title, publication, and date of publication.  </textarea>
+<br>
 <textarea id="vidtimestamp" name = "vidtimestamp" value="<?php echo htmlspecialchars($vidtimestamp) ?>">Enter timestamp of specified material</textarea><br>
 </p>
 <?php } // end of flagging function ?>

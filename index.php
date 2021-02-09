@@ -13,7 +13,11 @@
 <!-- <table style=\"width:60%\">
   <tr><th> --> 
 
-<h1>Welcome!</h1> This is a debate website made by creating claims using Vada Logic. Users can create new claims using the Vada structure, or particpate and observe pre-existing debates. <br><br><br>
+<h1>Welcome!</h1>
+
+This is a website for discussion and learning that is based on Indian traditions of epistemology, logic and debate. Users can create new claims using protocols of <i>vāda</i> and <i>pramāṇavāda</i>, or participate in and observe pre-existing debates.
+
+ <br><br><br>
  
 <h3>Topics to select from:</h3>
 <?php

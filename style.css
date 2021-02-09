@@ -203,6 +203,7 @@ div.a {
 
   /* The Modal (background) */
 .modal {
+
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -217,7 +218,19 @@ div.a {
 }
 
 /* Modal Content */
-.modal-content {
+.modal-content-a {
+  text-align: center;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+
+/* Modal Content */
+.modal-content-b {
+  text-align: left;
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
