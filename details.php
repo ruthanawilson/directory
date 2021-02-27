@@ -42,6 +42,7 @@ session_start();
 <p><b>Claim ID:</b>  <?php echo $details['claimID']; ?> </p>
 			<p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p></font>
 
+  <b>Thesis Statement:</b>  <?php echo $details['thesisST']; ?> 
 
 
 <?php //------------ ONE
@@ -50,7 +51,6 @@ if( $details['supportMeans'] == "Inference")
 
 
 
-	<b>Thesis Statement:</b>  <?php echo $details['thesisST']; ?>	
 
 <BR><br>
       <b>Reason Statement:</b>  <?php echo $details['reasonST']; ?>
@@ -225,7 +225,7 @@ if( $details['supportMeans'] == "Perception")
 if( $details['supportMeans'] == "Testimony")
 { ?>
   
-  	<p><b>Transcription:</b>  <?php echo $details['transcription']; ?>   <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
+  	<br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
 	
 
 <button class="openmodal myBtn">Flag Testimony</button>

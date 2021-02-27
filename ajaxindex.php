@@ -793,7 +793,7 @@ include('config/db_connect.php');
 
                 if(response.supportMeans == 'Testimony')
                 {
-                  html +=  "Transcription: " + response.transcription + " <BR> Citation: " + response.citation;
+                  html +=  "Transcription: " + response.transcription + " <BR><br><br> Citation: " + response.citation;
                 }
 
                 if(response.supportMeans == 'Perception')

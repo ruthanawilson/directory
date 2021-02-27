@@ -38,6 +38,14 @@ else
 } // end of "if addpage"
 $reason = mysqli_real_escape_string($conn, $_POST['reason']);
 $topic = mysqli_real_escape_string($conn, $_POST['topic']);
+$topic = strip_punctuation($topic);
+
+function strip_punctuation($string) {
+	$string = trim($string);
+    $string = preg_replace('/[^\w\s]/', '', $string);
+    return $string;
+}
+
 $example = mysqli_real_escape_string($conn, $_POST['example']);
 $url = mysqli_real_escape_string($conn, $_POST['url']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
