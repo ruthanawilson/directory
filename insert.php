@@ -2,11 +2,13 @@
 <?php 
 include('config/db_connect.php');
 $supportMeans = mysqli_real_escape_string($conn, $_POST['union']);
-
+$flagType = '';
 session_start();
 $claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is the claimID of the claim being flagged.
-
-
+			$addPage = $_SESSION['addPage'];	
+?><script> window.alert("add page is <?php echo $addPage; ?>"; </script><?php
+if($addPage == 'no')
+{
 $flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
 $flagTypeT = mysqli_real_escape_string($conn, $_POST['flagTypeT']);
 $flagTypeR = mysqli_real_escape_string($conn, $_POST['flagTypeR']);
@@ -30,9 +32,10 @@ elseif(strlen("$flagTypeE") > 2)
 ?><script> window.alert("four"); </script> <?php }
 else
   {$flagType = "ERROR: PERCEPTION OR TESTIMONY FLAG NOT ENTERED".$flagType.$flagTypeT.$flagTypeR.$flagTypeE."ERROR";
-?><script> window.alert("error"); </script> <?php
+?><script> window.alert("error"); </script> <script> window.alert("add page is <?php echo $addPage; ?>"); </script><?php
 }
-
+?><script> window.alert("add page is <?php echo $addPage; ?>"; </script><?php
+} // end of "if addpage"
 $reason = mysqli_real_escape_string($conn, $_POST['reason']);
 $topic = mysqli_real_escape_string($conn, $_POST['topic']);
 $example = mysqli_real_escape_string($conn, $_POST['example']);
@@ -82,7 +85,6 @@ $active = '1';
 			} else {
 				echo 'query error: '. mysqli_error($conn);
 			}
-			$addPage = $_SESSION['addPage'];	
 
 
 //if this was a new claim from the add page, it would NOT be flagging anything. but since it's NOT from the add page, it is flagging. thus, this is the flagger.

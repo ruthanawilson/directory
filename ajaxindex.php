@@ -1,6 +1,6 @@
 <?php include('config/db_connect.php');
 include('templates/header.php');?>
-<meta property="fb:app_id" content="910800136088440" />
+<!--<meta property="fb:app_id" content="910800136088440" /> -->
 
 <link rel="stylesheet" href="./style.css"> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

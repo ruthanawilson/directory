@@ -70,12 +70,7 @@ if( $details['supportMeans'] == "Inference")
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
 
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statement's target property or <br>(b) does not possess the flagee thesis statement's target property. </font>
-  </span>
-</div>
+
 <html>
 <p style="color:#000000";><font = #000000>
 
@@ -176,7 +171,7 @@ if (union.options[union.selectedIndex].value === 'rule') {
 echo'Tarka is an element of conversation used to discuss errors in debate form and communication with moderators.<br><br>'; ?>
       <b>Claim: </b><br>  <?php echo $details['subject']; ?><?php echo " ".$details['targetP']; 
 
- echo'<br><br><br>Please explain argument in the Facebook comments section below.';
+ echo'<br><br><br>Please explain argument in the comments section below.';
 }
 
   // ------------- TWO
@@ -195,12 +190,7 @@ if( $details['supportMeans'] == "Perception")
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
 
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">  <font = #000000>   <span id="explain-element"> <?php echo '<span style="color:red;"> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statements target property or <br>(b) does not possess the flagee thesis statements target property.</span>';?> </font>
-  </span>
-</div>
+
 <html>
 <p style="color:#000000";><font = #000000>
 <br>What are you flagging it for?<br> </font>
@@ -248,12 +238,7 @@ if( $details['supportMeans'] == "Testimony")
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
 
-<div id="some-div">
-    <img src = "https://i.ibb.co/YfHKPmM/question.png">
-  
-  <span id="explain-element">    <span id="explain-element"> <?php echo '<span style="color:red;"> Either link to a currently unflagged claim or generate a new claim with the identical subject as the flagee statement asserting that this subject either <br>(a) is not known to possess the flagee thesis statements target property or <br>(b) does not possess the flagee thesis statements target property.</span>';?>
-  </span>
-</div>
+
 <html>
 <p style="color:#000000";><font = #000000>
 <br>What are you flagging it for?<br> </font>
@@ -485,7 +470,7 @@ for(let i=0;i<spans.length;i++){
 
 
 <?php function flagging()
-{ $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $url =  $rd = $reason =  $flagType = $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $grammar = $active = '';
+{ ?> <div class = 'scroll'> <?php $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $grammar = $active = '';
 ?>
 <html> <p style="color:#000000";>
  <?php global $topic;
@@ -495,27 +480,25 @@ for(let i=0;i<spans.length;i++){
 			<input type="text" name="topic" value="<?php echo htmlspecialchars($topic) ?>" readonly><br>
 
 
-<label>Subject</label><br>
-			<input type="text" name="subject" id="subject" value="<?php echo htmlspecialchars($subject) ?>" required><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><u>Subject</u>         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <u>Target Property </u></label><br>
+<textarea class="subject" type="text" id="subject" name = "subject" value="<?php echo htmlspecialchars($subject) ?>">Enter Subject</textarea>			
+<textarea class="targetP" type="text" id="targetP" name = "targetP" value="<?php echo htmlspecialchars($targetP) ?>">Enter Target Property</textarea>
+			<br>
 
-			<label>Target Property</label><br>
-			<input type="text" name="targetP" id="targetP" value="<?php echo htmlspecialchars($targetP) ?>" required> <br>
+      <u> <p style="color:grey">Thesis Statement </u><br>
+<span class="jsValue3">subject</span> <span class="jsValue4">target</span> 
+</p></p>
 
-<label> Is the subject an object or a person? </label><br>
+
+<p style="color:black"> Is the subject an object or a person? 
 <select name="grammar" id="grammar" value="grammar">
 <option value="">Choose One</option>
 <option value="object">Object</option>
 <option value="person">Person</option>
 </select> <br>
   			
-	<label>What is your Support Means?</label><br>
-
-<!--
-  <div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-  <div id="union" name="union" value = "union" class="dropdown-content" selectBoxOptions="Canada;Denmark;Finland;Germany;Mexico">>
-  </div>
-</div> -->
+What is your Support Means?
+  
 <select name="union" id="union" value="union">
 <option value="">Choose One</option>
 <option value="Inference">Inference</option>
@@ -523,22 +506,117 @@ for(let i=0;i<spans.length;i++){
 <option value="Perception">Perception</option>
 <option value="Tarka">Tarka</option>
 </select>
-<br>
-<textarea id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea>
+</p>
+
+
+
+
+
+
+</p>
+
+
+
+
+<div id="hiddenRule"> 
+
+  <div id="some-div">
+  <img src = "https://i.imgur.com/o4qSiRD.png">
+  <span id="explain-element"> Hint: Your reason statement should answer "Why?". You might think of the reason as what comes after 'because....'.  </span>
+  </div>
+<p style="color:black"><u>Reason</u><br>
+<textarea class="reason" type="text" id="reason" name = "reason" value="<?php echo htmlspecialchars($reason) ?>">Enter Reason Property</textarea>
+</p>
+  <u> Reason Statement </u><br>
+ 
+ <span class="jsValue5">subject</span>   <span class="jsValue6">reason</span>
+<br><br>
+
+<u> Rule and Example Statement </u><br>
+Whatever/Whomever
+
+ <!-- Plain Javascript Example -->
+  <span class="jsValue">reason</span>,
+<span class="jsValue2">target</span>,
+
+as in the case of: </div>
 <br>
 <textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea>
-<br>
-<textarea id="url" name = "url" value="<?php echo htmlspecialchars($url) ?>">Enter URL</textarea>
-<br>
-<textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea>
-<br>
-<textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Enter citation. Please include: Author, title, publication, and date of publication.  </textarea>
-<br>
-<textarea id="vidtimestamp" name = "vidtimestamp" value="<?php echo htmlspecialchars($vidtimestamp) ?>">Enter timestamp of specified material</textarea><br>
-</p>
+
+
+<textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea><br>
+<textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Please include: Author, title, publication, and date of publication.  </textarea><br>
+<textarea id="url" name = "url" value="<?php echo htmlspecialchars($url) ?>">Enter URL</textarea><br>
+<textarea id="vidtimestamp" name = "vidtimestamp" value="<?php echo htmlspecialchars($vidtimestamp) ?>">Enter timestamp of specified material</textarea>
+
+<script>
+
+
+// This is for reason
+var $jsReason = document.querySelector('.reason');
+var $jsValue = document.querySelector('.jsValue');
+
+$jsReason.addEventListener('input', function(event){
+  $jsValue.innerHTML = $jsReason.value;
+}, false);
+
+
+//-------------------------
+//This is for Targetp
+
+var $jsTargetP = document.querySelector('.targetP');
+var $jsValue2 = document.querySelector('.jsValue2');
+
+$jsTargetP.addEventListener('input', function(event){
+  $jsValue2.innerHTML = $jsTargetP.value;
+}, false);
+
+//-------------------------
+//This is for subject
+
+var $jsSubject = document.querySelector('.subject');
+var $jsValue3 = document.querySelector('.jsValue3');
+
+$jsSubject.addEventListener('input', function(event){
+  $jsValue3.innerHTML = $jsSubject.value;
+}, false);
+
+//-------------------------
+//This is for the second target property (4)
+
+var $jsTargetP2 = document.querySelector('.targetP');
+var $jsValue4 = document.querySelector('.jsValue4');
+
+$jsTargetP2.addEventListener('input', function(event){
+  $jsValue4.innerHTML = $jsTargetP2.value;
+}, false);
+
+
+
+//-------------------------
+//This is for the second subject property (5)
+var $jsSubject2 = document.querySelector('.subject');
+var $jsValue5 = document.querySelector('.jsValue5');
+
+$jsSubject2.addEventListener('input', function(event){
+  $jsValue5.innerHTML = $jsSubject2.value;
+}, false);
+
+//-------------------------
+//This is for the reason (6)
+var $jsReason2 = document.querySelector('.reason');
+var $jsValue6 = document.querySelector('.jsValue6');
+
+$jsReason2.addEventListener('input', function(event){
+  $jsValue6.innerHTML = $jsReason2.value;
+}, false);
+
+</script> 
+</div> 
 <?php } // end of flagging function ?>
 
 <script type="text/javascript">
+
 
 var union = document.getElementById('union');
 union.onchange = checkOtherUnion;
@@ -550,6 +628,7 @@ function checkOtherUnion() {
     var example = document.getElementById('example');
     var url = document.getElementById('url');
  	var rd = document.getElementById('rd');
+  var hiddenRule = document.getElementById('hiddenRule');
 
         reason.style.display = 'none';
         example.style.display = 'none';
@@ -557,6 +636,7 @@ function checkOtherUnion() {
         url.style.display = 'none';
         vidtimestamp.style.display = 'none';
         transcription.style.display = 'none';
+        hiddenRule.style.display = 'none';
 
 
     if (union.options[union.selectedIndex].value === '') {
@@ -565,6 +645,7 @@ function checkOtherUnion() {
     if (union.options[union.selectedIndex].value === 'Inference') {
         reason.style.display = '';
         example.style.display = '';
+        hiddenRule.style.display = '';
         citation.style.display = 'none';
     }
 
@@ -581,10 +662,53 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
     } 
     
 if (union.options[union.selectedIndex].value === 'Tarka') {
-        window.alert("A requirement of Tarka is to use the Facebook comments feature in the Tarka claim following submission.");
+        window.alert("A requirement of Tarka is to use the comments feature in the Tarka claim following submission.");
          citation.style.display = 'none';
     } 
 
 }
+
+
+
 </script>
-<?
+
+
+ <!-- 
+     <div id="hyvor-talk-view"></div>
+<script type="text/javascript">
+    var HYVOR_TALK_WEBSITE = 3313; // DO NOT CHANGE THIS
+    var HYVOR_TALK_CONFIG = {
+        url: false,
+        id: false
+    };
+</script>
+<script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script>
+
+--> 
+
+
+<!--
+<div class="x">
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    
+    var disqus_config = function () {
+    this.page.url = document.write(window.location.href);  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = document.write(window.location.href); // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://vadaproject.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+ </div>
+
+-->
+<br>

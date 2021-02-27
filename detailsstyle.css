@@ -49,13 +49,18 @@ body {font-family: Arial, Helvetica, sans-serif;}
   .union {
 }
 
+div.scroll{
+  overflow: scroll;
+  width: 900px;
+  height: 400px;
+  position: relative;
+}
+
 #explain-element {
   border: 1px solid #ccc;
   display: none;
-  font-size: 10px;
   margin-top: 10px;
-  padding: 5px;
-  text-transform: uppercase;
+  padding: 2px;
 }
 
 #some-div:hover #explain-element {
