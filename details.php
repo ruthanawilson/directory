@@ -41,8 +41,9 @@ session_start();
 		?> 
 <p><b>Claim ID:</b>  <?php echo $details['claimID']; ?> </p>
 			<p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p></font>
-
-  <b>Thesis Statement:</b>  <?php echo $details['thesisST']; ?> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;"> (Subject) </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue;"> (Target Property) </span><br>
+  <b>Thesis Statement:</b> <span style="color:red;"> <?php echo $details['subject']; ?> </span> <span style="color:blue;"><?php
+  echo $details['targetP']; ?> </span>
 
 
 <?php //------------ ONE
@@ -51,12 +52,22 @@ if( $details['supportMeans'] == "Inference")
 
 
 
-
+<br>
 <BR><br>
-      <b>Reason Statement:</b>  <?php echo $details['reasonST']; ?>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:red;"> (Subject) </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:orange;">(Reason Property) </span><br>
+      <b>Reason Statement:</b> 
+<span style="color:red;"> <?php echo $details['subject']; ?> </span> <span style="color:orange;"><?php
+  echo $details['reason']; ?> </span>
       
       <br><br>
-      <b>Rule Statement:</b>  <?php echo $details['ruleST']; ?>
+
+
+
+
+      <b>Rule Statement:</b> Whomever/Whatever <span style="color:orange;"> <?php echo $details['reason']; ?> </span> <span style="color:blue;"><?php
+  echo $details['targetP']; ?></span>, as in the case of <span style="color:purple;"> <?php echo $details['example']; ?> </span> 
+
 <br><br>
 
 			<!-- Trigger/Open The Modal -->
@@ -404,8 +415,17 @@ if (validTextArea == true && validDropDown == true) {
 	
 $("#submit").click(function(){
   window.alert("Submitted!");
-window.location.assign("ajaxindex.php?topic=<?php echo $topic?>");
+  /*
+  if (union.options[union.selectedIndex].value === 'Tarka') {
+window.alert("HEY GIRLLLLL!");
+$newid = $claimID++; 
+window.location.assign("details.php?id=<?php echo $newid ?>");
+  } 
+  else
+  { window.location.assign("ajaxindex.php?topic=<?php echo $topic?>"); }
 
+  */
+  
  $.post( $("#myForm").attr("action"), 
          $("#myForm :input").serializeArray(), 
          function(info){ $("#result").html(info); 
@@ -531,7 +551,10 @@ What is your Support Means?
  
  <span class="jsValue5">subject</span>   <span class="jsValue6">reason</span>
 <br><br>
-
+<div id="some-div">
+  <img src = "https://i.imgur.com/o4qSiRD.png">
+  <span id="explain-element"> Hint: The example cannot be the same as the subject.  </span>
+  </div>
 <u> Rule and Example Statement </u><br>
 Whatever/Whomever
 
@@ -539,14 +562,50 @@ Whatever/Whomever
   <span class="jsValue">reason</span>,
 <span class="jsValue2">target</span>,
 
-as in the case of: </div>
+as in the case of: 
 <br>
 <textarea id="example" name = "example" value="<?php echo htmlspecialchars($example) ?>">Enter Example</textarea>
+  
+</div>
 
 
+<div id="perceptionHint">
+    <div id="some-div">
+  <img src = "https://i.imgur.com/o4qSiRD.png">
+  <span id="explain-element"> Hint: Perception MUST be audio or video.  </span>
+  </div>
+
+</div>
+<div id="hiddenTranscription">
+
+
+<u>Transcription</u>
+
+<div id="some-div">
+  <img src = "https://i.imgur.com/o4qSiRD.png">
+  <span id="explain-element"> Hint: The transcription MUST be a quotation from the source with no additional dialogue.  </span>
+  </div>
+
+  </div>
 <textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea><br>
-<textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Please include: Author, title, publication, and date of publication.  </textarea><br>
+<div id="hiddenCitation">
+<u>Citation</u>
+
+<div id="some-div">
+  <img src = "https://i.imgur.com/o4qSiRD.png">
+  <span id="explain-element"> Please include as applicable: author, title, publication, date of publication, and URL. </span>
+  </div>
+  </div>
+  <textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Citation</textarea><br>
+
+<div id="hiddenURL">
+<u>URL</u>
+  </div>
 <textarea id="url" name = "url" value="<?php echo htmlspecialchars($url) ?>">Enter URL</textarea><br>
+
+<div id="hiddenTS">
+<u>Timestamp of content</u>
+  </div>
 <textarea id="vidtimestamp" name = "vidtimestamp" value="<?php echo htmlspecialchars($vidtimestamp) ?>">Enter timestamp of specified material</textarea>
 
 <script>
@@ -630,6 +689,12 @@ function checkOtherUnion() {
  	var rd = document.getElementById('rd');
   var hiddenRule = document.getElementById('hiddenRule');
 
+ var hiddenURL = document.getElementById('hiddenURL');
+ var hiddenTS = document.getElementById('hiddenTS');
+ var hiddenCitation = document.getElementById('hiddenCitation');
+var hiddenTranscription = document.getElementById('hiddenTranscription');
+var perceptionHint = document.getElementById('perceptionHint');
+
         reason.style.display = 'none';
         example.style.display = 'none';
         citation.style.display = 'none';
@@ -638,6 +703,12 @@ function checkOtherUnion() {
         transcription.style.display = 'none';
         hiddenRule.style.display = 'none';
 
+
+        hiddenURL.style.display = 'none';
+        hiddenTS.style.display = 'none';
+        hiddenCitation.style.display = 'none';
+        hiddenTranscription.style.display = 'none';
+        perceptionHint.style.display = 'none';
 
     if (union.options[union.selectedIndex].value === '') {
         citation.style.display = 'none';
@@ -651,14 +722,20 @@ function checkOtherUnion() {
 
 
 if (union.options[union.selectedIndex].value === 'Perception') {
+        perceptionHint.style.display = '';
         url.style.display = '';
         vidtimestamp.style.display = '';
         citation.style.display = '';
+        hiddenURL.style.display = '';
+        hiddenTS.style.display = '';
+        hiddenCitation.style.display = '';
     }
 
 if (union.options[union.selectedIndex].value === 'Testimony') {
         transcription.style.display = '';
         citation.style.display = '';
+        hiddenCitation.style.display = '';
+        hiddenTranscription.style.display = '';
     } 
     
 if (union.options[union.selectedIndex].value === 'Tarka') {
