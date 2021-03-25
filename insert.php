@@ -59,16 +59,16 @@ $grammar = mysqli_real_escape_string($conn, $_POST['grammar']);
 ?><script> window.alert($grammar); </script> <?php
 if($grammar == "person")
 { 
-$ruleST= "Whomever " . $reason . " " . $targetP. ", as in the case of " . $example. ".";	
+$ruleST= "Whomever " . $reason . " " . $targetP. ", as in the case of " . $example;	
 }
 else {
-$ruleST= "Whatever " . $reason . " " . $targetP. ", as in the case of " . $example. ".";
+$ruleST= "Whatever " . $reason . " " . $targetP. ", as in the case of " . $example;
 }
 
 
-$thesisST= $subject . " " . $targetP. ".";
+$thesisST= $subject . " " . $targetP;
 
-$reasonST= $subject . " " . $reason. ".";
+$reasonST= $subject . " " . $reason;
 
 $c = uniqid (rand (),true);
 
