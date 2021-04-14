@@ -71,7 +71,7 @@ if( $details['supportMeans'] == "Inference")
 <br><br>
 
 			<!-- Trigger/Open The Modal -->
-<button class="openmodal myBtn">Flag Thesis, Reason, or Rule/Example</button>
+<button class="openmodal myBtn">Support or Flag Inference</button>
 
 <!-- The Modal -->
 <div class="modal myModal">
@@ -85,6 +85,15 @@ if( $details['supportMeans'] == "Inference")
 <html>
 <p style="color:#000000";><font = #000000>
 
+<br>Are you flagging or supporting this claim?<br> </font>
+  <select name="FOS" id="FOS" value="FOS">
+        <option value="" selected>Select...</option>
+        <option value="flagging">flagging</option>
+        <option value="supporting">supporting</option>
+</select>
+
+
+<div id="flaggingDiv">
 
 <br>Are you flagging the Thesis property, the Reason property, or the Rule and Example property?<br> </font>
   <select name="tre" id="tre" value="tre">
@@ -95,11 +104,11 @@ if( $details['supportMeans'] == "Inference")
 
 
 <br>What are you flagging it for?<br>
-	<select name="flagTypeT" id="flagTypeT" value="flagType">
-		  	<option value="" selected>Select...</option>
-  			<option value="thesisRival">Has Rival</option>
-  			<option value="TooEarly">Too Early</option>
-  			<option value="TooLate">Too Late</option>
+  <select name="flagTypeT" id="flagTypeT" value="flagType">
+        <option value="" selected>Select...</option>
+        <option value="thesisRival">Has Rival</option>
+        <option value="TooEarly">Too Early</option>
+        <option value="TooLate">Too Late</option>
         </select>
 
 
@@ -118,8 +127,7 @@ if( $details['supportMeans'] == "Inference")
        <option value="ruleContri">Contrived Universal</option>
       </select>
 
-  			
-<?php flagging(); ?>
+        
 
 <!-- //------------------------- -->
 
@@ -155,8 +163,44 @@ if (union.options[union.selectedIndex].value === 'rule') {
        
     }
 
+} </script>
+</div>
+
+
+<script>
+var union1 = document.getElementById('FOS');
+union1.onchange = checkOtherUnion1;
+union1.onchange();
+
+function checkOtherUnion1() {
+   var flaggingDiv = document.getElementById('flaggingDiv');
+    flaggingDiv.style.display = 'none';
+    var hideThesis = document.getElementById('hideThesis');
+    hideThesis.style.display = 'hideThesis';
+    var union1 = this;
+
+    if (union1.options[union1.selectedIndex].value === 'flagging') {
+        window.alert("the flagging option is chosen");
+        flaggingDiv.style.display = '';
+        hideThesis.style.display = '';
+    } else {
+        flaggingDiv.style.display = 'none';
+        hideThesis.style.display = 'none';
+      }
+
+
+if (union1.options[union1.selectedIndex].value === 'supporting') {
+window.alert("Please input your support for the claim below");
+hideThesis.style.display = 'none';
+    flaggingDiv.style.display = 'none';      
+    }
+
+
 }
 </script>
+
+
+<?php flagging(); ?>
 
 <!-- //------------------------- -->
 
@@ -191,7 +235,7 @@ if( $details['supportMeans'] == "Perception")
 	<p><b>Url of perception:</b>  <?php echo $details['URL']; ?> </p>
 	
 
-<button class="openmodal myBtn">Flag Perception</button>
+<button class="openmodal myBtn">Support or Flag Perception</button>
 
 <!-- The Modal -->
 <div class="modal myModal">
@@ -239,7 +283,7 @@ if( $details['supportMeans'] == "Testimony")
   	<br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
 	
 
-<button class="openmodal myBtn">Flag Testimony</button>
+<button class="openmodal myBtn">Support or Flag Testimony</button>
 
 <!-- The Modal -->
 <div class="modal myModal">
@@ -308,14 +352,16 @@ if( $details['supportMeans'] == "Testimony")
 <script>
 
 // BELOW IS WHERE SUBMIT BUTTON DISABLED HAPPENS
-jQuery("#submit").prop('disabled', true);
+/*jQuery("#submit").prop('disabled', true);
     var card = document.getElementById("union");
 //support means = union
 //var toValidate = jQuery('#subject');
 //var toValidateP = jQuery('#targetP');
-var toValidate = jQuery('#subject, #targetP');
+//below is all that is needed to restore the textarea checking. it just doesnt work with supporting, only with flagging!
 
-//var toValidate2 = jQuery('#union');
+
+ var toValidate = jQuery('#subject, #targetP');
+
     validTextArea = false;
 
 toValidate.keyup(function () {
@@ -408,16 +454,17 @@ if (validTextArea == true && validDropDown == true) {
 
 });
 
-
+*/
 // above IS WHERE SUBMIT BUTTON DISABLED HAPPENS 
 
 	$(document).ready(function() {
 	
 $("#submit").click(function(){
   window.alert("Submitted!");
+  window.location.assign("ajaxindex.php?topic=<?php echo $topic?>");
   /*
   if (union.options[union.selectedIndex].value === 'Tarka') {
-window.alert("HEY GIRLLLLL!");
+window.alert("testing to redirect tarka!");
 $newid = $claimID++; 
 window.location.assign("details.php?id=<?php echo $newid ?>");
   } 
@@ -499,9 +546,10 @@ for(let i=0;i<spans.length;i++){
 <label>Topic (Read only)</label><br>
 			<input type="text" name="topic" value="<?php echo htmlspecialchars($topic) ?>" readonly><br>
 
-
+<div id="hideThesis">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><u>Subject</u>         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <u>Target Property </u></label><br>
-<textarea class="subject" type="text" id="subject" name = "subject" value="<?php echo htmlspecialchars($subject) ?>">Enter Subject</textarea>			
+
+  <textarea class="subject" type="text" id="subject" name = "subject" value="<?php echo htmlspecialchars($subject) ?>">Enter Subject</textarea>			
 <textarea class="targetP" type="text" id="targetP" name = "targetP" value="<?php echo htmlspecialchars($targetP) ?>">Enter Target Property</textarea>
 			<br>
 
@@ -516,7 +564,7 @@ for(let i=0;i<spans.length;i++){
 <option value="object">Object</option>
 <option value="person">Person</option>
 </select> <br>
-  			
+  			</div>
 What is your Support Means?
   
 <select name="union" id="union" value="union">

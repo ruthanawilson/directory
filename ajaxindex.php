@@ -5,8 +5,8 @@ include('templates/header.php');?>
 <link rel="stylesheet" href="./style.css"> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-
-
+<!--
+//support or flag instead of add -->
 <?php  
   if(isset($_GET['topic'])){
      $topic = mysqli_real_escape_string($conn, $_GET['topic']); 
@@ -20,9 +20,9 @@ include('templates/header.php');?>
 
 <a class="brand-text" href="add.php?topic=<?php echo $topic?>">Add New Claim</a><br><br>
 <h3>TOPIC: <?php echo $topic; ?> <BR> </h3>
-Claims displayed as a <font color = "seagreen"> green font </font> mean that they are currently active. <br> 
+<!-- Claims displayed as a <font color = "seagreen"> green font </font> mean that they are currently active. <br> 
 Claims displayed as a <font color = "B7B802"> yellow font </font> mean that the are currently inactive. <br>
-
+-->
 </center>
 <center>
       <?php   //changing the centers above is a fun change
@@ -242,22 +242,37 @@ while($flagge = $result2->fetch_assoc())
   <li> <label for="<?php echo $claimid; ?>"><?php 
 while($d = $disp->fetch_assoc())
 {
-  // FONT CHANGING
- if($d['active'] == 1)
-{ $font = 'seagreen'; }
-else 
-{ $font = '#B7B802'; } ?>
 
-<font color = "<?php echo $font; ?>"> 
-<?php    // END FONT CHANGING
 
-echo $claimid . "<br>" . $d['subject'] . ' ' . $d['targetP'] . "<br>";
-if($resultFlagType == '')
-  { }
+
+if($resultFlagType == "supporting")
+{
+  echo "<img width='150' height='35' src='https://i.imgur.com/jogtMYv.png'> <br>";
+  echo"This is support for the claim. <br>";
+}
+elseif($resultFlagType == '')
+  {   echo "<br>" . $d['subject'] . ' ' . $d['targetP'] . "<br>";}
 else
 {
-  echo"<br> Flag type: " . $resultFlagType . "<br>";
+
+echo "<img width='100' height='35' src='https://i.imgur.com/K78YgJk.png'> <br>";
+
+ echo"<br> Flag type: " . $resultFlagType . "<br>";
+  echo "<br>" . $d['subject'] . ' ' . $d['targetP'] . "<br>";
 }
+echo $claimid . "<br>";
+
+//add is subject person or object to inference div
+
+  // FONT CHANGING
+ if($d['active'] == 1)
+{ //$font = 'seagreen'; 
+echo "<img width='50' height='50' src='https://i.imgur.com/2Jcq3kT.png'> <br>! This claim is uncontested. <br>";}
+else 
+{ //$font = '#B7B802'; 
+echo "<img width='60' height='50' src='https://i.imgur.com/jjwCLZu.png'> <br> ! There are active flags against this claim! <br>"; } 
+
+ 
 // ------------------------- BELOW is modal code
 createModal($claimid);
 // ------------------------- ABOVE is modal code
@@ -348,15 +363,18 @@ while($user = $result1->fetch_assoc())
  <li> <label for="<?php echo $claimid; ?>"><?php 
 while($d = $disp->fetch_assoc())
 {
-  // FONT CHANGING
- if($d['active'] == 1)
-{ $font = 'seagreen'; }
-else 
- { $font = '#B7B802';} 
 
-?>
-<font color = "<?php echo $font; ?>"> 
-<?php    // END FONT CHANGING
+echo "<img width='100' height='20' src='https://i.imgur.com/GDcQPD3.png'> <br><br>";
+
+
+ if($d['active'] == 1)
+{ echo "<img width='50' height='50' src='https://i.imgur.com/2Jcq3kT.png'> <br>! This claim is uncontested. <br>"; }
+else 
+ { echo "<img width='60' height='50' src='https://i.imgur.com/jjwCLZu.png'> <br> ! There are active flags against this claim! <br>";} 
+
+
+
+
 
  echo $claimid;
 echo nl2br("\r\n");
@@ -376,7 +394,7 @@ createModal($claimid);
  ?>
 
  </label><input id="<?php echo $claimid; ?>" type="checkbox"><ul> <span class="more">&hellip;</span>
-</font>
+<!--</font>-->
 <?php
 //below finds the flagger and continues the recursion by pushing it back to sortclaims recursion
   $sql1 = "SELECT DISTINCT claimIDFlagger
@@ -416,7 +434,7 @@ function restoreActivity ($claimid)
 include('config/db_connect.php');
 $act = "SELECT DISTINCT claimIDFlagger
         from flagsdb
-        WHERE claimIDFlagged = ? and flagType NOT LIKE 'thesisRival'"; 
+        WHERE claimIDFlagged = ? and flagType NOT LIKE 'thesisRival' and flagType NOT LIKE 'supporting'"; 
 $s = $conn->prepare($act); 
 $s->bind_param("i", $claimid);
 $s->execute();
@@ -527,7 +545,7 @@ include('config/db_connect.php');
 
   $sql188 = "SELECT DISTINCT claimIDFlagger
         from claimsdb, flagsdb
-        where ? = claimIDFlagged AND flagType NOT LIKE 'thesisRival'
+        where ? = claimIDFlagged AND flagType NOT LIKE 'thesisRival' AND flagType NOT LIKE 'supporting'
         ";
 $stmt188 = $conn->prepare($sql188); 
 $stmt188->bind_param("i", $claimid);
@@ -606,7 +624,7 @@ $h = "SELECT DISTINCT active
 //this is finding the flaggers for rival B
 $sql167 = "SELECT DISTINCT claimIDFlagger
         from claimsdb, flagsdb
-        where ? = claimIDFlagged AND flagType NOT LIKE 'thesisRival'
+        where ? = claimIDFlagged AND flagType NOT LIKE 'thesisRival' AND flagType NOT LIKE 'supporting'
         ";
 $stmt167 = $conn->prepare($sql167); 
 $stmt167->bind_param("i", $rivaling);
@@ -812,7 +830,7 @@ include('config/db_connect.php');
                
                 }
 
-                html += " <BR> <div class = \"modal-content-a\"> <a href=\"details.php?id=" + response.claimID + "\" class = \"button\">  FLAG THIS CLAIM! </a> </div></div>";
+                html += " <BR> <div class = \"modal-content-a\"> <a href=\"details.php?id=" + response.claimID + "\" class = \"button\">  DETAILS PAGE </a> </div></div>";
 
                 // And now assign this HTML layout in pop-up body
                 $("#modal-body").html(html);

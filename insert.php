@@ -9,6 +9,8 @@ $claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is th
 ?><script> window.alert("add page is <?php echo $addPage; ?>"; </script><?php
 if($addPage == 'no')
 {
+	$COS = "support";
+	//claim or support
 $flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
 $flagTypeT = mysqli_real_escape_string($conn, $_POST['flagTypeT']);
 $flagTypeR = mysqli_real_escape_string($conn, $_POST['flagTypeR']);
@@ -35,7 +37,14 @@ else
 ?><script> window.alert("error"); </script> <script> window.alert("add page is <?php echo $addPage; ?>"); </script><?php
 }
 ?><script> window.alert("add page is <?php echo $addPage; ?>"; </script><?php
-} // end of "if addpage"
+}
+else { $COS = "claim"; } // end of "if addpage"
+
+$FOS = mysqli_real_escape_string($conn, $_POST['FOS']);
+if($FOS == 'supporting')
+{
+	$flagType = 'supporting';
+}
 $reason = mysqli_real_escape_string($conn, $_POST['reason']);
 $topic = mysqli_real_escape_string($conn, $_POST['topic']);
 $topic = strip_punctuation($topic);
@@ -82,10 +91,9 @@ $active = '1';
 }
 //On page 2
 
-
 //see if it is an instance of a claim being flagged. which one? find preexisting flagType, if any. if it has a flagtype, check if thesisrival: if yes, then error. if no, continue..)
 		
-		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription')";
+		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', '$COS')";
 
 	
 			if(mysqli_query($conn, $sql1)){
@@ -120,13 +128,16 @@ if(mysqli_query($conn, $sql5)){
 			}
 
 //this below just updates our newly-flagged claim to be inactive. 
+			if($flagType != "supporting")
+			{
 	 $update = "UPDATE claimsdb 
 SET active = 0
 WHERE claimID = ? "; // SQL with parameters
 $stmt2 = $conn->prepare($update); 
 $stmt2->bind_param("i", $claimIDFlagged);
 $stmt2->execute();
-$result2 = $stmt2->get_result(); // get the mysqli result
+$result2 = $stmt2->get_result(); // get the mysqli result 
+} 
 
 if($flagType == 'thesisRival')
 {
