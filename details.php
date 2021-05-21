@@ -44,11 +44,17 @@ session_start();
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;"> (Subject) </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue;"> (Target Property) </span><br>
   <b>Thesis Statement:</b> <span style="color:red;"> <?php echo $details['subject']; ?> </span> <span style="color:blue;"><?php
   echo $details['targetP']; ?> </span>
+<?php
+
+if( $details['COS'] == "support")
+
+{
 
 
-<?php //------------ ONE
+ //----------------------------------------------------------------------------------- INFERENCE
 if( $details['supportMeans'] == "Inference")
-{ ?>
+{ $FOS = "flagging";
+?>
 
 
 
@@ -70,8 +76,8 @@ if( $details['supportMeans'] == "Inference")
 
 <br><br>
 
-			<!-- Trigger/Open The Modal -->
-<button class="openmodal myBtn">Support or Flag Inference</button>
+      <!-- Trigger/Open The Modal -->
+<button class="openmodal myBtn">Flag Inference</button>
 
 <!-- The Modal -->
 <div class="modal myModal">
@@ -85,31 +91,13 @@ if( $details['supportMeans'] == "Inference")
 <html>
 <p style="color:#000000";><font = #000000>
 
-<br>Are you flagging or supporting this claim?<br> </font>
-  <select name="FOS" id="FOS" value="FOS">
-        <option value="" selected>Select...</option>
-        <option value="flagging">flagging</option>
-        <option value="supporting">supporting</option>
-</select>
 
-
-<div id="flaggingDiv">
-
-<br>Are you flagging the Thesis property, the Reason property, or the Rule and Example property?<br> </font>
+<br>Are you flagging the Reason property or the Rule and Example property?<br> </font>
   <select name="tre" id="tre" value="tre">
         <option value="" selected>Select...</option>
-        <option value="thesis">Thesis</option>
         <option value="reason">Reason</option>
         <option value="rule">Rule</option> </select>
 
-
-<br>What are you flagging it for?<br>
-  <select name="flagTypeT" id="flagTypeT" value="flagType">
-        <option value="" selected>Select...</option>
-        <option value="thesisRival">Has Rival</option>
-        <option value="TooEarly">Too Early</option>
-        <option value="TooLate">Too Late</option>
-        </select>
 
 
   <select name="flagTypeR" id="flagTypeR" value="flagType">
@@ -139,14 +127,8 @@ union.onchange();
 
 function checkOtherUnion() {
     var union = this;
-    var thesis = document.getElementById('flagTypeT');
     var reason = document.getElementById('flagTypeR');
     var example = document.getElementById('flagTypeE');
-    if (union.options[union.selectedIndex].value === 'thesis') {
-        thesis.style.display = '';
-    } else {
-        thesis.style.display = 'none';
-    }
 
 
 if (union.options[union.selectedIndex].value === 'reason') {
@@ -164,7 +146,193 @@ if (union.options[union.selectedIndex].value === 'rule') {
     }
 
 } </script>
+
+
+
+
+<?php flagging(); ?>
+
+<!-- //------------------------- -->
+
+
+
+<div class="center">
+        <button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>  
+          </div>
+
+</p>
+</form></div>
 </div>
+<!-------------------------------------------------------------------------------------------------------------------------TARKA-->
+
+<?php }  // end inference check ?>
+  <?php
+
+  if( $details['supportMeans'] == "Tarka")
+{ ?>
+
+
+<BR><br><?php
+echo'Tarka is an element of conversation used to discuss errors in debate form and communication with moderators.<br><br>'; ?>
+      <b>Claim: </b><br>  <?php echo $details['subject']; ?><?php echo " ".$details['targetP']; 
+
+
+ echo'<br><br><br>Please explain argument in the comments section below.';
+}
+
+  // ------------------------------------------------------------------------------------------------------------------------------- PERCEPTION
+if( $details['supportMeans'] == "Perception")
+{ $FOS = "flagging"; ?>
+  <p><b>Url of perception:</b>  <?php echo $details['URL']; ?> </p>
+  
+
+<button class="openmodal myBtn">Flag Perception</button>
+
+<!-- The Modal -->
+<div class="modal myModal">
+
+<!-- Modal content -->
+<div class="modal-content">
+<span class="close">&times;</span>
+<form method="POST" id = "myForm" action="insert.php">
+
+
+<html>
+<p style="color:#000000";><font = #000000>
+<br>What are you flagging it for?<br> </font>
+  
+
+  <br><u>Perception Flags</u><br>
+        <select name="flagType" id="flagType" value="flagType">
+        <option value="" selected>Select...</option>
+        <option value="NoSenseObjectContact">No Sense-Object Contact</option>
+        <option value="DependsOnWords">Depends on Words</option>
+        <option value="Errant">Errant</option>
+        <option value="Ambiguous">Ambiguous</option>
+        </select><br>
+
+<?php flagging(); ?>
+
+<div class="center">
+<button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>  
+          </div>
+
+</p>
+</form>
+</div>
+</div>
+
+
+    <!-------------------------------------------------------------------------------------------------------------------------TESTIMONY--> 
+  
+<?php } // end perception check ?>
+
+   <?php // ------------- THREE
+if( $details['supportMeans'] == "Testimony")
+{ $FOS = "flagging"; ?>
+  
+    <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
+  
+
+<button class="openmodal myBtn">Flag Testimony</button>
+
+<!-- The Modal -->
+<div class="modal myModal">
+
+<!-- Modal content -->
+<div class="modal-content">
+<span class="close">&times;</span>
+<form method="POST" id = "myForm" action="insert.php">
+
+
+<html>
+<p style="color:#000000";><font = #000000>
+<br>What are you flagging it for?<br> </font>
+  
+<br><u>Testimony Flags</u><br>
+        <select name="flagType" id="flagType" value="flagType">
+        <option value="" selected>Select...</option>
+        <option value="NoDirectFamiliarity">No direct familiarity</option>
+        <option value="ErrantInfo">Errant information</option>
+        <option value="Ambiguous">Ambiguous</option>
+        <option value="Faithless">Faithless</option>
+        <option value="Misstatement">Misstatement</option>
+        </select><br>
+
+<?php flagging(); ?>
+
+<div class="center">
+
+        <button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>  
+
+      <?php   /* // if submit, then 
+
+    if(empty($supportMeans))
+{
+  header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=empty");
+  exit();
+} else {
+  header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=success");
+} */ 
+?> 
+
+
+          </div>
+
+</p>
+</form>
+</div>
+</div>
+
+      
+<?php } // end testimony check 
+} //end check for flagtype supporting
+else{
+
+?>
+
+  
+
+<br> <button class="openmodal myBtn">Support or Flag Claim</button>
+
+<!-- The Modal -->
+<div class="modal myModal">
+
+<!-- Modal content -->
+<div class="modal-content">
+<span class="close">&times;</span>
+<form method="POST" id = "myForm" action="insert.php">
+
+
+<html>
+<p style="color:#000000";><font = #000000>
+
+
+<br>Are you flagging or supporting this claim?<br> </font>
+  <select name="FOS" id="FOS" value="FOS">
+        <option value="" selected>Select...</option>
+        <option value="flagging">flagging</option>
+        <option value="supporting">supporting</option>
+</select>
+
+
+<div id="flaggingDiv">
+<br>Thesis Flags<br>
+  <select name="flagTypeT" id="flagTypeT" value="flagType">
+        <option value="" selected>Select...</option>
+        <option value="thesisRival">Has Rival</option>
+        <option value="TooEarly">Too Early</option>
+        <option value="TooLate">Too Late</option>
+        </select>
+<br>
+</div>
+
+<?php flagging(); ?>
+
+<div class="center">
+
+        <button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>  
+
 
 
 <script>
@@ -199,142 +367,36 @@ hideThesis.style.display = 'none';
 }
 </script>
 
+      <?php   /* // if submit, then 
 
-<?php flagging(); ?>
-
-<!-- //------------------------- -->
-
-
-
-<div class="center">
-				<button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>	
-					</div>
-
-</p>
-</form></div>
-</div>
-<!--------------------------------------------------------------------------------------------------------------------------->
-
-<?php }  // end inference check ?>
-  <?php
-
-  if( $details['supportMeans'] == "Tarka")
-{ ?>
-
-
-<BR><br><?php
-echo'Tarka is an element of conversation used to discuss errors in debate form and communication with moderators.<br><br>'; ?>
-      <b>Claim: </b><br>  <?php echo $details['subject']; ?><?php echo " ".$details['targetP']; 
-
- echo'<br><br><br>Please explain argument in the comments section below.';
-}
-
-  // ------------- TWO
-if( $details['supportMeans'] == "Perception")
-{ ?>
-	<p><b>Url of perception:</b>  <?php echo $details['URL']; ?> </p>
-	
-
-<button class="openmodal myBtn">Support or Flag Perception</button>
-
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	
-
-	<br><u>Perception Flags</u><br>
-				<select name="flagType" id="flagType" value="flagType">
-		  	<option value="" selected>Select...</option>
-  			<option value="NoSenseObjectContact">No Sense-Object Contact</option>
-  			<option value="DependsOnWords">Depends on Words</option>
-  			<option value="Errant">Errant</option>
-  			<option value="Ambiguous">Ambiguous</option>
-  			</select><br>
-
-<?php flagging(); ?>
-
-<div class="center">
-<button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>	
-					</div>
-
-</p>
-</form>
-</div>
-</div>
-
-
-		<!--------------------------------------------------------------------------------------------------------------------------->
-	
-<?php } // end perception check ?>
-
-   <?php // ------------- THREE
-if( $details['supportMeans'] == "Testimony")
-{ ?>
-  
-  	<br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
-	
-
-<button class="openmodal myBtn">Support or Flag Testimony</button>
-
-<!-- The Modal -->
-<div class="modal myModal">
-
-<!-- Modal content -->
-<div class="modal-content">
-<span class="close">&times;</span>
-<form method="POST" id = "myForm" action="insert.php">
-
-
-<html>
-<p style="color:#000000";><font = #000000>
-<br>What are you flagging it for?<br> </font>
-	
-<br><u>Testimony Flags</u><br>
-				<select name="flagType" id="flagType" value="flagType">
-		  	<option value="" selected>Select...</option>
-  			<option value="NoDirectFamiliarity">No direct familiarity</option>
-  			<option value="ErrantInfo">Errant information</option>
-  			<option value="Ambiguous">Ambiguous</option>
-  			<option value="Faithless">Faithless</option>
-  			<option value="Misstatement">Misstatement</option>
-  			</select><br>
-
-<?php flagging(); ?>
-
-<div class="center">
-
-				<button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>	
-
-			<?php 	/* // if submit, then 
-
-		if(empty($supportMeans))
+    if(empty($supportMeans))
 {
-	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=empty");
-	exit();
+  header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=empty");
+  exit();
 } else {
-	header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=success");
+  header("Location: ../directory/details.php?id=" . $claimIDFlagged ."?sf=success");
 } */ 
 ?> 
 
 
-					</div>
+          </div>
 
 </p>
 </form>
 </div>
 </div>
 
-			
-<?php } // end testimony check 
+
+<?php
+} // end of else statement
+
+
+
+
+
+
+
+
 
 
 
@@ -547,6 +609,7 @@ for(let i=0;i<spans.length;i++){
 			<input type="text" name="topic" value="<?php echo htmlspecialchars($topic) ?>" readonly><br>
 
 <div id="hideThesis">
+  Enter your new claim.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><u>Subject</u>         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <u>Target Property </u></label><br>
 
   <textarea class="subject" type="text" id="subject" name = "subject" value="<?php echo htmlspecialchars($subject) ?>">Enter Subject</textarea>			

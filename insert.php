@@ -1,64 +1,57 @@
 
 <?php 
 include('config/db_connect.php');
+
+$flagType = $union = $subject = $targetP = $topic = $supportMeans = $example = $url = $reason = $thesisST = $reasonST = $ruleST = $vidtimestamp = $citation = $transcription = $supportMeans = $example = $url = $reason = $thesisST = $reasonST = $ruleST = $vidtimestamp = $citation = $transcription = $claimIDFlagged = ' ';
 $supportMeans = mysqli_real_escape_string($conn, $_POST['union']);
-$flagType = '';
 session_start();
-$claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is the claimID of the claim being flagged.
 			$addPage = $_SESSION['addPage'];	
-?><script> window.alert("add page is <?php echo $addPage; ?>"; </script><?php
-if($addPage == 'no')
-{
-	$COS = "support";
-	//claim or support
-$flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
-$flagTypeT = mysqli_real_escape_string($conn, $_POST['flagTypeT']);
-$flagTypeR = mysqli_real_escape_string($conn, $_POST['flagTypeR']);
-$flagTypeE = mysqli_real_escape_string($conn, $_POST['flagTypeE']);
+?><script> window.alert("add page is <?php echo $addPage; ?>"; alert("hello");</script>
+<?php
 
-//something wrong with main flagtype because perception is flagtype yet it is not triggered 
-if(strlen("$flagType") > 2 )
-{$flagType = $flagType;
-  ?><script> window.alert("ONE"); </script> <?php
-}
-elseif(strlen("$flagTypeT") > 2)
-{$flagType = $flagTypeT;
 
-?><script> window.alert("two"); </script> <?php
-}
-elseif(strlen("$flagTypeR") > 2)
-{$flagType = $flagTypeR;
-?><script> window.alert("three"); </script> <?php }
-elseif(strlen("$flagTypeE") > 2)
-{$flagType = $flagTypeE;
-?><script> window.alert("four"); </script> <?php }
-else
-  {$flagType = "ERROR: PERCEPTION OR TESTIMONY FLAG NOT ENTERED".$flagType.$flagTypeT.$flagTypeR.$flagTypeE."ERROR";
-?><script> window.alert("error"); </script> <script> window.alert("add page is <?php echo $addPage; ?>"); </script><?php
-}
-?><script> window.alert("add page is <?php echo $addPage; ?>"; </script><?php
-}
-else { $COS = "claim"; } // end of "if addpage"
 
-$FOS = mysqli_real_escape_string($conn, $_POST['FOS']);
-if($FOS == 'supporting')
-{
-	$flagType = 'supporting';
-}
-$reason = mysqli_real_escape_string($conn, $_POST['reason']);
-$topic = mysqli_real_escape_string($conn, $_POST['topic']);
-$topic = strip_punctuation($topic);
-
-function strip_punctuation($string) {
-	$string = trim($string);
-    $string = preg_replace('/[^\w\s]/', '', $string);
-    return $string;
-}
-
-$example = mysqli_real_escape_string($conn, $_POST['example']);
-$url = mysqli_real_escape_string($conn, $_POST['url']);
 $subject = mysqli_real_escape_string($conn, $_POST['subject']);
 $targetP = mysqli_real_escape_string($conn, $_POST['targetP']);
+if($addPage == "no")
+{
+$claimIDFlagged = $_SESSION['varname']; //pulled from our details page. it is the claimID of the claim being flagged.
+}
+else
+{$claimIDFlagged = ' ';
+}
+
+$topic = mysqli_real_escape_string($conn, $_POST['topic']);
+$topic = trim($topic);
+$topic = preg_replace('/[^\w\s]/', '', $topic);
+
+if($addPage == "yes") // ----------------------------------------------------------- THIS IS THE ORIGINAL CLAIM FROM THE ADD PAGE
+{ 
+    
+$c = uniqid (rand (),true);
+
+$supportID =  $c;
+$active = 1;
+
+		$sql_AP = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', 'NA', 'NA','$NA','NA','NA', 'NA','NA','NA', '$topic', '$active', 'NA','NA','NA', 'claim')";
+//THIS IS THE ORIGINAL CLAIM FROM THE ADD PAGE
+	
+			if(mysqli_query($conn, $sql_AP)){
+				// success
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+} // end of addpage
+// NOW WE'RE CHECKING TO SEE IF THE DETAILS PAGE IS ADDING A FLAG OR A SUPPORT 
+
+$FOS = mysqli_real_escape_string($conn, $_POST['FOS']);
+
+
+//SIMPLE. 
+$reason = mysqli_real_escape_string($conn, $_POST['reason']);
+$example = mysqli_real_escape_string($conn, $_POST['example']);
+$url = mysqli_real_escape_string($conn, $_POST['url']);
 
 $transcription = mysqli_real_escape_string($conn, $_POST['transcription']);
 $citation = mysqli_real_escape_string($conn, $_POST['citation']);
@@ -66,22 +59,21 @@ $vidtimestamp = mysqli_real_escape_string($conn, $_POST['vidtimestamp']);
 
 $grammar = mysqli_real_escape_string($conn, $_POST['grammar']);
 ?><script> window.alert($grammar); </script> <?php
-if($grammar == "person")
+
+
+/* if($grammar == "person")
 { 
 $ruleST= "Whomever " . $reason . " " . $targetP. ", as in the case of " . $example;	
 }
 else {
 $ruleST= "Whatever " . $reason . " " . $targetP. ", as in the case of " . $example;
-}
-
+} 
 
 $thesisST= $subject . " " . $targetP;
 
 $reasonST= $subject . " " . $reason;
+*/
 
-$c = uniqid (rand (),true);
-
-$supportID =  $c;
 
 if($flagType == 'thesisRival')
 	{ $active = 0; }
@@ -91,8 +83,109 @@ $active = '1';
 }
 //On page 2
 
-//see if it is an instance of a claim being flagged. which one? find preexisting flagType, if any. if it has a flagtype, check if thesisrival: if yes, then error. if no, continue..)
+
+
+
+
+
+
+
+if($addPage == 'no')
+{
+	
+//	$COS = "support";
+	//are we making a claim or support? - this is making a support for an existing claim or a new claim
+$flagType = mysqli_real_escape_string($conn, $_POST['flagType']);
+$flagTypeT = mysqli_real_escape_string($conn, $_POST['flagTypeT']);
+$flagTypeR = mysqli_real_escape_string($conn, $_POST['flagTypeR']);
+$flagTypeE = mysqli_real_escape_string($conn, $_POST['flagTypeE']);
+
+//something wrong with main flagtype because perception is flagtype yet it is not triggered 
+if(strlen("$flagType") > 2 ) //does flagtype have a value from inference, testimony, or perception? then keep it.
+{$flagType = $flagType; }
+elseif(strlen("$flagTypeT") > 2) //does flagtype have a value from thesis? then keep it.
+{$flagType = $flagTypeT;
+$COS = "claim";
+}
+elseif(strlen("$flagTypeR") > 2) //does flagtype have a value from a reason pramana? then keep it.
+{$flagType = $flagTypeR; }
+elseif(strlen("$flagTypeE") > 2) //does flagtype have a value from example pramana? then keep it.
+{$flagType = $flagTypeE; }
+else
+  {$flagType = "ERROR: PERCEPTION OR TESTIMONY FLAG NOT ENTERED".$flagType.$flagTypeT.$flagTypeR.$flagTypeE."ERROR";
+?><script> window.alert("error"); </script> <script> window.alert("add page is <?php echo $addPage; ?>"); </script><?php
+}
+?><script> window.alert("add page is <?php echo $addPage; ?>"; </script><?php
+}
+else { 
+
+$COS = "claim"; 
+} // end of "if addpage"
+
+
+
+
+
+//look to see if it is an instance of a claim being flagged. which one? find preexisting flagType, if any. if it has a flagtype, check if thesisrival: if yes, then error. if no, continue..)
 		
+//THIS IS NOW CREATING THE SUPPORT THAT GOES WITH OUR CLAIM FROM A NEW CLAIM FROM THE ADD PAGE
+if($addPage == "yes")
+{
+
+	$order_support12 = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
+				 $nice112 = mysqli_query($conn, $order_support12);
+
+ 				if($row112 = $nice112->fetch_assoc()) {
+      $claimIDFlagged = $row112['claimID']; 
+      echo $claimIDFlagged;
+  		}
+
+
+
+$sql_support2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('NA', 'NA', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', 'support')";
+	
+			if(mysqli_query($conn, $sql_support2)){
+				// success
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+	$order_support1 = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
+				 $nice11 = mysqli_query($conn, $order_support1);
+
+ 				if($row11 = $nice11->fetch_assoc()) {
+      $claimIDFlagger = $row11['claimID']; 
+      echo $claimIDFlagger;
+  		}
+
+
+// ---------------------------------------------------------- THIS IS LINKING THE TWO TOGETHER
+ // this function below inserts into database
+	  $sql5_support1 = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, isRootRival) VALUES('$claimIDFlagged', 'supporting','$claimIDFlagger','0')";
+
+
+
+if(mysqli_query($conn, $sql5_support1)){
+				// success
+			//	header('Location: insert.php');
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+
+
+
+	
+}//end of addpage = yes 
+
+
+// add page? no add page?
+
+//if this was a new claim from the add page, it would NOT be flagging anything. but since it's NOT from the add page, it is flagging. thus, this is the flagger.
+			//we have to go grab the new claimID because it was generated in this very page. 
+if($addPage == 'no' && $FOS == "flagging")
+{
+
 		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', '$COS')";
 
 	
@@ -102,11 +195,6 @@ $active = '1';
 				echo 'query error: '. mysqli_error($conn);
 			}
 
-
-//if this was a new claim from the add page, it would NOT be flagging anything. but since it's NOT from the add page, it is flagging. thus, this is the flagger.
-			//we have to go grab the new claimID because it was generated in this very page. 
-if($addPage == 'no')
-{
 
  				$order = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
 				 $nice = mysqli_query($conn, $order);
@@ -127,8 +215,50 @@ if(mysqli_query($conn, $sql5)){
 				echo 'query error: '. mysqli_error($conn);
 			}
 
+
+
+$COS = "support";
+
+$sql_support3 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', '$COS')";
+
+	
+			if(mysqli_query($conn, $sql_support3)){
+				// success
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+$claimIDFlagged = $claimIDFlagger;
+	$order_support3 = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
+				 $nice1 = mysqli_query($conn, $order_support3);
+
+ 				if($row1 = $nice1->fetch_assoc()) {
+      $claimIDFlagger = $row1['claimID']; 
+      echo $claimIDFlagger;
+  		}
+
+
+
+$flagType = "supporting";
+
+ // this function below inserts into database
+	  $sql5_support = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, isRootRival) VALUES('$claimIDFlagged', '$flagType','$claimIDFlagger','$isRootRival')";
+
+if(mysqli_query($conn, $sql5_support)){
+				// success
+			//	header('Location: insert.php');
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+
+
+
+
+
+
 //this below just updates our newly-flagged claim to be inactive. 
-			if($flagType != "supporting")
+			if($flagType != "supporting") //if we're adding a support it isn't inactivating anything 
 			{
 	 $update = "UPDATE claimsdb 
 SET active = 0
@@ -218,6 +348,50 @@ $result11 = $stmt11->get_result(); // get the mysqli result
 
 
  }////end of addpage = no
+
+
+
+
+
+ // if its adding support, it isn't flagging or creating a new claim.... JUST a new support and its relation to the claim
+
+if($addPage == "no" && $FOS = "supporting")
+{
+		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', '$COS')";
+
+	
+			if(mysqli_query($conn, $sql1)){
+				// success
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+
+
+
+	$order_support_else = "SELECT * from claimsdb ORDER BY claimID DESC LIMIT 1";
+				 $nice2 = mysqli_query($conn, $order_support_else);
+
+ 				if($row2 = $nice2->fetch_assoc()) {
+      $claimIDFlagger = $row2['claimID']; 
+      echo $claimIDFlagger;
+  		}
+
+
+
+
+ // this function below inserts into database
+	  $sql5_support_else = "INSERT INTO flagsdb(claimIDFlagged, flagType, claimIDFlagger, isRootRival) VALUES('$claimIDFlagged', 'supporting','$claimIDFlagger','$isRootRival')";
+
+if(mysqli_query($conn, $sql5_support_else)){
+				// success
+			//	header('Location: insert.php');
+			} else {
+				echo 'query error: '. mysqli_error($conn);
+			}
+
+
+	}//end of addpage check
 
 
 mysqli_close($conn);
