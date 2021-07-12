@@ -1,6 +1,6 @@
 <?php 
 	include('config/db_connect.php');
-	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = '';
+	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = $dSubject = $dTargetP = '';
 	?> <center><?php include('templates/header.php');
 	// check GET request id param
 	if(isset($_GET['id'])){
@@ -40,30 +40,71 @@ session_start();
 
 		?> 
 <p><b>Claim ID:</b>  <?php echo $details['claimID']; ?> </p>
-			<p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p></font>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;"> (Subject) </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue;"> (Target Property) </span><br>
-  <b>Thesis Statement:</b> <span style="color:red;"> <?php echo $details['subject']; ?> </span> <span style="color:blue;"><?php
-  echo $details['targetP']; ?> </span>
+		</font>
 <?php
 
-if( $details['COS'] == "support")
 
+
+
+if( $details['COS'] == "support")
 {
 
 
  //----------------------------------------------------------------------------------- INFERENCE
 if( $details['supportMeans'] == "Inference")
 { $FOS = "flagging";
+
+$oldclaim = "SELECT claimIDFlagged
+FROM claimsdb, flagsdb
+WHERE claimIDFlagger = ?"; // SQL with parameters
+$oc = $conn->prepare($oldclaim); 
+$oc->bind_param("i", $claimID);
+$oc->execute();
+$results = $oc->get_result(); // get the mysqli result
+  
+
+while($data = $results->fetch_assoc())
+  {
+    $claimIDFlagged = $data['claimIDFlagged'];
+
+  }
+?> <table> <tr> <th> 
+  <style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+
+<?php
+
+echo "THESIS FROM CLAIM #" . $claimIDFlagged . ": <BR>";
+
+$oldclaim2 = "SELECT subject, targetP
+FROM claimsdb
+WHERE claimID = ?"; // SQL with parameters
+$oc2 = $conn->prepare($oldclaim2); 
+$oc2->bind_param("i", $claimIDFlagged);
+$oc2->execute();
+$results2 = $oc2->get_result(); // get the mysqli result
+  
+   
+while($data = $results2->fetch_assoc())
+  {
+
+    $dSubject = $data['subject'];
+    $dTargetP = $data['targetP'];
+
+    ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;"> (Subject) </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue;"> (Target Property) </span><br>
+  <b>Thesis Statement:</b> <span style="color:red;"> <?php echo $data['subject']; ?> </span> <span style="color:blue;"><?php
+  echo $dTargetP; ?> </span> </tr> </table>
+<?php
+  }
 ?>
-
-
-
-<br>
 <BR><br>
-
+  <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:red;"> (Subject) </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:orange;">(Reason Property) </span><br>
       <b>Reason Statement:</b> 
-<span style="color:red;"> <?php echo $details['subject']; ?> </span> <span style="color:orange;"><?php
+<span style="color:red;"> <?php echo $dSubject; ?> </span> <span style="color:orange;"><?php
   echo $details['reason']; ?> </span>
       
       <br><br>
@@ -72,7 +113,7 @@ if( $details['supportMeans'] == "Inference")
 
 
       <b>Rule Statement:</b> Whomever/Whatever <span style="color:orange;"> <?php echo $details['reason']; ?> </span> <span style="color:blue;"><?php
-  echo $details['targetP']; ?></span>, as in the case of <span style="color:purple;"> <?php echo $details['example']; ?> </span> 
+  echo $dTargetP; ?></span>, as in the case of <span style="color:purple;"> <?php echo $details['example']; ?> </span> 
 
 <br><br>
 
@@ -102,17 +143,17 @@ if( $details['supportMeans'] == "Inference")
 
   <select name="flagTypeR" id="flagTypeR" value="flagType">
         <option value="" selected>Select...</option>
-        <option value="reasonUnestablishedSubject">Unestablished Subject</option>
-        <option value="reasonItselfUnestablished">Itself Unestablished</option>
-        <option value="reasonHostile">Hostile</option>
+        <option value="Unestablished Subject">Unestablished Subject</option>
+        <option value="Itself Unestablished">Itself Unestablished</option>
+        <option value="Hostile">Hostile</option>
         </select>
 
   <select name="flagTypeE" id="flagTypeE" value="flagType">
         <option value="" selected>Select...</option>
-        <option value="ruleNarrow">Too Narrow</option>
-        <option value="ruleBroadCounterexample">Too Broad (Counterexample)</option>
-        <option value="ruleBroadUnestablishedUniversal">Too Broad (Unestabilshed Universal)</option>
-       <option value="ruleContri">Contrived Universal</option>
+        <option value="Too Narrow">Too Narrow</option>
+        <option value="Too Broad (Counterexample)">Too Broad (Counterexample)</option>
+        <option value="Too Broad (Unestablished Universal)">Too Broad (Unestabilshed Universal)</option>
+       <option value="Contrived Universal">Contrived Universal</option>
       </select>
 
         
@@ -171,7 +212,7 @@ if (union.options[union.selectedIndex].value === 'rule') {
   if( $details['supportMeans'] == "Tarka")
 { ?>
 
-
+  <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
 <BR><br><?php
 echo'Tarka is an element of conversation used to discuss errors in debate form and communication with moderators.<br><br>'; ?>
       <b>Claim: </b><br>  <?php echo $details['subject']; ?><?php echo " ".$details['targetP']; 
@@ -183,6 +224,7 @@ echo'Tarka is an element of conversation used to discuss errors in debate form a
   // ------------------------------------------------------------------------------------------------------------------------------- PERCEPTION
 if( $details['supportMeans'] == "Perception")
 { $FOS = "flagging"; ?>
+  <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
   <p><b>Url of perception:</b>  <?php echo $details['URL']; ?> </p>
   
 
@@ -205,8 +247,8 @@ if( $details['supportMeans'] == "Perception")
   <br><u>Perception Flags</u><br>
         <select name="flagType" id="flagType" value="flagType">
         <option value="" selected>Select...</option>
-        <option value="NoSenseObjectContact">No Sense-Object Contact</option>
-        <option value="DependsOnWords">Depends on Words</option>
+        <option value="No Sense Object Contact">No Sense-Object Contact</option>
+        <option value="Depends On Words">Depends on Words</option>
         <option value="Errant">Errant</option>
         <option value="Ambiguous">Ambiguous</option>
         </select><br>
@@ -230,7 +272,7 @@ if( $details['supportMeans'] == "Perception")
    <?php // ------------- THREE
 if( $details['supportMeans'] == "Testimony")
 { $FOS = "flagging"; ?>
-  
+    <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
     <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
   
 
@@ -252,8 +294,8 @@ if( $details['supportMeans'] == "Testimony")
 <br><u>Testimony Flags</u><br>
         <select name="flagType" id="flagType" value="flagType">
         <option value="" selected>Select...</option>
-        <option value="NoDirectFamiliarity">No direct familiarity</option>
-        <option value="ErrantInfo">Errant information</option>
+        <option value="No Direct Familiarity">No direct familiarity</option>
+        <option value="Errant Info">Errant information</option>
         <option value="Ambiguous">Ambiguous</option>
         <option value="Faithless">Faithless</option>
         <option value="Misstatement">Misstatement</option>
@@ -320,9 +362,9 @@ else{
 <br>Thesis Flags<br>
   <select name="flagTypeT" id="flagTypeT" value="flagType">
         <option value="" selected>Select...</option>
-        <option value="thesisRival">Has Rival</option>
-        <option value="TooEarly">Too Early</option>
-        <option value="TooLate">Too Late</option>
+        <option value="Thesis Rival">Has Rival</option>
+        <option value="Too Early">Too Early</option>
+        <option value="Too Late">Too Late</option>
         </select>
 <br>
 </div>
@@ -899,4 +941,3 @@ if (union.options[union.selectedIndex].value === 'Tarka') {
  </div>
 
 -->
-<br>
