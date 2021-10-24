@@ -48,8 +48,15 @@ clearInput();
 
 <form method="POST" id = "myForm" action="insert.php">
 
-	<?php $addPage = 'yes';
-  $_SESSION['addPage'] = $addPage;
+	<?php 
+  // $addPage = 'yes';
+ // $_SESSION['addPage'] = $addPage;
+// get add page variable from another page, hopefully thru post variable. 
+// vada recruitment proposal
+// firefox working? not working?
+// rivals at the leaf level not working? ----> if rival, active = 0
+//NA 
+// AS IN THE CASE OF : SPACE IN EXAMPLE STATEMENT  
    ?>
 			
 

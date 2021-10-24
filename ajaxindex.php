@@ -106,7 +106,49 @@ while($results = $rres->fetch_assoc())
 
 
 
+// leafy tests below
 
+
+$root2 = "SELECT DISTINCT claimIDFlagger
+from flagsdb 
+WHERE flagType LIKE 'Thesis Rival'
+        "; // SQL with parameters
+        $stmt12 = $conn->prepare($root2); 
+// $stmt12->bind_param("s", $topic);
+        $stmt12->execute();
+$rootresult2 = $stmt12->get_result(); // get the mysqli result
+$numhitsroot28 = mysqli_num_rows($rootresult2);
+
+
+
+while($root2 = $rootresult2->fetch_assoc())
+{   
+  if($numhitsroot28 > 0)
+  {
+
+    $r = "SELECT DISTINCT claimID, topic
+    from claimsdb 
+    WHERE claimID = ?
+        "; // SQL with parameters
+        $s = $conn->prepare($r); 
+        $s->bind_param("i", $root2['claimIDFlagger']);
+        $s->execute();
+$rres = $s->get_result(); // get the mysqli result
+
+while($results = $rres->fetch_assoc())
+{
+  if($results['topic'] == $topic)
+       { restoreActivityRIVAL($results['claimID']); } // end of if topic = topic
+
+      } // end of while
+
+    } //end of if numhits
+
+  } // end of while
+
+
+
+//leafy tests above
 
 
 
@@ -227,8 +269,8 @@ else {
       echo "<img height = '45' width = '32' src='https://i.imgur.com/JCHZjr3.png'> <br>";
       echo $d['supportMeans'] . "<br>"; 
       if($d['supportMeans'] == "Inference")
-        { echo "Reason statement: " . $d['subject'] . $d['reason'] . "<BR>";
-      echo "Example Statement: as in the case of" . $d['example'] . "<BR>";
+        { echo "Reason: " . $d['subject'] . " " . $d['reason'] . ", as in the case of " . $d['example'] . "<BR>";
+      
     }
 
     if($d['supportMeans'] == "Testimony" || $d['supportMeans'] == "Perception")
@@ -404,56 +446,6 @@ createModal($claimid);
  ?></ul><?php 
 
 } // end of rivalfunction
-
-
-
-
-
-
-
-
-
-
-
-
-function doesThesisFlagRivals ($claimid)
-{
-  include('config/db_connect.php');
-  $answer = 'false';
-  $act2 = "SELECT DISTINCT claimIDFlagger
-  from flagsdb
-  WHERE claimIDFlagged = ? and flagType LIKE 'Too Early' OR flagType LIKE 'Too Late'"; 
-  $s2 = $conn->prepare($act2); 
-  $s2->bind_param("i", $claimid);
-  $s2->execute();
-  $activity2 = $s2->get_result(); 
-  $nh2 = mysqli_num_rows($activity2);
-  while($supports = $activity2->fetch_assoc())
-  {
-
-    $new = "SELECT DISTINCT active
-    from claimsdb
-    WHERE claimID = ?"; 
-    $snew = $conn->prepare($new); 
-    $snew->bind_param("i", $supports['claimIDFlagger']);
-    $snew->execute();
-    $activitynew = $snew->get_result(); 
-    while($SCHECK = $activitynew->fetch_assoc())
-    {
-      if($SCHECK['active'] == 1)
-      {
-        $answer = 'true';
-      } //end of if
-
-    } //end of while
-} //end of while
-   //       echo '<script type="text/javascript">alert("active: ' . $claimid . "support number" . $answer . '");</script>';
-
-          return $answer;
-
-} //end of function
-
-
 
 
 
@@ -688,9 +680,48 @@ if($nh2 == 0)
 
 ///////////////////////////////////////////////////////// NUMBER TWO ON DIAGRAM, ORANGE
                                         //below grabs all flaggers for the support and JUST the support. not the claims.  - act3, s3, activity3
+                                        
+                                        //below is for rivals
+
+
+$a = "SELECT DISTINCT claimIDFlagger
+from flagsdb
+WHERE claimIDFlagged = ? and flagType LIKE 'Thesis Rival'"; 
+$si = $conn->prepare($a); 
+$si->bind_param("i", $supports['claimIDFlagger']);
+$si->execute();
+$sim = $si->get_result(); 
+while($mi = $sim->fetch_assoc())
+{ 
+    restoreActivityRIVAL($mi['claimIDFlagger']);
+
+    //below should get the companion rival
+  
+    $a2 = "SELECT DISTINCT claimIDFlagger
+from flagsdb
+WHERE claimIDFlagged = ? and flagType LIKE 'Thesis Rival'"; 
+$si2 = $conn->prepare($a2); 
+$si2->bind_param("i", $mi['claimIDFlagger']);
+$si2->execute();
+$sim2 = $si2->get_result(); 
+while($mi2 = $sim2->fetch_assoc())
+{ 
+
+    restoreActivityRIVAL($mi2['claimIDFlagger']);
+
+} //end of first while
+
+    
+} //end of second while
+//echo '<script type="text/javascript">alert("claim id: ' . $claimid . "support number" . $supports['claimIDFlagger'] . "mi" . $mi['claimIDFlagger'] .  '");</script>';
+
+//above is for rivals
+
+                                        
   $act3 = "SELECT DISTINCT claimIDFlagger
   from flagsdb
-  WHERE claimIDFlagged = ?"; 
+  WHERE claimIDFlagged = ? and flagType NOT LIKE 'Thesis Rival'
+  "; 
   $s3 = $conn->prepare($act3); 
   $s3->bind_param("i", $supports['claimIDFlagger']);
   $s3->execute();
@@ -851,6 +882,11 @@ $upd->execute();
 
     restoreActivity($activestatus['claimIDFlagger']); }
 
+
+// echo '<script type="text/javascript">alert("active: ' . $activestatus['claimIDFlagger'] .  '");</script>';
+
+
+
 //////////////////////////////////////////// COME BACK
   $h90 = "SELECT DISTINCT active
   from claimsdb
@@ -864,7 +900,7 @@ $upd->execute();
       { 
 
 //grabs active status of all flaggers of original claim: is it active?
-
+ // $activestatus['claimiDflagger'] <--- flagtype like "suppporting"
 
 
         if($r90['active'] == 1)
@@ -877,7 +913,16 @@ $upd = $conn->prepare($act);
 $upd->bind_param("i", $claimid);
 $upd->execute();
         } // end of if
+        else{
 
+          $act = "UPDATE claimsdb 
+          SET active = 1
+          WHERE claimID = ? 
+"; // SQL with parameters
+$upd = $conn->prepare($act); 
+$upd->bind_param("i", $claimid);
+$upd->execute();
+        }
 
    // if($everyInactive == 'true')
     //{
@@ -914,12 +959,105 @@ while($mi = $sim->fetch_assoc())
 }  // end function
 
 
+function noSupportsRival ($claimidA)
+{  include('config/db_connect.php');
+
+    $result = 'no active supports';
+
+    $act2 = "SELECT DISTINCT claimIDFlagger
+  from flagsdb
+  WHERE claimIDFlagged = ? and flagType LIKE 'supporting'"; 
+  $s2 = $conn->prepare($act2); 
+  $s2->bind_param("i", $claimidA);
+  $s2->execute();
+  $activity2 = $s2->get_result(); 
+  $nh2 = mysqli_num_rows($activity2);
+  while($supports = $activity2->fetch_assoc())
+  {
+
+
+  $new = "SELECT DISTINCT active
+  from claimsdb
+  WHERE claimID = ?"; 
+  $snew = $conn->prepare($new); 
+  $snew->bind_param("i", $supports['claimIDFlagger']);
+  $snew->execute();
+  $activitynew = $snew->get_result(); 
+  $everyInactiveSupport = 'true';
+
+    while($SCHECK = $activitynew->fetch_assoc())
+  {
+// echo '<script type="text/javascript">alert("active: ' . $SCHECK['active'] . '");</script>';
+
+    if($SCHECK['active'] == 1)
+    {
+
+      $result = "There is an active";
+      return 'true';
+      // can you just break here?
+    }
+    
+
+  } //end of second while loop
+
+
+} // end of first while loop
+
+//rivalA : supportless --> rivalb should be active. does rivalb have active TE/TL? 
+
+//rivalB : needs to be active AND it doesn't have a too early / too late AND needs at least one support itself
+
+    if($result != "There is an active" ) 
+    {
+//echo '<script type="text/javascript">alert("ITS HAPPENING: ' . $result . '");</script>';
+
+  return 'false';
+   
+    }//end of if statement
+
+} // end of function
 
 
 
+function doesThesisFlagRival ($claimid)
+{
+  include('config/db_connect.php');
+  $answer = 'false';
+  
+
+  $act2 = "SELECT DISTINCT claimIDFlagger
+  from flagsdb
+  WHERE claimIDFlagged = ? AND (flagType LIKE 'Too Early' OR flagType LIKE 'Too Late')
+  "; 
+  $s2 = $conn->prepare($act2); 
+  $s2->bind_param("i", $claimid);
+  $s2->execute();
+  $activity2 = $s2->get_result(); 
+  $nh2 = mysqli_num_rows($activity2);
+  while($supports = $activity2->fetch_assoc())
+  {
+
+    $new = "SELECT DISTINCT active
+    from claimsdb
+    WHERE claimID = ?"; 
+    $snew = $conn->prepare($new); 
+    $snew->bind_param("i", $supports['claimIDFlagger']);
+    $snew->execute();
+    $activitynew = $snew->get_result(); 
+    while($SCHECK = $activitynew->fetch_assoc())
+    {
+      if($SCHECK['active'] == 1)
+      {
+        $answer = 'true';
+      } //end of if
+
+    } //end of while
+} //end of while
 
 
+          return $answer;
 
+} //end of function
 
 
 
@@ -935,18 +1073,16 @@ function restoreActivityRIVAL ($claimid)
 
   include('config/db_connect.php');
       
-// if(doesThesisFlagRivals($claimid) == 'false' )
-// {
-  echo '<script type="text/javascript">alert("active: ' . $claimid . '");</script>';
+//  echo '<script type="text/javascript">alert("active: ' . $claimid . '");</script>';
 
-  noSupports($claimid);
-// }
+//  noSupports($claimid);
 
+//noSupports($nodeFlaggers, $rivaling);
 
 // set of all too-early and too-late 
   $sql188 = "SELECT DISTINCT claimIDFlagger
   from claimsdb, flagsdb
-  where ? = claimIDFlagged AND flagType NOT LIKE 'Thesis Rival' AND flagType NOT LIKE 'supporting'
+  where ? = claimIDFlagged AND flagType NOT LIKE 'Thesis Rival'
   ";
   $stmt188 = $conn->prepare($sql188); 
   $stmt188->bind_param("i", $claimid);
@@ -989,43 +1125,10 @@ function restoreActivityRIVAL ($claimid)
 
 
 
-//this is the flaggers for rival A. 
-
- $h = "SELECT DISTINCT active
- from claimsdb
-        WHERE ? = claimID"; // SQL with parameters
-        $noce = $conn->prepare($h); 
-        $noce->bind_param("i", $nodeFlaggers);
-        $noce->execute();
-      $res = $noce->get_result(); // get the mysqli result
-      $numh = mysqli_num_rows($res);
-      //checks the active status of the flagger
-
-
-      while($r = $res->fetch_assoc())
-      {  
-
-        if($r['active'] == 1)
-        {
-          global $everyInactiveA;
-          $everyInactiveA = 'false';
-    //  ECHO $everyInactiveA . ".....THIS IS THE QUERY FOR A <BR>";
-    } // end of if
-  } //end of while loop
-
-
-//above is to check active status of flagging claims OF INITIAL RIVAL
-
-//it's pushed - now the function attends to the rival companion.
-
-
- // ---------------------------------------------------------------
-//now that we have the rival pair, let's push it through to the normal sortclaims so it doesn't get stuck in a loop and it continues into normal restore activity
-
 //this is finding the flaggers for rival B
   $sql167 = "SELECT DISTINCT claimIDFlagger
   from claimsdb, flagsdb
-  where ? = claimIDFlagged AND flagType NOT LIKE 'Thesis Rival' AND flagType NOT LIKE 'supporting'
+  where ? = claimIDFlagged AND flagType NOT LIKE 'Thesis Rival'
   ";
   $stmt167 = $conn->prepare($sql167); 
   $stmt167->bind_param("i", $rivaling);
@@ -1040,39 +1143,85 @@ function restoreActivityRIVAL ($claimid)
     else {restoreActivity($userRIVALING['claimIDFlagger']); }
 
 
+ } // end of outer while loop
+
+///////////////////////////////////////////// start of checking for supports and then putting the results in recursion
+
+/*
+
+
+  $rivalsupports = "SELECT DISTINCT claimIDFlagger
+  from claimsdb, flagsdb
+  where ? = claimIDFlagged AND flagType LIKE 'supporting'
+  ";
+  $stmtsupports = $conn->prepare($rivalsupports); 
+  $stmtsupports->bind_param("i", $rivaling);
+  $stmtsupports->execute();
+  $resultsupports = $stmtsupports->get_result(); 
+  $numhitsSupports = mysqli_num_rows($resultsupports);
+//above looks for normal non-rival flags for this rivaling claim.
+  while($rivalsupporting = $resultsupports->fetch_assoc())
+  {
+                echo '<script type="text/javascript">alert("active: ' . $rivalsupporting['claimIDFlagger'] .  '");</script>';
+
+    if($numhitsSupports == 0)
+      { }
+    else {restoreActivity($rivalsupporting['claimIDFlagger']); }
+
+} // end of while 
+
+  $rivalsupports2 = "SELECT DISTINCT claimIDFlagger
+  from claimsdb, flagsdb
+  where ? = claimIDFlagged AND flagType LIKE 'supporting'
+  ";
+  $stmtsupports2 = $conn->prepare($rivalsupports2); 
+  $stmtsupports2->bind_param("i", $claimid);
+  $stmtsupports2->execute();
+  $resultsupports2 = $stmtsupports2->get_result(); 
+  $numhitsSupports2 = mysqli_num_rows($resultsupports2);
+//above looks for normal non-rival flags for this rivaling claim.
+  while($rivalsupporting2 = $resultsupports2->fetch_assoc())
+  {
+
+            echo '<script type="text/javascript">alert("active: ' . $rivalsupporting2['claimIDFlagger'] .  '");</script>';
+
+    if($numhitsSupports2 == 0)
+      { }
+    else {restoreActivity($rivalsupporting2['claimIDFlagger']); }
+
+
+} // end of while
+*/
+///////////////////////////////////////////// end of checking for supports and then putting the results in recursion
+
+
+$statusA = '';
+$statusB = '';
+if(noSupportsRival($claimid) == 'true' && doesThesisFlagRival($claimid) == 'false')
+{
+  $statusA = 'unchallenged';
+}
+else{
+  $statusA = 'challenged';
+}
+
+
+if(noSupportsRival($rivaling) == 'true' && doesThesisFlagRival($rivaling) == 'false')
+{
+  $statusB = 'unchallenged';
+}
+else{
+  $statusB = 'challenged';
+}
 
 
 
+ // echo "CLAIM ID:" . $claimid . noSupportsRival($claimid) . doesThesisFlagRival($claimid) . "<BR> ACTIVE B: " . $rivaling . noSupportsRival($rivaling) . doesThesisFlagRival($rivaling) . "<BR><BR><BR><BR><BR><BR><BR><BR>";
+
+//  echo "CLAIM ID:" . $claimid . $rivaling . "<BR> ACTIVE B: " . $statusB . "<BR> ACTIVE A: " . $statusA . "<BR><BR><BR><BR><BR><BR><BR><BR>";
 
 
-    $h1 = "SELECT DISTINCT active
-    from claimsdb
-        WHERE ? = claimID"; // SQL with parameters
-        $noce1 = $conn->prepare($h1); 
-        $noce1->bind_param("i", $userRIVALING['claimIDFlagger']);
-        $noce1->execute();
-      $res1 = $noce1->get_result(); // get the mysqli result
-      $numh = mysqli_num_rows($res1);
-      //checks the active status of the flagger
-
-      while($r = $res1->fetch_assoc())
-      {  
-
-        if($r['active'] == 1)
-        {
-
-          global $everyInactiveB;
-          $everyInactiveB = 'false';
-    //  ECHO $everyInactiveB . ".....THIS IS THE QUERY FOR B <BR>";
-
-    } // end of if
-  } //end of while loop
-
- } // end while loop
-
-
- // echo "CLAIM ID:" . $claimid . "<BR> ACTIVE B: " . $everyInactiveB . "<BR> ACTIVE A: " . $everyInactiveA . "<BR><BR><BR><BR><BR><BR><BR><BR>";
- if($everyInactiveA == 'true' && $everyInactiveB == 'true' || $everyInactiveA == 'false' && $everyInactiveB == 'false')
+ if($statusA == 'unchallenged' && $statusB == 'unchallenged' || $statusA == 'challenged' && $statusB == 'challenged')
  {
   $act = "UPDATE claimsdb 
   SET active = 0
@@ -1095,7 +1244,7 @@ $upd->execute();
 
 //if its true, there are no flags. 
 //if false, there are flags.
-if($everyInactiveA == 'true' && $everyInactiveB == 'false')
+if($statusA == 'unchallenged' && $statusB == 'challenged')
 {
   $act = "UPDATE claimsdb 
   SET active = 1
@@ -1116,7 +1265,7 @@ $upd->execute();
 
 }
 
-if($everyInactiveA == 'false' && $everyInactiveB == 'true')
+if($statusB == 'unchallenged' && $statusA == 'challenged')
 {
   $act = "UPDATE claimsdb 
   SET active = 0
@@ -1136,7 +1285,6 @@ $upd->bind_param("i", $rivaling);
 $upd->execute();
 
 }
-
 
 
 

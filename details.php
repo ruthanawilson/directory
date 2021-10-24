@@ -1,8 +1,8 @@
+<!DOCTYPE html>
 <?php 
 	include('config/db_connect.php');
-	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = $dSubject = $dTargetP = '';
+	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = $dSubject = $dTargetP = $domain = '';
 	?> <center><?php include('templates/header.php');
-	// check GET request id param
 	if(isset($_GET['id'])){
 		
 		// escape sql chars
@@ -20,11 +20,8 @@ $s = $conn->prepare($act);
 $s->bind_param("i", $claimID);
 $s->execute();
 $activity = $s->get_result(); // get the mysqli result
-} //end isset check
-	
-	// close connection
-//	mysqli_close($conn);
- 
+} //end of get request 
+
 include('config/db_connect.php');
 	
 
@@ -32,18 +29,19 @@ include('config/db_connect.php');
 
 while($details = $activity->fetch_assoc())
 	{
-session_start();
-		$_SESSION['varname'] = $details['claimID'];
-		$addPage = 'no';
-		$_SESSION['addPage'] = $addPage;
+        $claimIDFlaggedINSERT = $details['claimID'];
 		$topic = $details['topic']; 
-
+        
 		?> 
 <p><b>Claim ID:</b>  <?php echo $details['claimID']; ?> </p>
 		</font>
 <?php
 
 
+if( $details['COS'] == "claim")
+{
+?> <p><b>Claim:</b>  <?php echo $details['subject'] . " " .$details['targetP']; 
+}
 
 
 if( $details['COS'] == "support")
@@ -53,7 +51,6 @@ if( $details['COS'] == "support")
  //----------------------------------------------------------------------------------- INFERENCE
 if( $details['supportMeans'] == "Inference")
 { $FOS = "flagging";
-
 $oldclaim = "SELECT claimIDFlagged
 FROM claimsdb, flagsdb
 WHERE claimIDFlagger = ?"; // SQL with parameters
@@ -128,6 +125,9 @@ while($data = $results2->fetch_assoc())
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
 
+<input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
+ $_POST['FOS'] = 'flagging'; ?>
+
 
 <html>
 <p style="color:#000000";><font = #000000>
@@ -155,8 +155,14 @@ while($data = $results2->fetch_assoc())
         <option value="Too Broad (Unestablished Universal)">Too Broad (Unestabilshed Universal)</option>
        <option value="Contrived Universal">Contrived Universal</option>
       </select>
+<?php
+    $claimIDFlaggedINSERT = $details['claimID'];
 
-        
+    
+ ?> <input name="claimIDFlaggedINSERT" value="<?php echo htmlspecialchars($claimIDFlaggedINSERT) ?>"> </input> <?php
+$_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT; 
+// echo '<script type="text/javascript">alert("a LERT: ' . $claimIDFlaggedINSERT . '");</script>';
+?>
 
 <!-- //------------------------- -->
 
@@ -223,10 +229,13 @@ echo'Tarka is an element of conversation used to discuss errors in debate form a
 
   // ------------------------------------------------------------------------------------------------------------------------------- PERCEPTION
 if( $details['supportMeans'] == "Perception")
-{ $FOS = "flagging"; ?>
-  <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
-  <p><b>Url of perception:</b>  <?php echo $details['URL']; ?> </p>
+{ $FOS = "flagging"; 
   
+ ?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
+ $_POST['FOS'] = 'flagging';
+?>
+ <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
+  <p><b>Url of perception:</b> <?php echo $details['URL']; ?> </p>
 
 <button class="openmodal myBtn">Flag Perception</button>
 
@@ -243,7 +252,14 @@ if( $details['supportMeans'] == "Perception")
 <p style="color:#000000";><font = #000000>
 <br>What are you flagging it for?<br> </font>
   
+<?php
+    $claimIDFlaggedINSERT = $details['claimID'];
+$_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT; 
 
+?> <input name="claimIDFlaggedINSERT" value="<?php echo htmlspecialchars($claimIDFlaggedINSERT) ?>"> </input> <?php
+
+
+?>
   <br><u>Perception Flags</u><br>
         <select name="flagType" id="flagType" value="flagType">
         <option value="" selected>Select...</option>
@@ -271,11 +287,16 @@ if( $details['supportMeans'] == "Perception")
 
    <?php // ------------- THREE
 if( $details['supportMeans'] == "Testimony")
-{ $FOS = "flagging"; ?>
+{ $FOS = "flagging";
+  
+ ?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
+ $_POST['FOS'] = 'flagging';
+
+
+ ?>
     <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
     <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
   
-
 <button class="openmodal myBtn">Flag Testimony</button>
 
 <!-- The Modal -->
@@ -286,7 +307,13 @@ if( $details['supportMeans'] == "Testimony")
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
 
-
+<?php
+    $claimIDFlaggedINSERT = $details['claimID'];
+    
+ ?> <input name="claimIDFlaggedINSERT" value="<?php echo htmlspecialchars($claimIDFlaggedINSERT) ?>"> </input> <?php
+ $_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;  
+/// echo '<script type="text/javascript">alert("a LERT: ' . $claimIDFlaggedINSERT . '");</script>';
+?>
 <html>
 <p style="color:#000000";><font = #000000>
 <br>What are you flagging it for?<br> </font>
@@ -349,14 +376,19 @@ else{
 <html>
 <p style="color:#000000";><font = #000000>
 
+<?php
+$_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;
 
+?> <input name="claimIDFlaggedINSERT" value="<?php echo htmlspecialchars($claimIDFlaggedINSERT) ?>"> </input> <?php
+
+// echo '<script type="text/javascript">alert("a LERT: ' . $claimIDFlaggedINSERT . '");</script>';
+?>
 <br>Are you flagging or supporting this claim?<br> </font>
   <select name="FOS" id="FOS" value="FOS">
         <option value="" selected>Select...</option>
         <option value="flagging">flagging</option>
         <option value="supporting">supporting</option>
 </select>
-
 
 <div id="flaggingDiv">
 <br>Thesis Flags<br>
@@ -368,7 +400,6 @@ else{
         </select>
 <br>
 </div>
-
 <?php flagging(); ?>
 
 <div class="center">
@@ -390,7 +421,7 @@ function checkOtherUnion1() {
     var union1 = this;
 
     if (union1.options[union1.selectedIndex].value === 'flagging') {
-        window.alert("the flagging option is chosen");
+      //  window.alert("the flagging option is chosen");
         flaggingDiv.style.display = '';
         hideThesis.style.display = '';
     } else {
@@ -400,7 +431,7 @@ function checkOtherUnion1() {
 
 
 if (union1.options[union1.selectedIndex].value === 'supporting') {
-window.alert("Please input your support for the claim below");
+//window.alert("Please input your support for the claim below");
 hideThesis.style.display = 'none';
     flaggingDiv.style.display = 'none';      
     }
