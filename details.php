@@ -295,7 +295,8 @@ if( $details['supportMeans'] == "Testimony")
 
  ?>
     <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
-    <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
+    <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  
+    <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
   
 <button class="openmodal myBtn">Flag Testimony</button>
 
@@ -774,13 +775,19 @@ as in the case of:
 <textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea><br>
 <div id="hiddenCitation">
 <u>Citation</u>
-
+<?php $author = $title = $publication = $date = ''; ?> 
 <div id="some-div">
   <img src = "https://i.imgur.com/o4qSiRD.png">
-  <span id="explain-element"> Please include as applicable: author, title, publication, date of publication, and URL. </span>
+  <span id="explain-element"> Please include as applicable: author, title, publication, and date of publication. </span>
+  <br><textarea id="author" name = "author" value="<?php echo htmlspecialchars($author) ?>">Author</textarea><br>
+  <textarea id="title" name = "title" value="<?php echo htmlspecialchars($title) ?>">Title</textarea><br>
+  <textarea id="publication" name = "publication" value="<?php echo htmlspecialchars($publication) ?>">Publication</textarea><br>
+  <textarea id="date" name = "date" value="<?php echo htmlspecialchars($date) ?>">Date of Publication</textarea><br>
+
+</div>
   </div>
-  </div>
-  <textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Citation</textarea><br>
+
+  <textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Empty Citation</textarea><br>
 
 <div id="hiddenURL">
 <u>URL</u>
@@ -882,6 +889,12 @@ var perceptionHint = document.getElementById('perceptionHint');
         reason.style.display = 'none';
         example.style.display = 'none';
         citation.style.display = 'none';
+
+        author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
         url.style.display = 'none';
         vidtimestamp.style.display = 'none';
         transcription.style.display = 'none';
@@ -896,12 +909,22 @@ var perceptionHint = document.getElementById('perceptionHint');
 
     if (union.options[union.selectedIndex].value === '') {
         citation.style.display = 'none';
+        author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
     }
     if (union.options[union.selectedIndex].value === 'Inference') {
         reason.style.display = '';
         example.style.display = '';
         hiddenRule.style.display = '';
         citation.style.display = 'none';
+        author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
     }
 
 
@@ -910,6 +933,12 @@ if (union.options[union.selectedIndex].value === 'Perception') {
         url.style.display = '';
         vidtimestamp.style.display = '';
         citation.style.display = '';
+
+        author.style.display = '';
+        title.style.display = '';
+        publication.style.display = '';
+        date.style.display = '';
+
         hiddenURL.style.display = '';
         hiddenTS.style.display = '';
         hiddenCitation.style.display = '';
@@ -918,6 +947,12 @@ if (union.options[union.selectedIndex].value === 'Perception') {
 if (union.options[union.selectedIndex].value === 'Testimony') {
         transcription.style.display = '';
         citation.style.display = '';
+
+        author.style.display = '';
+        title.style.display = '';
+        publication.style.display = '';
+        date.style.display = '';
+
         hiddenCitation.style.display = '';
         hiddenTranscription.style.display = '';
     } 
@@ -925,6 +960,13 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
 if (union.options[union.selectedIndex].value === 'Tarka') {
         window.alert("A requirement of Tarka is to use the comments feature in the Tarka claim following submission.");
          citation.style.display = 'none';
+
+         author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
+         
     } 
 
 }
@@ -948,7 +990,7 @@ if (union.options[union.selectedIndex].value === 'Tarka') {
 --> 
 
 
-<!--
+
 <div class="x">
 <div id="disqus_thread"></div>
 <script>
@@ -970,5 +1012,3 @@ if (union.options[union.selectedIndex].value === 'Tarka') {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
  </div>
-
--->

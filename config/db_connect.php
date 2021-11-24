@@ -1,7 +1,7 @@
 <?php
 
 //connect to database
-$conn = mysqli_connect('localhost', 'leafy', 'vada', 'u240763051_6dszd');
+$conn = mysqli_connect('localhost', 'amydonahue', 'amypassword', 'vadaProject');
 
 //check connection
 if(!$conn){
