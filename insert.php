@@ -88,7 +88,7 @@ $reasonST= $subject . " " . $reason;
 
 
 if($flagType == 'Thesis Rival')
-{ $active = 0; }
+{ $active = '0'; }
 else
 {
 $active = '1'; 	

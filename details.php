@@ -126,7 +126,7 @@ while($data = $results2->fetch_assoc())
 <form method="POST" id = "myForm" action="insert.php">
 
 <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
- $_POST['FOS'] = 'flagging'; ?>
+ $_POST['FOS'] = "flagging"; ?>
 
 
 <html>
@@ -229,10 +229,7 @@ echo'Tarka is an element of conversation used to discuss errors in debate form a
 
   // ------------------------------------------------------------------------------------------------------------------------------- PERCEPTION
 if( $details['supportMeans'] == "Perception")
-{ $FOS = "flagging"; 
-  
- ?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
- $_POST['FOS'] = 'flagging';
+{
 ?>
  <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
   <p><b>Url of perception:</b> <?php echo $details['URL']; ?> </p>
@@ -246,6 +243,11 @@ if( $details['supportMeans'] == "Perception")
 <div class="modal-content">
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
+
+<?php 
+$FOS = "flagging";
+?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
+$_POST['FOS'] = "flagging"; ?>
 
 
 <html>
@@ -287,12 +289,7 @@ $_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;
 
    <?php // ------------- THREE
 if( $details['supportMeans'] == "Testimony")
-{ $FOS = "flagging";
-  
- ?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
- $_POST['FOS'] = 'flagging';
-
-
+{ 
  ?>
     <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
     <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  
@@ -307,6 +304,11 @@ if( $details['supportMeans'] == "Testimony")
 <div class="modal-content">
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
+
+<?php 
+$FOS = "flagging";
+?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
+$_POST['FOS'] = "flagging"; ?>
 
 <?php
     $claimIDFlaggedINSERT = $details['claimID'];
