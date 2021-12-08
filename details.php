@@ -132,29 +132,26 @@ while($data = $results2->fetch_assoc())
 <html>
 <p style="color:#000000";><font = #000000>
 
-
+<!--
 <br>Are you flagging the Reason property or the Rule and Example property?<br> </font>
   <select name="tre" id="tre" value="tre">
         <option value="" selected>Select...</option>
         <option value="reason">Reason</option>
         <option value="rule">Rule</option> </select>
+-->
 
-
-
-  <select name="flagTypeR" id="flagTypeR" value="flagType">
+<br>How are you flagging this inference? <br> </font>
+  <select name="flagType" id="flagType" value="flagType">
         <option value="" selected>Select...</option>
         <option value="Unestablished Subject">Unestablished Subject</option>
         <option value="Itself Unestablished">Itself Unestablished</option>
         <option value="Hostile">Hostile</option>
-        </select>
-
-  <select name="flagTypeE" id="flagTypeE" value="flagType">
-        <option value="" selected>Select...</option>
         <option value="Too Narrow">Too Narrow</option>
         <option value="Too Broad (Counterexample)">Too Broad (Counterexample)</option>
         <option value="Too Broad (Unestablished Universal)">Too Broad (Unestabilshed Universal)</option>
        <option value="Contrived Universal">Contrived Universal</option>
-      </select>
+ </select>
+<br>
 <?php
     $claimIDFlaggedINSERT = $details['claimID'];
 
@@ -167,7 +164,7 @@ $_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;
 <!-- //------------------------- -->
 
 <script type="text/javascript">
-
+/*
 var union = document.getElementById('tre');
 union.onchange = checkOtherUnion;
 union.onchange();
@@ -192,7 +189,7 @@ if (union.options[union.selectedIndex].value === 'rule') {
        
     }
 
-} </script>
+} */ </script>
 
 
 
