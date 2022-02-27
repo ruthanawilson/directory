@@ -150,6 +150,7 @@ body .wrapper ul > li label {
   display: inline-block;
   cursor: pointer;
 }
+/*add*/
 body .wrapper ul [type="checkbox"] {
   display: none;
 }
