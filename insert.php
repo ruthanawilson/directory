@@ -59,6 +59,14 @@ $url = mysqli_real_escape_string($conn, $_POST['url']);
 
 $transcription = mysqli_real_escape_string($conn, $_POST['transcription']);
 $citation = mysqli_real_escape_string($conn, $_POST['citation']);
+
+$author = mysqli_real_escape_string($conn, $_POST['author']);
+$title = mysqli_real_escape_string($conn, $_POST['title']);
+$publication = mysqli_real_escape_string($conn, $_POST['publication']);
+$date = mysqli_real_escape_string($conn, $_POST['date']);
+
+$citation = $author . ', ' . $title . ', ' . $publication . ', ' . $date;
+
 $vidtimestamp = mysqli_real_escape_string($conn, $_POST['vidtimestamp']);
 
 $grammar = mysqli_real_escape_string($conn, $_POST['grammar']);
@@ -80,7 +88,7 @@ $reasonST= $subject . " " . $reason;
 
 
 if($flagType == 'Thesis Rival')
-{ $active = 0; }
+{ $active = '0'; }
 else
 {
 $active = '1'; 	

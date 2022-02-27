@@ -603,11 +603,9 @@ function restoreActivity ($claimid)
 
 
 //are supports active? we only need one to reactivate the claim.
-    if($SCHECK['active'] == '1' && doesThesisFlag($claimid) == 'false' ) //i have a suspicion that this isn't working/triggering
+    if($SCHECK['active'] == '1' && doesThesisFlag($claimid) == 'false'&& haveRival($claimid) == 'false' ) //i have a suspicion that this isn't working/triggering
     {
-
-
-
+//THIS IS TRIGGERED FOR 1383
 
       global $everyInactiveSupport;
       $everyInactiveSupport = 'false';
@@ -1017,6 +1015,29 @@ function noSupportsRival ($claimidA)
 
 } // end of function
 
+
+//yep just gonna write this here i guess
+function haveRival($claimid)
+{
+  include('config/db_connect.php');
+  $answer = 'false';
+  
+
+  $act2 = "SELECT DISTINCT claimIDFlagger
+  from flagsdb
+  WHERE claimIDFlagged = ? AND flagType LIKE 'Thesis Rival'
+  "; 
+  $s2 = $conn->prepare($act2); 
+  $s2->bind_param("i", $claimid);
+  $s2->execute();
+  $activity2 = $s2->get_result(); 
+  $nh2 = mysqli_num_rows($activity2);
+  while($supports = $activity2->fetch_assoc())
+  {  $answer = 'true'; } //end of while
+
+          return $answer;
+
+} //end of haverival
 
 
 function doesThesisFlagRival ($claimid)

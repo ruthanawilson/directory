@@ -22,7 +22,7 @@ session_start();
   
 $("#submit").click(function(){
   window.alert("Submitted!");
-window.location.assign("http://www.vadaproject.com/");
+window.location.assign("http://localhost/directory/index.php");
 
  $.post( $("#myForm").attr("action"), 
          $("#myForm :input").serializeArray(), 

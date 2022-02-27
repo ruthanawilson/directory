@@ -88,7 +88,7 @@ $results2 = $oc2->get_result(); // get the mysqli result
 while($data = $results2->fetch_assoc())
   {
 
-    $dSubject = $data['subject'];
+    $subject = $data['subject'];
     $dTargetP = $data['targetP'];
 
     ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;"> (Subject) </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue;"> (Target Property) </span><br>
@@ -126,35 +126,32 @@ while($data = $results2->fetch_assoc())
 <form method="POST" id = "myForm" action="insert.php">
 
 <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
- $_POST['FOS'] = 'flagging'; ?>
+ $_POST['FOS'] = "flagging"; ?>
 
 
 <html>
 <p style="color:#000000";><font = #000000>
 
-
+<!--
 <br>Are you flagging the Reason property or the Rule and Example property?<br> </font>
   <select name="tre" id="tre" value="tre">
         <option value="" selected>Select...</option>
         <option value="reason">Reason</option>
         <option value="rule">Rule</option> </select>
+-->
 
-
-
-  <select name="flagTypeR" id="flagTypeR" value="flagType">
+<br>How are you flagging this inference? <br> </font>
+  <select name="flagType" id="flagType" value="flagType">
         <option value="" selected>Select...</option>
         <option value="Unestablished Subject">Unestablished Subject</option>
         <option value="Itself Unestablished">Itself Unestablished</option>
         <option value="Hostile">Hostile</option>
-        </select>
-
-  <select name="flagTypeE" id="flagTypeE" value="flagType">
-        <option value="" selected>Select...</option>
         <option value="Too Narrow">Too Narrow</option>
         <option value="Too Broad (Counterexample)">Too Broad (Counterexample)</option>
         <option value="Too Broad (Unestablished Universal)">Too Broad (Unestabilshed Universal)</option>
        <option value="Contrived Universal">Contrived Universal</option>
-      </select>
+ </select>
+<br>
 <?php
     $claimIDFlaggedINSERT = $details['claimID'];
 
@@ -167,7 +164,7 @@ $_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;
 <!-- //------------------------- -->
 
 <script type="text/javascript">
-
+/*
 var union = document.getElementById('tre');
 union.onchange = checkOtherUnion;
 union.onchange();
@@ -192,7 +189,7 @@ if (union.options[union.selectedIndex].value === 'rule') {
        
     }
 
-} </script>
+} */ </script>
 
 
 
@@ -229,10 +226,7 @@ echo'Tarka is an element of conversation used to discuss errors in debate form a
 
   // ------------------------------------------------------------------------------------------------------------------------------- PERCEPTION
 if( $details['supportMeans'] == "Perception")
-{ $FOS = "flagging"; 
-  
- ?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
- $_POST['FOS'] = 'flagging';
+{
 ?>
  <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
   <p><b>Url of perception:</b> <?php echo $details['URL']; ?> </p>
@@ -246,6 +240,11 @@ if( $details['supportMeans'] == "Perception")
 <div class="modal-content">
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
+
+<?php 
+$FOS = "flagging";
+?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
+$_POST['FOS'] = "flagging"; ?>
 
 
 <html>
@@ -287,15 +286,11 @@ $_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;
 
    <?php // ------------- THREE
 if( $details['supportMeans'] == "Testimony")
-{ $FOS = "flagging";
-  
- ?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
- $_POST['FOS'] = 'flagging';
-
-
+{ 
  ?>
     <p><b>Support Means:</b>  <?php echo $details['supportMeans']; ?> </p>
-    <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
+    <br><br><p><b>Transcription:</b>  <?php echo $details['transcription']; ?>  
+    <br><br> <p><b>Citation:</b>  <?php echo $details['citation']; ?> </p>
   
 <button class="openmodal myBtn">Flag Testimony</button>
 
@@ -306,6 +301,11 @@ if( $details['supportMeans'] == "Testimony")
 <div class="modal-content">
 <span class="close">&times;</span>
 <form method="POST" id = "myForm" action="insert.php">
+
+<?php 
+$FOS = "flagging";
+?> <input name="FOS" value="<?php echo htmlspecialchars($FOS) ?>"> </input> <?php
+$_POST['FOS'] = "flagging"; ?>
 
 <?php
     $claimIDFlaggedINSERT = $details['claimID'];
@@ -774,13 +774,19 @@ as in the case of:
 <textarea id="transcription" name = "transcription" value="<?php echo htmlspecialchars($transcription) ?>">Transcription </textarea><br>
 <div id="hiddenCitation">
 <u>Citation</u>
-
+<?php $author = $title = $publication = $date = ''; ?> 
 <div id="some-div">
   <img src = "https://i.imgur.com/o4qSiRD.png">
-  <span id="explain-element"> Please include as applicable: author, title, publication, date of publication, and URL. </span>
+  <span id="explain-element"> Please include as applicable: author, title, publication, and date of publication. </span>
+  <br><textarea id="author" name = "author" value="<?php echo htmlspecialchars($author) ?>">Author</textarea><br>
+  <textarea id="title" name = "title" value="<?php echo htmlspecialchars($title) ?>">Title</textarea><br>
+  <textarea id="publication" name = "publication" value="<?php echo htmlspecialchars($publication) ?>">Publication</textarea><br>
+  <textarea id="date" name = "date" value="<?php echo htmlspecialchars($date) ?>">Date of Publication</textarea><br>
+
+</div>
   </div>
-  </div>
-  <textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Citation</textarea><br>
+
+  <textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Empty Citation</textarea><br>
 
 <div id="hiddenURL">
 <u>URL</u>
@@ -882,6 +888,12 @@ var perceptionHint = document.getElementById('perceptionHint');
         reason.style.display = 'none';
         example.style.display = 'none';
         citation.style.display = 'none';
+
+        author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
         url.style.display = 'none';
         vidtimestamp.style.display = 'none';
         transcription.style.display = 'none';
@@ -896,12 +908,22 @@ var perceptionHint = document.getElementById('perceptionHint');
 
     if (union.options[union.selectedIndex].value === '') {
         citation.style.display = 'none';
+        author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
     }
     if (union.options[union.selectedIndex].value === 'Inference') {
         reason.style.display = '';
         example.style.display = '';
         hiddenRule.style.display = '';
         citation.style.display = 'none';
+        author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
     }
 
 
@@ -910,6 +932,12 @@ if (union.options[union.selectedIndex].value === 'Perception') {
         url.style.display = '';
         vidtimestamp.style.display = '';
         citation.style.display = '';
+
+        author.style.display = '';
+        title.style.display = '';
+        publication.style.display = '';
+        date.style.display = '';
+
         hiddenURL.style.display = '';
         hiddenTS.style.display = '';
         hiddenCitation.style.display = '';
@@ -918,6 +946,12 @@ if (union.options[union.selectedIndex].value === 'Perception') {
 if (union.options[union.selectedIndex].value === 'Testimony') {
         transcription.style.display = '';
         citation.style.display = '';
+
+        author.style.display = '';
+        title.style.display = '';
+        publication.style.display = '';
+        date.style.display = '';
+
         hiddenCitation.style.display = '';
         hiddenTranscription.style.display = '';
     } 
@@ -925,6 +959,13 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
 if (union.options[union.selectedIndex].value === 'Tarka') {
         window.alert("A requirement of Tarka is to use the comments feature in the Tarka claim following submission.");
          citation.style.display = 'none';
+
+         author.style.display = 'none';
+        title.style.display = 'none';
+        publication.style.display = 'none';
+        date.style.display = 'none';
+
+         
     } 
 
 }
@@ -948,7 +989,7 @@ if (union.options[union.selectedIndex].value === 'Tarka') {
 --> 
 
 
-<!--
+
 <div class="x">
 <div id="disqus_thread"></div>
 <script>
@@ -970,5 +1011,3 @@ if (union.options[union.selectedIndex].value === 'Tarka') {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
  </div>
-
--->

@@ -145,7 +145,7 @@ body .wrapper ul > li.noline:before {
 body .wrapper ul > li label {
   padding: 0.5em 1em;
   border: 1px solid grey;
-  max-width: 140px; 
+  max-width: 600px; 
   white-space: normal; 
   display: inline-block;
   cursor: pointer;
