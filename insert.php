@@ -23,13 +23,6 @@ $topic = preg_replace('/[^\w\s]/', '', $topic);
 if($FOS == 'flagging' || $FOS == 'supporting'){ ///////////// NUMBER ONE
 
 
-//delete below
-
-
-//		$sql_AP = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('send me help', '$targetP', 'NA', 'NA','$NA','NA','NA', 'NA','NA','NA', '$topic', '1', 'NA','NA','NA', 'claim')";
-//THIS IS THE ORIGINAL CLAIM FROM THE ADD PAGE
-
-//delete above 
 }
 else
 {
@@ -126,7 +119,7 @@ elseif(strlen("$flagTypeE") > 2) //does flagtype have a value from example prama
 {$flagType = $flagTypeE; 
 $flaggingSupport =  "true";}
 else
-  {$flagType = "ERROR: PERCEPTION OR TESTIMONY FLAG NOT ENTERED".$flagType.$flagTypeT.$flagTypeR.$flagTypeE."ERROR";}
+  {$flagType = "ERROR: User did not select flag type when entering claim.";}
 } //end of FOS
 
 
@@ -154,7 +147,7 @@ else
 
 
 
-$sql_support2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', 'NA', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', 'support')";
+$sql_support2 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', 'support')";
 	
 			if(mysqli_query($conn, $sql_support2)){
 				// success
@@ -189,8 +182,6 @@ if(mysqli_query($conn, $sql5_support1)){
 
 	
 }//end of addpage = yes 
-
-
 // add page? no add page?
 
 //if this was a new claim from the add page, it would NOT be flagging anything. but since it's NOT from the add page, it is flagging. thus, this is the flagger.
@@ -198,6 +189,8 @@ if(mysqli_query($conn, $sql5_support1)){
 if($FOS == "flagging" || $flaggingSupport == "true")
 { 
 		// $sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', '$COS')";
+
+
 
 		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', '$targetP', 'NA', 'NA','$NA','NA','NA', 'NA','NA','NA', '$topic', '$active', 'NA','NA','NA', 'claim')";
 	
@@ -325,7 +318,7 @@ $result11 = $stmt11->get_result(); // get the mysqli result
 $COS = "support";
 
 $sql_support3 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) 
-VALUES('$subject', 'NA', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', '$COS')";
+VALUES('$subject', '$targetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', '$COS')";
 
 	
 			if(mysqli_query($conn, $sql_support3)){
@@ -387,7 +380,25 @@ if(mysqli_query($conn, $sql5_support)){
 
 if($FOS == "supporting")
 {
-		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$subject', 'NA', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', 'support')";
+	$supportingSubject = $supportingTargetP = '';
+
+	//because there is a field currently that is pulling a new subject and target property, we have to get the old one from the claim thats being flagged. 
+
+$act = "SELECT * FROM claimsdb WHERE claimID = ?"; // SQL with parameters
+$s = $conn->prepare($act); 
+$s->bind_param("i", $claimIDFlagged);
+$s->execute();
+$activity = $s->get_result(); // get the mysqli result
+
+while($end = $activity->fetch_assoc())
+  { $supportingSubject =  $end['subject'];
+	$supportingTargetP =  $end['targetP'];
+  }
+
+  
+
+
+		$sql1 = "INSERT INTO claimsdb(subject, targetP, supportMeans, supportID, example, URL, reason, thesisST, reasonST, ruleST, topic, active, vidtimestamp, citation, transcription, COS) VALUES('$supportingSubject', '$supportingTargetP', '$supportMeans', '$supportID','$example','$url','$reason', '$thesisST','$reasonST','$ruleST', '$topic', '$active', '$vidtimestamp','$citation','$transcription', 'support')";
 
 	
 			if(mysqli_query($conn, $sql1)){

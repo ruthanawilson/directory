@@ -18,7 +18,7 @@ include('templates/header.php');?>
     <li class="noline">
       <BR><BR>
 
-      <a class="brand-text" href="add.php?topic=<?php echo $topic?>">Add New Claim</a><br><br>
+      <a class="brand-text" href="add.php?topic=<?php echo $topic?>">Add New Claim To This Topic</a><br><br>
       <h3>TOPIC: <?php echo $topic; ?> <BR> </h3>
 
     </center>

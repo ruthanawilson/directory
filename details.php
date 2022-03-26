@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php 
 	include('config/db_connect.php');
-	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = $dSubject = $dTargetP = $domain = '';
+	$claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $active = $dSubject = $dTargetP = $domain = $supportingDropCheck = '';
 	?> <center><?php include('templates/header.php');
 	if(isset($_GET['id'])){
 		
@@ -106,12 +106,9 @@ while($data = $results2->fetch_assoc())
       
       <br><br>
 
-
-
-
-      <b>Rule Statement:</b> Whomever/Whatever <span style="color:orange;"> <?php echo $details['reason']; ?> </span> <span style="color:blue;"><?php
+  <b>Rule Statement:</b> Whomever/Whatever <span style="color:orange;"> <?php echo $details['reason']; ?> </span> <span style="color:blue;"><?php
   echo $dTargetP; ?></span>, as in the case of <span style="color:purple;"> <?php echo $details['example']; ?> </span> 
-
+ 
 <br><br>
 
       <!-- Trigger/Open The Modal -->
@@ -194,7 +191,7 @@ if (union.options[union.selectedIndex].value === 'rule') {
 
 
 
-<?php flagging(); ?>
+<?php flagging($claimIDFlaggedINSERT); ?>
 
 <!-- //------------------------- -->
 
@@ -223,7 +220,7 @@ echo'Tarka is an element of conversation used to discuss errors in debate form a
 
  echo'<br><br><br>Please explain argument in the comments section below.';
 }
-
+//extra comment 
   // ------------------------------------------------------------------------------------------------------------------------------- PERCEPTION
 if( $details['supportMeans'] == "Perception")
 {
@@ -268,7 +265,7 @@ $_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;
         <option value="Ambiguous">Ambiguous</option>
         </select><br>
 
-<?php flagging(); ?>
+<?php flagging($claimIDFlaggedINSERT); ?>
 
 <div class="center">
 <button onclick="setTimeout(myFunction, 5000)" id="submit">Submit</button>  
@@ -328,7 +325,7 @@ $_POST['FOS'] = "flagging"; ?>
         <option value="Misstatement">Misstatement</option>
         </select><br>
 
-<?php flagging(); ?>
+<?php flagging($claimIDFlaggedINSERT); ?>
 
 <div class="center">
 
@@ -400,7 +397,7 @@ $_POST['claimIDFlaggedINSERT'] = $claimIDFlaggedINSERT;
         </select>
 <br>
 </div>
-<?php flagging(); ?>
+<?php flagging($claimIDFlaggedINSERT); ?>
 
 <div class="center">
 
@@ -415,6 +412,7 @@ union1.onchange();
 
 function checkOtherUnion1() {
    var flaggingDiv = document.getElementById('flaggingDiv');
+   var supportingDropCheck;
     flaggingDiv.style.display = 'none';
     var hideThesis = document.getElementById('hideThesis');
     hideThesis.style.display = 'hideThesis';
@@ -668,10 +666,58 @@ for(let i=0;i<spans.length;i++){
 </script>
 
 
+<?php function retrieveTargetP($claimIDFlaggedINSERT)
+{
+
+  include('config/db_connect.php');
 
 
+  $act = "SELECT * FROM claimsdb WHERE claimID = ?"; // SQL with parameters
+  $s = $conn->prepare($act); 
+  $s->bind_param("i", $claimIDFlaggedINSERT);
+  $s->execute();
+  $activity = $s->get_result(); // get the mysqli result
+  
+  while($details = $activity->fetch_assoc())
+    { echo $details['targetP'];  }
+  
+}
 
-<?php function flagging()
+function retrieveSubject($claimIDFlaggedINSERT)
+{
+
+  include('config/db_connect.php');
+
+
+  $act = "SELECT * FROM claimsdb WHERE claimID = ?"; // SQL with parameters
+  $s = $conn->prepare($act); 
+  $s->bind_param("i", $claimIDFlaggedINSERT);
+  $s->execute();
+  $activity = $s->get_result(); // get the mysqli result
+  
+  while($details = $activity->fetch_assoc())
+    { echo $details['subject'];  }
+  
+}
+
+function retrieveCOS($claimIDFlaggedINSERT)
+{
+
+  include('config/db_connect.php');
+
+
+  $act = "SELECT * FROM claimsdb WHERE claimID = ?"; // SQL with parameters
+  $s = $conn->prepare($act); 
+  $s->bind_param("i", $claimIDFlaggedINSERT);
+  $s->execute();
+  $activity = $s->get_result(); // get the mysqli result
+  
+  while($details = $activity->fetch_assoc())
+    { return $details['COS'];  }
+  
+}
+
+function flagging($claimIDFlaggedINSERT)
 { ?> <div class = 'scroll'> <?php $claimID = $temp = $result = $topic = $array = $claim_fk = $IclaimID = $thesisST = $reasonST = $ruleST = $NewOld = $oldClaim = $subject = $targetP = $supportMeans = $supportforID = $supportID = $example = $URL =  $rd = $reason =  $flagType = $flagType = $flagTypeT = $flagTypeR = $flagTypeE = $flagURL = $flagSource = $flagID = $inferenceIDFlagger= $grammar = $active = '';
 ?>
 <html> <p style="color:#000000";>
@@ -733,7 +779,19 @@ What is your Support Means?
 </p>
   <u> Reason Statement </u><br>
  
- <span class="jsValue5">subject</span>   <span class="jsValue6">reason</span>
+
+  <?php
+if(retrieveCOS($claimIDFlaggedINSERT) == "claim")
+{
+
+  retrieveSubject($claimIDFlaggedINSERT); 
+  
+}
+else { ?>  <span class="jsValue5">subject</span>, <?php } ?>
+
+
+
+   <span class="jsValue6">reason</span>
 <br><br>
 <div id="some-div">
   <img src = "https://i.imgur.com/o4qSiRD.png">
@@ -744,7 +802,14 @@ Whatever/Whomever
 
  <!-- Plain Javascript Example -->
   <span class="jsValue">reason</span>,
-<span class="jsValue2">target</span>,
+<?php
+if(retrieveCOS($claimIDFlaggedINSERT) == "claim")
+{
+
+  retrieveTargetP($claimIDFlaggedINSERT); 
+  
+}
+else { ?> <span class="jsValue2">target</span>, <?php } ?>
 
 as in the case of: 
 <br>
@@ -818,6 +883,7 @@ var $jsValue2 = document.querySelector('.jsValue2');
 
 $jsTargetP.addEventListener('input', function(event){
   $jsValue2.innerHTML = $jsTargetP.value;
+
 }, false);
 
 //-------------------------
