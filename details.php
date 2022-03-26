@@ -736,7 +736,7 @@ function flagging($claimIDFlaggedINSERT)
 			<br>
 
       <u> <p style="color:grey">Thesis Statement </u><br>
-<span class="jsValue3">subject</span> <span class="jsValue4">target</span> 
+<span class="jsValue3"></span> <span class="jsValue4"></span> 
 </p></p>
 
 
@@ -787,11 +787,11 @@ if(retrieveCOS($claimIDFlaggedINSERT) == "claim")
   retrieveSubject($claimIDFlaggedINSERT); 
   
 }
-else { ?>  <span class="jsValue5">subject</span>, <?php } ?>
+else { ?>  <span class="jsValue5"></span>, <?php } ?>
 
 
 
-   <span class="jsValue6">reason</span>
+   <span class="jsValue6"></span>
 <br><br>
 <div id="some-div">
   <img src = "https://i.imgur.com/o4qSiRD.png">
@@ -801,7 +801,7 @@ else { ?>  <span class="jsValue5">subject</span>, <?php } ?>
 Whatever/Whomever
 
  <!-- Plain Javascript Example -->
-  <span class="jsValue">reason</span>,
+  <span class="jsValue"></span>,
 <?php
 if(retrieveCOS($claimIDFlaggedINSERT) == "claim")
 {
@@ -809,7 +809,7 @@ if(retrieveCOS($claimIDFlaggedINSERT) == "claim")
   retrieveTargetP($claimIDFlaggedINSERT); 
   
 }
-else { ?> <span class="jsValue2">target</span>, <?php } ?>
+else { ?> <span class="jsValue2"></span>, <?php } ?>
 
 as in the case of: 
 <br>

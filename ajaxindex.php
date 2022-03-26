@@ -1397,7 +1397,7 @@ if(response.supportMeans == 'Perception')
 
 if(response.supportMeans == 'Inference')
 {
-  html += " <BR> Reason: " + response.reasonST + "<BR> Rule & Example: " + response.ruleST;
+  html += " <BR> Reason: " + response.subject + " " + response.reason + "<BR> Rule & Example: Whatever/Whomever " + response.reason + ', ' + response.targetP + " as in the case of " + response.example;
 
 }
 if(response.supportMeans == 'Tarka')
