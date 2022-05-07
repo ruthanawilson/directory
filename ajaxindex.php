@@ -23,6 +23,11 @@ include('templates/header.php');?>
 
     </center>
     <center>
+
+    <div id="floatingRectangle">
+    <img src="https://i.imgur.com/Zg0ijAM.png">
+    <br> A contested claim or support will have this symbol.  
+</div>
       <?php 
 
 

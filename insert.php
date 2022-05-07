@@ -57,8 +57,9 @@ $author = mysqli_real_escape_string($conn, $_POST['author']);
 $title = mysqli_real_escape_string($conn, $_POST['title']);
 $publication = mysqli_real_escape_string($conn, $_POST['publication']);
 $date = mysqli_real_escape_string($conn, $_POST['date']);
+$citationURL = mysqli_real_escape_string($conn, $_POST['citationURL']);
 
-$citation = $author . ', ' . $title . ', ' . $publication . ', ' . $date;
+$citation = $author . ', ' . $title . ', ' . $publication . ', ' . $date . ', ' . $citationURL;
 
 $vidtimestamp = mysqli_real_escape_string($conn, $_POST['vidtimestamp']);
 

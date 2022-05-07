@@ -847,11 +847,12 @@ as in the case of:
   <textarea id="title" name = "title" value="<?php echo htmlspecialchars($title) ?>">Title</textarea><br>
   <textarea id="publication" name = "publication" value="<?php echo htmlspecialchars($publication) ?>">Publication</textarea><br>
   <textarea id="date" name = "date" value="<?php echo htmlspecialchars($date) ?>">Date of Publication</textarea><br>
+  <textarea id="citationURL" name = "citationURL" value="<?php echo htmlspecialchars($citationURL) ?>">URL of Citation</textarea><br>
 
 </div>
   </div>
 
-  <textarea id="citation" name = "citation" value="<?php echo htmlspecialchars($citation) ?>">Empty Citation</textarea><br>
+  <textarea id="citation" name = "citation" hidden = "hidden" value="<?php echo htmlspecialchars($citation) ?>">Empty Citation</textarea><br>
 
 <div id="hiddenURL">
 <u>URL</u>
@@ -959,6 +960,7 @@ var perceptionHint = document.getElementById('perceptionHint');
         title.style.display = 'none';
         publication.style.display = 'none';
         date.style.display = 'none';
+        citationURL.style.display = 'none';
 
         url.style.display = 'none';
         vidtimestamp.style.display = 'none';
@@ -978,6 +980,7 @@ var perceptionHint = document.getElementById('perceptionHint');
         title.style.display = 'none';
         publication.style.display = 'none';
         date.style.display = 'none';
+        citationURL.style.display = 'none';
 
     }
     if (union.options[union.selectedIndex].value === 'Inference') {
@@ -989,6 +992,7 @@ var perceptionHint = document.getElementById('perceptionHint');
         title.style.display = 'none';
         publication.style.display = 'none';
         date.style.display = 'none';
+        citationURL.style.display = 'none';
 
     }
 
@@ -1003,6 +1007,7 @@ if (union.options[union.selectedIndex].value === 'Perception') {
         title.style.display = '';
         publication.style.display = '';
         date.style.display = '';
+        citationURL.style.display = 'none';
 
         hiddenURL.style.display = '';
         hiddenTS.style.display = '';
@@ -1017,6 +1022,7 @@ if (union.options[union.selectedIndex].value === 'Testimony') {
         title.style.display = '';
         publication.style.display = '';
         date.style.display = '';
+        citationURL.style.display = '';
 
         hiddenCitation.style.display = '';
         hiddenTranscription.style.display = '';
