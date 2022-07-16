@@ -73,6 +73,11 @@ body {
     font-size: 20px;
   }
 }
+.container {
+  width: 30em;
+  overflow-x: auto;
+  white-space: nowrap;
+}
 
 /* THIS IS BAD BELOW */
 
@@ -83,7 +88,6 @@ ul, li {
   box-sizing: border-box; 
   margin: 0;
   padding: 0px;
-  transform: scale(.9);
 
 }
 div:before, div:after, ul:before, ul:after, li:before, li:after {
