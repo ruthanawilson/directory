@@ -170,6 +170,8 @@ body .wrapper ul > li label {
   white-space: normal; 
   display: inline-block;
   cursor: pointer;
+  background: whitesmoke;
+  border-radius: 1rem;
 }
 /*add*/
 body .wrapper ul [type="checkbox"] {
